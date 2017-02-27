@@ -429,6 +429,15 @@ namespace FreeMarket.Models
 
         public void Save(string userId = null)
         {
+            if (Order.OrderNumber == 0)
+            {
+                using (FreeMarketEntities db = new FreeMarketEntities())
+                {
+                    db.OrderHeaders.Add(Order);
+                    db.SaveChanges();
+                }
+            }
+
             // Compare the Session cart to the database cart and resolve differences
             Compare();
 
@@ -504,7 +513,7 @@ namespace FreeMarket.Models
 
         public void Merge(string userId, CartBody tempBody)
         {
-            if (Order.OrderNumber != 0 && Order.OrderStatus != "Locked")
+            if (Order.OrderStatus != "Locked")
             {
                 using (FreeMarketEntities db = new FreeMarketEntities())
                 {
@@ -525,15 +534,14 @@ namespace FreeMarket.Models
                                 .Quantity += item.Quantity;
                     }
                 }
-            }
 
-            UpdateTotal();
-            Save();
+                UpdateTotal();
+            }
         }
 
-        public void UpdateDeliveryDetails(SaveCartViewModel model)
+        public void UpdateDeliveryDetails(SaveCartViewModel model, bool specialDelivery)
         {
-            Order.UpdateDeliveryDetails(model);
+            Order.UpdateDeliveryDetails(model, specialDelivery);
             ApplyAllSpecialPrices();
             Save();
         }
@@ -566,6 +574,24 @@ namespace FreeMarket.Models
             }
         }
 
+        public decimal CalculateLocalCourierFee()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                decimal totalWeight = GetTotalWeightOfOrder();
+                return (decimal)db.CalculateLocalDeliveryFee(totalWeight, Order.OrderNumber).FirstOrDefault();
+            }
+        }
+
+        public decimal CalculateLocalCourierFeeAdhoc(int postalCode)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                decimal totalWeight = GetTotalWeightOfOrder();
+                return (decimal)db.CalculateLocalDeliveryFeeAdhoc(totalWeight, postalCode).FirstOrDefault();
+            }
+        }
+
         public decimal CalculatePostalFee()
         {
             using (FreeMarketEntities db = new FreeMarketEntities())
@@ -590,6 +616,18 @@ namespace FreeMarket.Models
                 if (Order.DeliveryType == "Courier")
                 {
                     return CalculateCourierFee();
+                }
+                else if (Order.DeliveryType == "LocalCourier")
+                {
+                    decimal fee = CalculateLocalCourierFee();
+                    if (fee > 0)
+                    {
+                        return fee;
+                    }
+                    else
+                    {
+                        return CalculateCourierFee();
+                    }
                 }
                 else // Post Office
                 {

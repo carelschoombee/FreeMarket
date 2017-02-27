@@ -1,7 +1,7 @@
 ﻿@using FreeMarket.Models
 @model ConfirmOrderViewModel
 
-@if (Model.Cart.Order.DeliveryType == "Courier")
+@if (Model.Cart.Order.DeliveryType == "Courier" || Model.Cart.Order.DeliveryType == "LocalCourier")
 {
         if (Model.SpecialDelivery)
         {
@@ -46,7 +46,15 @@
                 <tr>
                     <td colspan="2">
                         <div>@Model.Courier.CourierName</div>
-                        <img src="~/Content/Images/slideCourier1.png" width="128" height="80" alt="Time Freight" />
+                        @if (Model.Courier.CourierNumber == 1)
+                        {
+                            <img src="~/Content/Images/slideCourier1.png" width="128" height="80" alt="Time Freight" />
+                        }
+                        else if (Model.Courier.CourierNumber == 2)
+                        {
+                            <img src="~/Content/Images/delivery.jpg" width="128" height="80" alt="Time Freight" />
+                        }
+
                     </td>
                 </tr>
                 <tr>

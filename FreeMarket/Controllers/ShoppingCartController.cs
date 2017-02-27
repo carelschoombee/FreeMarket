@@ -239,11 +239,13 @@ namespace FreeMarket.Controllers
         {
             string userId = User.Identity.GetUserId();
             ShoppingCart sessionCart = GetCartFromSession(userId);
+            sessionCart.Save();
 
+            decimal localCourierCost = sessionCart.CalculateLocalCourierFee();
             decimal courierCost = sessionCart.CalculateCourierFee();
             decimal postOfficeCost = sessionCart.CalculatePostalFee();
 
-            SaveCartViewModel model = new SaveCartViewModel(userId, sessionCart.Order, courierCost, postOfficeCost);
+            SaveCartViewModel model = new SaveCartViewModel(userId, sessionCart.Order, localCourierCost, courierCost, postOfficeCost);
             if (model == null)
                 return RedirectToAction("Index", "Product");
 
@@ -271,12 +273,14 @@ namespace FreeMarket.Controllers
                 string userId = User.Identity.GetUserId();
                 ShoppingCart sessionCart = GetCartFromSession(userId);
 
+                decimal localCourierCost = sessionCart.CalculateLocalCourierFeeAdhoc(int.Parse(id));
                 decimal courierCost = sessionCart.CalculateCourierFeeAdhoc(int.Parse(id));
                 decimal postOfficeCost = sessionCart.CalculatePostalFee();
 
                 options = new DeliveryType()
                 {
                     SelectedDeliveryType = selectedDeliveryType,
+                    LocalCourierCost = localCourierCost,
                     CourierCost = courierCost,
                     PostOfficeCost = postOfficeCost
                 };
@@ -326,6 +330,24 @@ namespace FreeMarket.Controllers
             TimeSpan startTime = new TimeSpan(8, 0, 0);
             TimeSpan endTime = new TimeSpan(17, 0, 0);
             DateTime minDate = DateTime.Today.AddDays(model.DaysToAddToMinDate);
+
+            int code = 0;
+            int specialDelivery = 0;
+
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                if (ModelState.IsValid)
+                {
+                    code = int.Parse(model.Address.AddressPostalCode);
+                    specialDelivery = (int)db.ValidateSpecialDeliveryCode(code).FirstOrDefault();
+                }
+            }
+
+            if (model.DeliveryOptions == null || model.DeliveryOptions.SelectedDeliveryType == null)
+            {
+                if (specialDelivery == 0)
+                    ModelState.AddModelError("", "Please select a delivery option");
+            }
 
             if (ModelState.IsValid)
             {
@@ -382,7 +404,9 @@ namespace FreeMarket.Controllers
                     return View("CheckoutDeliveryDetails", model);
                 }
 
-                sessionCart.UpdateDeliveryDetails(model);
+                bool special = specialDelivery == 1 ? true : false;
+
+                sessionCart.UpdateDeliveryDetails(model, special);
                 result = new FreeMarketObject { Result = FreeMarketResult.NoResult };
                 if (model.AddressName != "Current")
                 {
@@ -403,6 +427,12 @@ namespace FreeMarket.Controllers
             }
 
             model.SetAddressNameOptions(userId, model.SelectedAddress);
+
+            decimal localCourierCost = sessionCart.CalculateLocalCourierFeeAdhoc(int.Parse(model.Address.AddressPostalCode));
+            decimal courierCost = sessionCart.CalculateCourierFeeAdhoc(int.Parse(model.Address.AddressPostalCode));
+            decimal postOfficeCost = sessionCart.CalculatePostalFee();
+            model.SetDeliveryOptions(sessionCart.Order, localCourierCost, courierCost, postOfficeCost);
+            model.SetTextBlocks();
 
             if (Request.IsAjaxRequest())
             {

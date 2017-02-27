@@ -1263,7 +1263,6 @@ namespace FreeMarket.Controllers
             return RedirectToAction("Index", "Admin");
         }
 
-
         public ActionResult GetTotalWeightOfOrder(int orderNumber)
         {
             decimal totalWeight = 0;
@@ -1320,6 +1319,13 @@ namespace FreeMarket.Controllers
 
                 return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", title);
             }
+        }
+
+        public ActionResult ArticleIndex()
+        {
+            ArticlesViewModel model = new ArticlesViewModel();
+
+            return View(model);
         }
     }
 }

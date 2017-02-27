@@ -261,6 +261,12 @@
     <Compile Include="Models\Admin\SpecialsMetaData.cs" />
     <Compile Include="Models\Admin\SpecialsViewModel.cs" />
     <Compile Include="Models\Admin\TimeFreightCourierFeeReferenceMetaData.cs" />
+    <Compile Include="Models\Article.cs">
+      <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ArticleCategory.cs">
+      <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetUser.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
@@ -281,6 +287,9 @@
     <Compile Include="Models\CashOrder\CashOrderMetaData.cs" />
     <Compile Include="Models\CashOrder\CashCustomerViewModel.cs" />
     <Compile Include="Models\CashOrder\CashOrderViewModel.cs" />
+    <Compile Include="Models\CharliesTransportCourierFeeReference.cs">
+      <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Checkout\CheckOutViewModel.cs" />
     <Compile Include="Models\Checkout\PaymentGatewayIntegration.cs" />
     <Compile Include="Models\CourierReview.cs">
@@ -365,6 +374,7 @@
     <Compile Include="Models\GetProduct_Result.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Home\ArticlesViewModel.cs" />
     <Compile Include="Models\Home\SpecialMessageViewModel.cs" />
     <Compile Include="Models\Home\DeliveryOptionsViewModel.cs" />
     <Compile Include="Models\Home\AboutViewModel.cs" />
@@ -529,7 +539,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\slide3.png" />
     <Content Include="Content\Images\AboutUs.jpg" />
+    <Content Include="Content\Images\delivery.jpg" />
     <Content Include="Content\Images\MasterCard.png" />
     <Content Include="Content\Images\PayGate-3D-Secure-Logo-MasterCard-SecureCode-Small.png" />
     <Content Include="Content\Images\PayGate-3D-Secure-Logo-MasterCard-SecureCode.png" />
@@ -569,6 +581,8 @@
     <Content Include="Content\Images\slideLocation2.jpg" />
     <Content Include="Content\Images\slideCourier1.png" />
     <Content Include="Content\Images\slideLocation3.jpg" />
+    <Content Include="Content\Images\slide2.png" />
+    <Content Include="Content\Images\slide1.png" />
     <Content Include="Content\Images\TimeFreight.png" />
     <Content Include="Content\Images\visa.png" />
     <Content Include="Content\morris.css" />
@@ -588,13 +602,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\logoSmall.png" />
-    <Content Include="Content\Images\slide1.jpg">
+    <Content Include="Content\Images\oldslide1.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\slide2.jpg">
+    <Content Include="Content\Images\oldslide2.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\slide3.jpg">
+    <Content Include="Content\Images\oldslide3.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\loading.gif" />
@@ -848,6 +862,7 @@
     <Content Include="Views\Admin\InitiateCashOrder.cshtml" />
     <Content Include="Views\Admin\EditCashOrder.cshtml" />
     <Content Include="Views\Home\_SpecialMessage.cshtml" />
+    <Content Include="Views\Admin\_Articles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

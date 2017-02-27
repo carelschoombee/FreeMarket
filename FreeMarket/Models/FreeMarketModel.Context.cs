@@ -64,8 +64,11 @@ namespace FreeMarket.Models
         public virtual DbSet<CashCustomer> CashCustomers { get; set; }
         public virtual DbSet<CashOrderDetail> CashOrderDetails { get; set; }
         public virtual DbSet<CashOrder> CashOrders { get; set; }
-        public virtual DbSet<TimeFreightCourierFeeReference> TimeFreightCourierFeeReferences { get; set; }
         public virtual DbSet<ProductSupplier> ProductSuppliers { get; set; }
+        public virtual DbSet<Article> Articles { get; set; }
+        public virtual DbSet<ArticleCategory> ArticleCategories { get; set; }
+        public virtual DbSet<CharliesTransportCourierFeeReference> CharliesTransportCourierFeeReferences { get; set; }
+        public virtual DbSet<TimeFreightCourierFeeReference> TimeFreightCourierFeeReferences { get; set; }
     
         public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
         {
@@ -354,6 +357,58 @@ namespace FreeMarket.Models
                 new ObjectParameter("SupplierNumber", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProduct_Result>("GetProduct", productNumberParameter, supplierNumberParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> CalculateCharliesFee(Nullable<decimal> weight, Nullable<int> orderNumber, ObjectParameter courierFee)
+        {
+            var weightParameter = weight.HasValue ?
+                new ObjectParameter("weight", weight) :
+                new ObjectParameter("weight", typeof(decimal));
+    
+            var orderNumberParameter = orderNumber.HasValue ?
+                new ObjectParameter("orderNumber", orderNumber) :
+                new ObjectParameter("orderNumber", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateCharliesFee", weightParameter, orderNumberParameter, courierFee);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> CalculateCharliesFeeAdhoc(Nullable<decimal> weight, Nullable<int> postalCode, ObjectParameter courierFee)
+        {
+            var weightParameter = weight.HasValue ?
+                new ObjectParameter("weight", weight) :
+                new ObjectParameter("weight", typeof(decimal));
+    
+            var postalCodeParameter = postalCode.HasValue ?
+                new ObjectParameter("postalCode", postalCode) :
+                new ObjectParameter("postalCode", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateCharliesFeeAdhoc", weightParameter, postalCodeParameter, courierFee);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> CalculateLocalDeliveryFee(Nullable<decimal> weight, Nullable<int> orderNumber)
+        {
+            var weightParameter = weight.HasValue ?
+                new ObjectParameter("weight", weight) :
+                new ObjectParameter("weight", typeof(decimal));
+    
+            var orderNumberParameter = orderNumber.HasValue ?
+                new ObjectParameter("orderNumber", orderNumber) :
+                new ObjectParameter("orderNumber", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateLocalDeliveryFee", weightParameter, orderNumberParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> CalculateLocalDeliveryFeeAdhoc(Nullable<decimal> weight, Nullable<int> postalCode)
+        {
+            var weightParameter = weight.HasValue ?
+                new ObjectParameter("weight", weight) :
+                new ObjectParameter("weight", typeof(decimal));
+    
+            var postalCodeParameter = postalCode.HasValue ?
+                new ObjectParameter("postalCode", postalCode) :
+                new ObjectParameter("postalCode", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateLocalDeliveryFeeAdhoc", weightParameter, postalCodeParameter);
         }
     }
 }

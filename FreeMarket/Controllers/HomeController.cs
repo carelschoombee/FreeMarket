@@ -32,6 +32,13 @@ namespace FreeMarket.Controllers
             return View(model);
         }
 
+        public ActionResult ArticlesIndex()
+        {
+            ArticlesViewModel model = new ArticlesViewModel();
+
+            return View(model);
+        }
+
         public ActionResult DeliveryOptionsInfo()
         {
             DeliveryOptionsViewModel model = new DeliveryOptionsViewModel();

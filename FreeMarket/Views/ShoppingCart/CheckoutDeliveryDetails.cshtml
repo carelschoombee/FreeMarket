@@ -27,7 +27,7 @@
 
         <div class="form-horizontal">
 
-            @Html.ValidationSummary(true)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger", @style = "font-size:20px" })
 
             @if (Model.OrderStatus == "Locked")
             {
@@ -43,37 +43,7 @@
                 </table>
             }
 
-            <table class="table table-bordered-custom table-responsive">
-                <tr>
-                    <td class="text-center"><span class="text-info">Special Offer</span></td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.Raw(Model.TextBlock1)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.Raw(Model.TextBlock2)
-                    </td>
-                </tr>
-            </table>
-            
-            <table class="table table-bordered-custom table-responsive">
-                <tr>
-                    <td class="text-center"><span class="text-info">Deliveries for the rest of RSA</span></td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.Raw(Model.TextBlock3)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.Raw(Model.TextBlock4)
-                    </td>
-                </tr>
-            </table>
+            @Html.Raw(Model.TextBlock1)
 
             <br />
             <br />
@@ -150,7 +120,12 @@
                 </div>
 
                 <div id="DeliveryTypeContainer">
-                    @Html.Partial("_CartModifyDeliveryTypeDetails", Model)
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.Partial("_CartModifyDeliveryTypeDetails", Model)
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="form-group">
@@ -468,7 +443,7 @@
             }).done
                 (function (data) {
                     if (data == 1) { //if it is a special delivery and by courier
-                        if (selectedVal == "Courier")
+                        if (selectedVal == "Courier" || selectedVal == "LocalCourier")
                         {
                             // hide delivery options
                             $("#radioDiv").hide();
@@ -493,7 +468,7 @@
                     else if (data == 0)
                     {
                         // if it is not a special delivery and by courier
-                        if (selectedVal == "Courier")
+                        if (selectedVal == "Courier" || selectedVal == "LocalCourier")
                         {
                             // show delivery options
                             $("#radioDiv").show();
@@ -558,7 +533,7 @@
                    else
                    {
                        // if it is not a special delivery and by courier
-                       if (selectedVal == "Courier")
+                       if (selectedVal == "Courier" || selectedVal == "LocalCourier")
                        {
                            // hide the special picker and show the normal picker
                            $("#specialDeliveryDateContainer").hide();
@@ -592,7 +567,7 @@
         }).done
                (function (data) {
                    if (data == 1) { //if it is a special delivery and by courier
-                       if (selectedVal == "Courier")
+                       if (selectedVal == "Courier" || selected == "LocalCourier")
                        {
                            // hide normal picker
                            $("#deliveryDateContainer").hide();
@@ -609,7 +584,7 @@
                    else
                    {
                        // if it is not a special delivery and by courier
-                       if (selectedVal == "Courier")
+                       if (selectedVal == "Courier" || selectedVal == "LocalCourier")
                        {
                            // hide the special picker and show the normal picker
                            $("#specialDeliveryDateContainer").hide();
