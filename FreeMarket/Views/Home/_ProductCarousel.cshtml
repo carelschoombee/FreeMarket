@@ -1,4 +1,7 @@
-﻿<div id="myCarousel" class="carousel slide" data-ride="carousel">
+﻿@using FreeMarket.Models
+@model WelcomeViewModel
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Carousel indicators -->
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -6,6 +9,9 @@
         <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
     <!-- Wrapper for carousel items -->
+
+    @if (Model.Products.Products.Count == 0)
+    {
     <div class="carousel-inner">
         <div class="item active">
             <img class="img-rounded img-thumbnail img-responsive" src="~/Content/Images/slide1.png" alt="Pecan Nuts 1kg">
@@ -17,6 +23,21 @@
             <img class="img-rounded img-thumbnail img-responsive" src="~/Content/Images/slide3.png" alt="Pecan Nuts Display">
         </div>
     </div>
+    }
+    else
+    {
+        <div class="carousel-inner">
+            <div class="item active">
+                <img class="img-rounded img-thumbnail img-responsive" src="~/Content/Images/smallRamLogo.png" alt="Schoombee and son">
+            </div>
+            @foreach (Product item in Model.Products.Products)
+            { 
+                <div class="item">
+                    <img class="img-thumbnail img-thumbnail img-responsive" src="@Url.Action("RenderImage", "Image", new { id = item.MainImageNumber})" alt="@item.Description" title="@item.Description" />
+                </div>
+            }
+        </div>       
+    }
     <!-- Carousel controls -->
     <a class="carousel-control left" href="#myCarousel" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>

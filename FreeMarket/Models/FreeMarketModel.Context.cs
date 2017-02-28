@@ -65,8 +65,6 @@ namespace FreeMarket.Models
         public virtual DbSet<CashOrderDetail> CashOrderDetails { get; set; }
         public virtual DbSet<CashOrder> CashOrders { get; set; }
         public virtual DbSet<ProductSupplier> ProductSuppliers { get; set; }
-        public virtual DbSet<Article> Articles { get; set; }
-        public virtual DbSet<ArticleCategory> ArticleCategories { get; set; }
         public virtual DbSet<CharliesTransportCourierFeeReference> CharliesTransportCourierFeeReferences { get; set; }
         public virtual DbSet<TimeFreightCourierFeeReference> TimeFreightCourierFeeReferences { get; set; }
     

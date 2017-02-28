@@ -19,25 +19,6 @@
           <Property Name="AddressNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AddressName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Article">
-          <Key>
-            <PropertyRef Name="ArticleId" />
-          </Key>
-          <Property Name="ArticleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="200" />
-          <Property Name="Category" Type="nvarchar" MaxLength="200" />
-          <Property Name="ArticleContent" Type="nvarchar(max)" />
-          <Property Name="DateAdded" Type="datetime" />
-          <Property Name="DateModified" Type="datetime" />
-          <Property Name="Image" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="ArticleCategory">
-          <Key>
-            <PropertyRef Name="CategoryId" />
-          </Key>
-          <Property Name="CategoryId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
-        </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -835,8 +816,6 @@
         <EntityContainer Name="FreeMarketModelStoreContainer">
           <EntitySet Name="ActivityLogging" EntityType="Self.ActivityLogging" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AddressName" EntityType="Self.AddressName" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ArticleCategory" EntityType="Self.ArticleCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditUser" EntityType="Self.AuditUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashCustomer" EntityType="Self.CashCustomer" Schema="dbo" store:Type="Tables" />
@@ -1355,8 +1334,6 @@
             <Parameter Name="ProductNumber" Mode="In" Type="Int32" />
             <Parameter Name="SupplierNumber" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Articles" EntityType="FreeMarketModel.Article" />
-          <EntitySet Name="ArticleCategories" EntityType="FreeMarketModel.ArticleCategory" />
           <EntitySet Name="CharliesTransportCourierFeeReferences" EntityType="FreeMarketModel.CharliesTransportCourierFeeReference" />
           <FunctionImport Name="CalculateCharliesFee" ReturnType="Collection(Decimal)">
             <Parameter Name="weight" Mode="In" Type="Decimal" />
@@ -2324,25 +2301,6 @@
           <Property Type="Decimal" Name="SpecialPricePerUnit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="RetailPricePerUnit" Nullable="true" Precision="19" />
         </ComplexType>
-        <EntityType Name="Article">
-          <Key>
-            <PropertyRef Name="ArticleId" />
-          </Key>
-          <Property Name="ArticleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ArticleContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateAdded" Type="DateTime" Precision="3" />
-          <Property Name="DateModified" Type="DateTime" Precision="3" />
-          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="ArticleCategory">
-          <Key>
-            <PropertyRef Name="CategoryId" />
-          </Key>
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="CharliesTransportCourierFeeReference">
           <Key>
             <PropertyRef Name="DeliveryCostID" />
@@ -3445,27 +3403,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Articles">
-            <EntityTypeMapping TypeName="FreeMarketModel.Article">
-              <MappingFragment StoreEntitySet="Article">
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
-                <ScalarProperty Name="ArticleContent" ColumnName="ArticleContent" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ArticleCategories">
-            <EntityTypeMapping TypeName="FreeMarketModel.ArticleCategory">
-              <MappingFragment StoreEntitySet="ArticleCategory">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CharliesTransportCourierFeeReferences">
             <EntityTypeMapping TypeName="FreeMarketModel.CharliesTransportCourierFeeReference">
               <MappingFragment StoreEntitySet="CharliesTransportCourierFeeReference">

@@ -261,12 +261,6 @@
     <Compile Include="Models\Admin\SpecialsMetaData.cs" />
     <Compile Include="Models\Admin\SpecialsViewModel.cs" />
     <Compile Include="Models\Admin\TimeFreightCourierFeeReferenceMetaData.cs" />
-    <Compile Include="Models\Article.cs">
-      <DependentUpon>FreeMarketModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ArticleCategory.cs">
-      <DependentUpon>FreeMarketModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\AspNetUser.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
@@ -374,6 +368,7 @@
     <Compile Include="Models\GetProduct_Result.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Home\Article.cs" />
     <Compile Include="Models\Home\ArticlesViewModel.cs" />
     <Compile Include="Models\Home\SpecialMessageViewModel.cs" />
     <Compile Include="Models\Home\DeliveryOptionsViewModel.cs" />
@@ -539,6 +534,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\Baking.jpg" />
+    <Content Include="Content\Images\Document.jpg" />
+    <Content Include="Content\Images\History.jpg" />
+    <Content Include="Content\Images\Industry.jpg" />
     <Content Include="Content\Images\slide3.png" />
     <Content Include="Content\Images\AboutUs.jpg" />
     <Content Include="Content\Images\delivery.jpg" />
@@ -583,6 +582,7 @@
     <Content Include="Content\Images\slideLocation3.jpg" />
     <Content Include="Content\Images\slide2.png" />
     <Content Include="Content\Images\slide1.png" />
+    <Content Include="Content\Images\smallRamLogo.png" />
     <Content Include="Content\Images\TimeFreight.png" />
     <Content Include="Content\Images\visa.png" />
     <Content Include="Content\morris.css" />
@@ -863,6 +863,8 @@
     <Content Include="Views\Admin\EditCashOrder.cshtml" />
     <Content Include="Views\Home\_SpecialMessage.cshtml" />
     <Content Include="Views\Admin\_Articles.cshtml" />
+    <Content Include="Views\Home\ArticlesIndex.cshtml" />
+    <Content Include="Views\Home\_ViewArticleModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

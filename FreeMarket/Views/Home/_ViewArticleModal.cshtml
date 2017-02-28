@@ -1,0 +1,27 @@
+﻿@using FreeMarket.Models
+@model Article
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <hr />
+
+                    <div class="table-scroll-parent">
+                        @Html.Raw(Model.Content)
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

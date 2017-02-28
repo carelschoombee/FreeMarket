@@ -1,0 +1,182 @@
+﻿@using FreeMarket.Models
+@model ArticlesViewModel
+
+@{
+    ViewBag.Title = "Pecan Nuts - Articles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@helper ListArticle(int i)
+{
+    <table class="table table-bordered-custom table-responsive well">
+
+        <tr>
+
+            @if (Model.Articles[i].Key == "ArticleHistoricalBackground")
+            {
+                <td class="text-center">
+                    <img src="~/Content/Images/History.jpg" width="256" height="150" class="img-thumbnail" alt="@Model.Articles[i].Title" title="@Model.Articles[i].Title" />
+                </td>
+            }
+            else if (Model.Articles[i].Key == "ArticleIndustry")
+            {
+                <td class="text-center">
+                    <img src="~/Content/Images/Industry.jpg" width="256" height="150"  class="img-thumbnail" alt="@Model.Articles[i].Title" title="@Model.Articles[i].Title" />
+                </td>
+            }
+            else if (Model.Articles[i].Key == "ArticleWhyTheWorldIsNuts")
+            {
+                <td class="text-center">
+                    <img src="~/Content/Images/oldslide1.jpg" width="256" height="150"  class="img-thumbnail" alt="@Model.Articles[i].Title" title="@Model.Articles[i].Title" />
+                </td>
+            }
+            else if (Model.Articles[i].Key == "ArticleBakingSnacking")
+            {
+                <td class="text-center">
+                    <img src="~/Content/Images/Baking.jpg" width="256" height="150" class="img-thumbnail" alt="@Model.Articles[i].Title" title="@Model.Articles[i].Title" />
+                </td>
+            }
+            else
+            {
+                <td class="text-center">
+                    <img src="~/Content/Images/Document.jpg" width="256" height="150"  class="img-thumbnail" alt="@Model.Articles[i].Title" title="@Model.Articles[i].Title" />
+                </td>
+            }
+
+        </tr>
+
+        <tr>
+            <td class="text-center">
+                @Model.Articles[i].Title
+            </td>
+        </tr> 
+        <tr>
+            <td class="text-center">
+                <a href="@Url.Action("ViewArticle", "Home")/@Model.Articles[i].Key" data-id="@Url.Action("ViewArticleModal", "Home")/@Model.Articles[i].Key"
+                   class="btn btn-success editClass"><span class="glyphicon glyphicon-eye-open" aria-hidden="true">&nbsp;&nbsp;View Article</span></a>
+            </td>
+        </tr> 
+
+    </table>
+
+}
+
+<div class="container">
+    <div class="col-sm-12">
+        <div class="row">
+            <h1 class="text-center">Articles</h1>
+            <hr />
+        </div>
+       @if (Model.Articles.Count == 1)
+       {
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-6">
+                @ListArticle(0)
+            </div>
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+       }
+       else if (Model.Articles.Count == 2)
+       {
+        <div class="row">
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-4">
+                @ListArticle(0)
+            </div>
+
+            <div class="col-sm-4">
+                @ListArticle(1)
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+        </div>
+       }
+       else if (Model.Articles.Count == 3)
+       {
+        <div class="row">
+            <div class="col-sm-4">
+                @ListArticle(0)
+            </div>
+            <div class="col-sm-4">
+                @ListArticle(1)
+            </div>
+            <div class="col-sm-4">
+                @ListArticle(2)
+            </div>
+        </div>
+       }
+       else
+       {
+           for (int i = 0; i < Model.Articles.Count; i++)
+           {
+            <div class="row">
+                @if (i < Model.Articles.Count)
+                {
+                    <div class="col-sm-4">
+                        @ListArticle(i)
+                    </div>
+                }
+                @if (++i < Model.Articles.Count)
+                {
+                    <div class="col-sm-4">
+                        @ListArticle(i)
+                    </div>
+                }
+                @if (++i < Model.Articles.Count)
+                {
+                    <div class="col-sm-4">
+                        @ListArticle(i)
+                    </div>
+                }
+            </div>
+           }
+       }
+
+    </div>
+    <div class="col-sm-12">
+        <div class="row text-center">
+            @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "freemarket-link" })
+        </div>
+    </div>
+</div>
+
+<div id="loadingDiv" style="display:none;"></div>
+
+<hr />
+
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog">
+    <div id='EditContainer'>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/Scripts/bootstrapValidator.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.editClass').click(function (evt) {
+            evt.preventDefault();
+            var urlId = $(this).data('id');
+            $.ajax({
+                url: urlId,
+                cache: false
+            }).done
+            (function (data) {
+                $('#EditContainer').html(data);
+            });
+            $('.modal-content').empty();
+            $('#EditModal').removeData('bs.modal');
+            $('#EditModal').modal('show');
+        });
+    });
+
+
+</script>
+

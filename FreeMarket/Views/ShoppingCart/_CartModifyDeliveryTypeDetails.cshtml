@@ -12,7 +12,7 @@
                         @Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "Courier", new { @class = "radioControl", @disabled = "disabled" })
                         @Html.HiddenFor(m => Model.DeliveryOptions.SelectedDeliveryType)
                     </td>
-                    <td>Deliver via Courier</td>
+                    <td>Deliver via Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.CourierCost)</td>
                 </tr>
                 <tr>
@@ -36,14 +36,14 @@
                         @Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "LocalCourier", new { @class = "radioControl", @disabled = "disabled" })
                         @Html.HiddenFor(m => Model.DeliveryOptions.SelectedDeliveryType)
                     </td>
-                    <td>Deliver via Local Courier</td>
+                    <td>Deliver via Local Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.LocalCourierCost)</td>
                 </tr>
                 <tr>
                     <td>
                         @Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "Courier", new { @class = "radioControl", @disabled = "disabled" })
                     </td>
-                    <td>Deliver via National Courier</td>
+                    <td>Deliver via National Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.CourierCost)</td>
                 </tr>
                 <tr>
@@ -66,7 +66,7 @@ else
             <table class="table table-responsive table-condensed table-bordered-custom">
                 <tr>
                     <td>@Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "Courier", new { @class = "radioControl" })</td>
-                    <td>Deliver via Courier</td>
+                    <td>Deliver via Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.CourierCost)</td>
                 </tr>
                 <tr>
@@ -89,13 +89,13 @@ else
                 {
                 <tr>
                     <td>@Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "LocalCourier", new { @class = "radioControl" })</td>
-                    <td>Deliver via Local Courier</td>
+                    <td>Deliver via Local Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.LocalCourierCost)</td>
                 </tr>
                 }
                 <tr>
                     <td>@Html.RadioButtonFor(c => Model.DeliveryOptions.SelectedDeliveryType, "Courier", new { @class = "radioControl" })</td>
-                    <td>Deliver via National Courier</td>
+                    <td>Deliver via National Door to Door Courier</td>
                     <td>@string.Format("{0:C}", Model.DeliveryOptions.CourierCost)</td>
                 </tr>
                 <tr>

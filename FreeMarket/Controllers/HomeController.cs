@@ -108,5 +108,39 @@ namespace FreeMarket.Controllers
 
             return PartialView("_SpecialMessage", model);
         }
+
+        public ActionResult ViewArticleModal(string id)
+        {
+            Article model = new Article();
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                SiteConfiguration temp = db.SiteConfigurations
+                    .Where(c => c.Key == id)
+                    .FirstOrDefault();
+
+                if (temp != null)
+                {
+                    string heading = getBetween(temp.Value, "<h1>", "</h1>");
+                    model = new Article { Content = temp.Value, Key = temp.Key, Title = heading };
+                }
+            }
+
+            return PartialView("_ViewArticleModal", model);
+        }
+
+        public static string getBetween(string strSource, string strStart, string strEnd)
+        {
+            int Start, End;
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            else
+            {
+                return "";
+            }
+        }
     }
 }
