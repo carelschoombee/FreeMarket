@@ -81,8 +81,6 @@ namespace FreeMarket.Models
             {
                 sales = new Dictionary<string, decimal>()
                     {
-                        { "January", 0},
-                        { "February", 0},
                         { "March", 0},
                         { "April", 0},
                         { "May", 0 },
@@ -92,12 +90,18 @@ namespace FreeMarket.Models
                         { "September",0 },
                         { "October", 0 },
                         { "November", 0 },
-                        { "December", 0 }
+                        { "December", 0 },
+                        { "January", 0},
+                        { "February", 0}
                     };
 
                 foreach (OrderHeader o in orders)
                 {
-                    if (sales.ContainsKey(((DateTime)o.OrderDatePlaced).ToString("MMMM")) && (o.OrderDatePlaced.Value.Year == year))
+                    if (sales.ContainsKey(((DateTime)o.OrderDatePlaced).ToString("MMMM")) && (((DateTime)o.OrderDatePlaced).ToString("MMMM") == "January" || (((DateTime)o.OrderDatePlaced).ToString("MMMM") == "February")) && (o.OrderDatePlaced.Value.Year == (year + 1)))
+                    {
+                        sales[((DateTime)o.OrderDatePlaced).ToString("MMMM")] += o.TotalOrderValue;
+                    }
+                    else if (sales.ContainsKey(((DateTime)o.OrderDatePlaced).ToString("MMMM")) && (((DateTime)o.OrderDatePlaced).ToString("MMMM") != "January" && (((DateTime)o.OrderDatePlaced).ToString("MMMM") != "February")) && (o.OrderDatePlaced.Value.Year == year))
                     {
                         sales[((DateTime)o.OrderDatePlaced).ToString("MMMM")] += o.TotalOrderValue;
                     }
@@ -105,7 +109,11 @@ namespace FreeMarket.Models
 
                 foreach (CashOrder o in cashOrders)
                 {
-                    if (sales.ContainsKey(((DateTime)o.DatePlaced).ToString("MMMM")) && (o.DatePlaced.Value.Year == year))
+                    if (sales.ContainsKey(((DateTime)o.DatePlaced).ToString("MMMM")) && (((DateTime)o.DatePlaced).ToString("MMMM") == "January" || (((DateTime)o.DatePlaced).ToString("MMMM") == "February")) && (o.DatePlaced.Value.Year == (year + 1)))
+                    {
+                        sales[((DateTime)o.DatePlaced).ToString("MMMM")] += (decimal)o.Total;
+                    }
+                    else if (sales.ContainsKey(((DateTime)o.DatePlaced).ToString("MMMM")) && (((DateTime)o.DatePlaced).ToString("MMMM") != "January" && (((DateTime)o.DatePlaced).ToString("MMMM") != "February")) && (o.DatePlaced.Value.Year == year))
                     {
                         sales[((DateTime)o.DatePlaced).ToString("MMMM")] += (decimal)o.Total;
                     }
@@ -345,7 +353,7 @@ namespace FreeMarket.Models
                     TotalSalesGateway = TotalSalesGateway / 100;
 
                     orders = db.OrderHeaders
-                        .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "Completed"))
+                        .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "InTransit" || c.OrderStatus == "Completed"))
                         .ToList();
 
                     cashOrders = db.CashOrders
@@ -375,8 +383,8 @@ namespace FreeMarket.Models
                     try
                     {
                         orders = db.OrderHeaders
-                           .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "Completed")
-                           && c.OrderDatePlaced.Value.Year == year)
+                           .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "InTransit" || c.OrderStatus == "Completed")
+                           && (c.OrderDatePlaced.Value.Year == year || c.OrderDatePlaced.Value.Year == (year + 1)))
                            .ToList();
 
                         cashOrders = db.CashOrders
@@ -477,7 +485,7 @@ namespace FreeMarket.Models
                 try
                 {
                     orders = db.OrderHeaders
-                        .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "Completed")
+                        .Where(c => (c.OrderStatus == "Confirmed" || c.OrderStatus == "InTransit" || c.OrderStatus == "Completed")
                         && c.OrderDatePlaced.Value.Year == date.Year && c.OrderDatePlaced.Value.Month == date.Month)
                         .ToList();
 

@@ -17,7 +17,7 @@
             Name
         </th>
         <th>
-            Contact
+            Contact / Delivery
         </th>
         <th>
             Total
@@ -44,6 +44,15 @@
                 @result.Order.CustomerEmail
                 <br />
                 @result.Order.CustomerDeliveryAddress
+                <br />
+                <br />
+                Delivered: <span class="text-info">@result.Order.Delivered</span>
+                <br />
+                Payment Received: <span class="text-info">@result.Order.PaymentReceived</span>
+                <br />
+                Cash: <span class="text-info">@result.Order.CashTransaction</span>
+                <br />
+                Bank Transfer: <span class="text-info">@result.Order.BankTransfer</span>
             </td>
             <td>
                 @string.Format("{0:C}", result.Order.Total)
@@ -89,6 +98,7 @@
                     
                 }
             </td>
+            
         </tr>
     }
 </table>

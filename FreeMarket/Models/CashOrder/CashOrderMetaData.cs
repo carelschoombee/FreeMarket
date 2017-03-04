@@ -53,12 +53,22 @@ namespace FreeMarket.Models
                     db.SaveChanges();
                 }
 
+                string status;
+                if (model.Order.Delivered == true && model.Order.PaymentReceived == true)
+                    status = "Completed";
+                else
+                    status = "In Progress";
+
                 CashOrder order = new CashOrder
                 {
                     CashCustomerId = customer.Id,
                     DatePlaced = DateTime.Now,
-                    Status = "Completed",
-                    Total = 0
+                    Status = status,
+                    Total = 0,
+                    Delivered = model.Order.Delivered,
+                    PaymentReceived = model.Order.PaymentReceived,
+                    BankTransfer = model.Order.BankTransfer,
+                    CashTransaction = model.Order.CashTransaction
                 };
 
                 db.CashOrders.Add(order);
@@ -201,6 +211,19 @@ namespace FreeMarket.Models
                 List<GetCashOrderDetails_Result> details = db.GetCashOrderDetails(order.OrderId).ToList();
                 order.Total = details.Sum(c => c.OrderItemTotal);
                 order.DatePlaced = DateTime.Now;
+                order.Delivered = model.Order.Delivered;
+                order.BankTransfer = model.Order.BankTransfer;
+                order.CashTransaction = model.Order.CashTransaction;
+                order.PaymentReceived = model.Order.PaymentReceived;
+
+                string status;
+                if (model.Order.Delivered == true && model.Order.PaymentReceived == true)
+                    status = "Completed";
+                else
+                    status = "In Progress";
+
+                order.Status = status;
+
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -267,6 +290,16 @@ namespace FreeMarket.Models
 
     public class CashOrderMetaData
     {
+        [DisplayName("Delivered")]
+        public bool Delivered { get; set; }
 
+        [DisplayName("Payment Received")]
+        public bool PaymentReceived { get; set; }
+
+        [DisplayName("Cash Transaction")]
+        public bool CashTransaction { get; set; }
+
+        [DisplayName("Bank Transfer")]
+        public bool BankTransfer { get; set; }
     }
 }

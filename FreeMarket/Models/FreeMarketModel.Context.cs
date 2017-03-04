@@ -68,15 +68,6 @@ namespace FreeMarket.Models
         public virtual DbSet<CharliesTransportCourierFeeReference> CharliesTransportCourierFeeReferences { get; set; }
         public virtual DbSet<TimeFreightCourierFeeReference> TimeFreightCourierFeeReferences { get; set; }
     
-        public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
-        }
-    
         public virtual ObjectResult<GetAllCouriersReviewList_Result> GetAllCouriersReviewList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAllCouriersReviewList_Result>("GetAllCouriersReviewList");
@@ -210,15 +201,6 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetails_Result>("GetOrderDetails", orderNumberParameter);
         }
     
-        public virtual ObjectResult<FilterAuditUser_Result> FilterAuditUser(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterAuditUser_Result>("FilterAuditUser", filterCriteriaParameter);
-        }
-    
         public virtual ObjectResult<GetOrderReport_Result> GetOrderReport(Nullable<int> orderNumber)
         {
             var orderNumberParameter = orderNumber.HasValue ?
@@ -258,24 +240,6 @@ namespace FreeMarket.Models
                 new ObjectParameter("orderNumber", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderDetails_Result>("GetCashOrderDetails", orderNumberParameter);
-        }
-    
-        public virtual ObjectResult<FilterCashCustomers_Result> FilterCashCustomers(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashCustomers_Result>("FilterCashCustomers", filterCriteriaParameter);
-        }
-    
-        public virtual ObjectResult<FilterCashOrder_Result> FilterCashOrder(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
         }
     
         public virtual ObjectResult<Nullable<decimal>> CalculateDeliveryFee(Nullable<decimal> weight, Nullable<int> orderNumber)
@@ -407,6 +371,42 @@ namespace FreeMarket.Models
                 new ObjectParameter("postalCode", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateLocalDeliveryFeeAdhoc", weightParameter, postalCodeParameter);
+        }
+    
+        public virtual ObjectResult<FilterAuditUser_Result> FilterAuditUser(string filterCriteria)
+        {
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterAuditUser_Result>("FilterAuditUser", filterCriteriaParameter);
+        }
+    
+        public virtual ObjectResult<FilterCashCustomers_Result> FilterCashCustomers(string filterCriteria)
+        {
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashCustomers_Result>("FilterCashCustomers", filterCriteriaParameter);
+        }
+    
+        public virtual ObjectResult<FilterCashOrder_Result> FilterCashOrder(string filterCriteria)
+        {
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
+        }
+    
+        public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
+        {
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
         }
     }
 }

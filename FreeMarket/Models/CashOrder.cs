@@ -19,5 +19,9 @@ namespace FreeMarket.Models
         public int CashCustomerId { get; set; }
         public Nullable<decimal> Total { get; set; }
         public string Status { get; set; }
+        public Nullable<bool> Delivered { get; set; }
+        public Nullable<bool> PaymentReceived { get; set; }
+        public Nullable<bool> CashTransaction { get; set; }
+        public Nullable<bool> BankTransfer { get; set; }
     }
 }

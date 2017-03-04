@@ -42,8 +42,11 @@ namespace FreeMarket.Models
                         CustomerEmail = result.Email,
                         CustomerName = result.Name,
                         CustomerPhone = result.PhoneNumber,
-                        DatePlaced = result.DatePlaced
-
+                        DatePlaced = result.DatePlaced,
+                        Delivered = result.Delivered,
+                        BankTransfer = result.BankTransfer,
+                        CashTransaction = result.CashTransaction,
+                        PaymentReceived = result.PaymentReceived
                     };
 
                     viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)

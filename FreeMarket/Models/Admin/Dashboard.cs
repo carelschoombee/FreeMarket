@@ -105,7 +105,7 @@ namespace FreeMarket.Models
                 {
                     YearOptions.Add(new SelectListItem
                     {
-                        Text = i.ToString(),
+                        Text = i.ToString() + "/" + (i + 1).ToString(),
                         Value = i.ToString(),
                         Selected = (i.ToString() == SelectedYear ? true : false)
                     });
