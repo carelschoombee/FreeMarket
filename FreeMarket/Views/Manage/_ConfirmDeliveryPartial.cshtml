@@ -1,7 +1,7 @@
 ﻿@using FreeMarket.Models
 @model OrderHeaderViewModel
 
-@if (Model.Order.DeliveryType == "Courier")
+@if (Model.Order.DeliveryType == "Courier" || Model.Order.DeliveryType == "LocalCourier")
 {
         if (Model.SpecialDelivery)
         {
@@ -46,7 +46,7 @@
                 <tr>
                     <td colspan="2">
                         <div>@Model.Courier.CourierName</div>
-                        <img src="~/Content/Images/slideCourier1.png" width="128" height="80" alt="Time Freight" />
+                        <img src="~/Content/Images/delivery.jpg" width="128" height="80" alt="Delivery" />
                     </td>
                 </tr>
                 <tr>
