@@ -20,9 +20,6 @@
             Contact / Delivery
         </th>
         <th>
-            Total
-        </th>
-        <th>
             Items
         </th>
     </tr>
@@ -59,9 +56,7 @@
                 @Html.ActionLink("Download Personal Invoice", "DownloadCashReport", "Admin", new { orderNumber = result.Order.OrderId, bankAccount = "Personal" }, null)
                 @Html.ActionLink("Download Business Invoice", "DownloadCashReport", "Admin", new { orderNumber = result.Order.OrderId, bankAccount = "Business" }, null)
             </td>
-            <td>
-                @string.Format("{0:C}", result.Order.Total)
-            </td>
+            
             <td>
                 @if (result.OrderDetails != null && result.OrderDetails.Count > 0)
                 {
@@ -70,6 +65,9 @@
                         <tr>
                             <th>
                                 Description
+                            </th>
+                            <th>
+                                Weight
                             </th>
                             <th>
                                 Qty
@@ -87,7 +85,10 @@
                         <tr>
                             <td>
                                 @item.Description from @item.SupplierName
-                            </td>                               
+                            </td>   
+                            <td>
+                                @item.Weight KG
+                            </td>                            
                             <td data-label="Qty">
                                 @item.Quantity
                             </td>
@@ -99,6 +100,25 @@
                             </td>
                         </tr>
                         }
+                    </table>
+
+                    <table class="table table-bordered-custom table-responsive well">
+                        <tr>
+                            <td>
+                                Shipping
+                            </td>
+                            <td>
+                                @string.Format("{0:C}", result.Order.ShippingTotal)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Grand Total
+                            </td>
+                            <td>
+                                @string.Format("{0:C}", result.Order.Total)
+                            </td>
+                        </tr>
                     </table>
                     
                 }

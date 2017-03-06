@@ -2389,6 +2389,7 @@
           <Property Type="Boolean" Name="CashTransaction" Nullable="true" />
           <Property Type="Boolean" Name="BankTransfer" Nullable="true" />
           <Property Type="Boolean" Name="InvoiceSent" Nullable="true" />
+          <Property Type="Decimal" Name="ShippingTotal" Nullable="true" Precision="19" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3544,6 +3545,7 @@
                 <ScalarProperty Name="CashTransaction" ColumnName="CashTransaction" />
                 <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
                 <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
+                <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

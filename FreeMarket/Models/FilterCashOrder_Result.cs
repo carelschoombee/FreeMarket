@@ -28,5 +28,6 @@ namespace FreeMarket.Models
         public Nullable<bool> CashTransaction { get; set; }
         public Nullable<bool> BankTransfer { get; set; }
         public Nullable<bool> InvoiceSent { get; set; }
+        public Nullable<decimal> ShippingTotal { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace FreeMarket.Models
     {
         public string Description { get; set; }
         public string SupplierName { get; set; }
-        public int Weight { get; set; }
+        public decimal Weight { get; set; }
     }
 
     public class CashOrderDetailMetaData

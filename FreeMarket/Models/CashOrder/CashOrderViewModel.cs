@@ -52,7 +52,8 @@ namespace FreeMarket.Models
                         BankTransfer = result.BankTransfer,
                         CashTransaction = result.CashTransaction,
                         PaymentReceived = result.PaymentReceived,
-                        InvoiceSent = result.InvoiceSent
+                        InvoiceSent = result.InvoiceSent,
+                        ShippingTotal = result.ShippingTotal
                     };
 
                     viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
@@ -67,7 +68,7 @@ namespace FreeMarket.Models
                             SupplierNumber = c.SupplierNumber,
                             Description = c.Description,
                             SupplierName = c.SupplierName,
-                            Weight = (int)c.Weight,
+                            Weight = c.Weight,
                             OrderItemTotal = c.OrderItemTotal
                         })
                         .ToList();

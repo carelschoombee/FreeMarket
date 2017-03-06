@@ -197,7 +197,7 @@ namespace FreeMarket.Models
                     CashCustomerId = customer.Id,
                     DatePlaced = DateTime.Now,
                     Status = status,
-                    Total = 0,
+                    Total = model.Order.ShippingTotal,
                     Delivered = model.Order.Delivered,
                     PaymentReceived = model.Order.PaymentReceived,
                     BankTransfer = model.Order.BankTransfer,
@@ -322,7 +322,7 @@ namespace FreeMarket.Models
                                 Quantity = p.CashQuantity,
                                 Price = price,
                                 OrderItemTotal = price * p.CashQuantity,
-                                CustodianNumber = model.SelectedCustodian
+                                CustodianNumber = model.SelectedCustodian,
                             };
 
                             db.CashOrderDetails.Add(detail);
@@ -349,7 +349,7 @@ namespace FreeMarket.Models
                 db.SaveChanges();
 
                 List<GetCashOrderDetails_Result> details = db.GetCashOrderDetails(order.OrderId).ToList();
-                order.Total = details.Sum(c => c.OrderItemTotal);
+                order.Total = details.Sum(c => c.OrderItemTotal) + model.Order.ShippingTotal;
                 order.DatePlaced = DateTime.Now;
                 order.Delivered = model.Order.Delivered;
                 order.BankTransfer = model.Order.BankTransfer;
