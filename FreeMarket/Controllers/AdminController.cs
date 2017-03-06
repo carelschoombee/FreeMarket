@@ -37,6 +37,12 @@ namespace FreeMarket.Controllers
             return Content(address.ToString());
         }
 
+        public ActionResult DownloadCashReport(int orderNumber, string bankAccount)
+        {
+            Dictionary<Stream, string> invoice = CashOrder.GetReport(ReportType.CashOrderInvoice.ToString(), orderNumber, bankAccount);
+            return File(invoice.FirstOrDefault().Key, invoice.FirstOrDefault().Value, string.Format("Order {0}.pdf", orderNumber));
+        }
+
         public ActionResult EditCustomer(string customerNumber)
         {
             AspNetUserCustomer model = new AspNetUserCustomer(customerNumber, false);
@@ -617,7 +623,7 @@ namespace FreeMarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateCashOrderProcess(CashOrderViewModel model)
+        public async Task<ActionResult> CreateCashOrderProcess(CashOrderViewModel model)
         {
             if (!model.Products.Products.Any(c => c.CashQuantity > 0))
             {
@@ -628,7 +634,7 @@ namespace FreeMarket.Controllers
 
             if (ModelState.IsValid)
             {
-                CashOrder.CreateNewCashOrder(model);
+                await CashOrder.CreateNewCashOrder(model);
 
                 AuditUser.LogAudit(39, string.Format("Cash Order Number: {0}", model.Order.OrderId), User.Identity.GetUserId());
 
@@ -640,7 +646,7 @@ namespace FreeMarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditCashOrderProcess(CashOrderViewModel model)
+        public async Task<ActionResult> EditCashOrderProcess(CashOrderViewModel model)
         {
             if (!model.Products.Products.Any(c => c.CashQuantity > 0))
             {
@@ -651,7 +657,7 @@ namespace FreeMarket.Controllers
 
             if (ModelState.IsValid)
             {
-                CashOrder.ModifyOrder(model);
+                await CashOrder.ModifyOrder(model);
 
                 AuditUser.LogAudit(40, string.Format("Cash Order Number: {0}", model.Order.OrderId), User.Identity.GetUserId());
 

@@ -63,6 +63,7 @@
           <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="1100" />
           <Property Name="Email" Type="nvarchar" MaxLength="256" />
           <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="ClientVatNumber" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="CashOrder">
           <Key>
@@ -77,6 +78,9 @@
           <Property Name="PaymentReceived" Type="bit" />
           <Property Name="CashTransaction" Type="bit" />
           <Property Name="BankTransfer" Type="bit" />
+          <Property Name="InvoiceSent" Type="bit" />
+          <Property Name="ShippingTotal" Type="money" />
+          <Property Name="ClientOrderNumber" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="CashOrderDetail">
           <Key>
@@ -195,8 +199,9 @@
         </EntityType>
         <EntityType Name="FreeMarketOwner">
           <Key>
-            <PropertyRef Name="EmailAddress" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TelephoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -207,6 +212,7 @@
           <Property Name="BankingDetailsBranchCode" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="BankingDetailsAccountNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="BankingDetailsAccountType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BankAccountType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -776,6 +782,10 @@
         <Function Name="GetCashOrderDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="orderNumber" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetCashOrderReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="int" Mode="In" />
+          <Parameter Name="BankAccountType" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="GetCustodianInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="productNumber" Type="int" Mode="In" />
           <Parameter Name="supplierNumber" Type="int" Mode="In" />
@@ -994,21 +1004,6 @@
           <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Identity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="FreeMarketOwner">
-          <Key>
-            <PropertyRef Name="EmailAddress" />
-          </Key>
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TelephoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CellphoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankingDetailsBankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankingDetailsBranchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankingDetailsBranchCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankingDetailsAccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankingDetailsAccountType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="Location">
           <Key>
             <PropertyRef Name="LocationNumber" />
@@ -1147,7 +1142,6 @@
           <EntitySet Name="CourierStockMovementLogs" EntityType="Self.CourierStockMovementLog" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="ExceptionLoggings" EntityType="Self.ExceptionLogging" />
-          <EntitySet Name="FreeMarketOwners" EntityType="Self.FreeMarketOwner" />
           <EntitySet Name="Locations" EntityType="Self.Location" />
           <EntitySet Name="OrderStatus" EntityType="Self.OrderStatu" />
           <EntitySet Name="PaymentGatewayParameters" EntityType="Self.PaymentGatewayParameter" />
@@ -1285,12 +1279,10 @@
           <FunctionImport Name="GetPaymentGatewayMessages" ReturnType="Collection(FreeMarketModel.GetPaymentGatewayMessages_Result)">
           <Parameter Name="orderNumber" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="CashCustomers" EntityType="FreeMarketModel.CashCustomer" />
           <EntitySet Name="CashOrderDetails" EntityType="FreeMarketModel.CashOrderDetail" />
           <FunctionImport Name="GetCashOrderDetails" ReturnType="Collection(FreeMarketModel.GetCashOrderDetails_Result)">
           <Parameter Name="orderNumber" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="CashOrders" EntityType="FreeMarketModel.CashOrder" />
           <FunctionImport Name="CalculateDeliveryFee" ReturnType="Collection(Decimal)">
             <Parameter Name="weight" Mode="In" Type="Decimal" />
             <Parameter Name="orderNumber" Mode="In" Type="Int32" />
@@ -1347,15 +1339,22 @@
           </FunctionImport>
           <EntitySet Name="TimeFreightCourierFeeReferences" EntityType="FreeMarketModel.TimeFreightCourierFeeReference" />
           <FunctionImport Name="FilterAuditUser" ReturnType="Collection(FreeMarketModel.FilterAuditUser_Result)">
-            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          <Parameter Name="filterCriteria" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="FilterCashCustomers" ReturnType="Collection(FreeMarketModel.FilterCashCustomers_Result)">
-            <Parameter Name="filterCriteria" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="FilterCashOrder" ReturnType="Collection(FreeMarketModel.FilterCashOrder_Result)">
-            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          <Parameter Name="filterCriteria" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="FilterCustomers" ReturnType="Collection(FreeMarketModel.FilterCustomers_Result)">
+          <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="CashCustomers" EntityType="FreeMarketModel.CashCustomer" />
+          <EntitySet Name="CashOrders" EntityType="FreeMarketModel.CashOrder" />
+          <EntitySet Name="FreeMarketOwners" EntityType="FreeMarketModel.FreeMarketOwner" />
+          <FunctionImport Name="GetCashOrderReport" ReturnType="Collection(FreeMarketModel.GetCashOrderReport_Result)">
+            <Parameter Name="OrderNumber" Mode="In" Type="Int32" />
+            <Parameter Name="BankAccountType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FilterCashOrder" ReturnType="Collection(FreeMarketModel.FilterCashOrder_Result)">
             <Parameter Name="filterCriteria" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
@@ -2139,16 +2138,6 @@
           <Property Type="String" Name="Description" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <EntityType Name="CashCustomer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryAddress" Type="String" MaxLength="1100" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="CashOrderDetail">
           <Key>
             <PropertyRef Name="CashOrderItemId" />
@@ -2175,20 +2164,6 @@
           <Property Type="String" Name="SupplierName" Nullable="false" MaxLength="100" />
           <Property Type="Decimal" Name="Weight" Nullable="false" Precision="8" Scale="2" />
         </ComplexType>
-        <EntityType Name="CashOrder">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DatePlaced" Type="DateTime" Precision="3" />
-          <Property Name="CashCustomerId" Type="Int32" Nullable="false" />
-          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Delivered" Type="Boolean" />
-          <Property Name="PaymentReceived" Type="Boolean" />
-          <Property Name="CashTransaction" Type="Boolean" />
-          <Property Name="BankTransfer" Type="Boolean" />
-        </EntityType>
         <EntityType Name="ProductSupplier">
           <Key>
             <PropertyRef Name="ProductNumber" />
@@ -2301,22 +2276,6 @@
           <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="FilterCashOrder_Result">
-          <Property Type="Int32" Name="Id" Nullable="true" />
-          <Property Type="DateTime" Name="DatePlaced" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-          <Property Type="Int32" Name="OrderId" Nullable="true" />
-          <Property Type="Int32" Name="CashCustomerId" Nullable="true" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
-          <Property Type="Boolean" Name="Delivered" Nullable="true" />
-          <Property Type="Boolean" Name="PaymentReceived" Nullable="true" />
-          <Property Type="Boolean" Name="CashTransaction" Nullable="true" />
-          <Property Type="Boolean" Name="BankTransfer" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="FilterCustomers_Result">
           <Property Type="String" Name="Id" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="Name" Nullable="true" />
@@ -2338,6 +2297,98 @@
           <Property Type="Boolean" Name="LockoutEnabled" Nullable="true" />
           <Property Type="Int32" Name="AccessFailedCount" Nullable="true" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="256" />
+        </ComplexType>
+        <EntityType Name="CashCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="1100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientVatNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CashOrder">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DatePlaced" Type="DateTime" Precision="3" />
+          <Property Name="CashCustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Delivered" Type="Boolean" />
+          <Property Name="PaymentReceived" Type="Boolean" />
+          <Property Name="CashTransaction" Type="Boolean" />
+          <Property Name="BankTransfer" Type="Boolean" />
+          <Property Name="InvoiceSent" Type="Boolean" />
+          <Property Name="ShippingTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClientOrderNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FreeMarketOwner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TelephoneNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CellphoneNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankingDetailsBankName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankingDetailsBranchName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankingDetailsBranchCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankingDetailsAccountNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankingDetailsAccountType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="GetCashOrderReport_Result">
+          <Property Type="String" Name="CustomerName" Nullable="false" />
+          <Property Type="String" Name="CustomerPhone1" Nullable="true" />
+          <Property Type="String" Name="CustomerEmail" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="DeliveryAddressLine1" Nullable="true" MaxLength="1100" />
+          <Property Type="String" Name="ClientVatNumber" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="OrderNumber" Nullable="false" />
+          <Property Type="Decimal" Name="SubTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ShippingTotal" Nullable="true" Precision="19" />
+          <Property Type="String" Name="ClientOrderNumber" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="GrandTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="String" Name="Size" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="Weight" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="String" Name="SupportCel" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SupportLand" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SupportEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StreetAddress" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="TownName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="StruisbaaiPostalCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Province" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsBankName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BankingDetailsBranchName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BankingDetailsBranchCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsAccountNumber" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsAccountType" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="FilterCashOrder_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="DateTime" Name="DatePlaced" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="Int32" Name="OrderId" Nullable="true" />
+          <Property Type="Int32" Name="CashCustomerId" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
+          <Property Type="Boolean" Name="Delivered" Nullable="true" />
+          <Property Type="Boolean" Name="PaymentReceived" Nullable="true" />
+          <Property Type="Boolean" Name="CashTransaction" Nullable="true" />
+          <Property Type="Boolean" Name="BankTransfer" Nullable="true" />
+          <Property Type="Boolean" Name="InvoiceSent" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2413,22 +2464,6 @@
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
                 <ScalarProperty Name="Identity" ColumnName="Identity" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FreeMarketOwners">
-            <EntityTypeMapping TypeName="FreeMarketModel.FreeMarketOwner">
-              <MappingFragment StoreEntitySet="FreeMarketOwner">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="TelephoneNumber" ColumnName="TelephoneNumber" />
-                <ScalarProperty Name="CellphoneNumber" ColumnName="CellphoneNumber" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-                <ScalarProperty Name="BankingDetailsBankName" ColumnName="BankingDetailsBankName" />
-                <ScalarProperty Name="BankingDetailsBranchName" ColumnName="BankingDetailsBranchName" />
-                <ScalarProperty Name="BankingDetailsBranchCode" ColumnName="BankingDetailsBranchCode" />
-                <ScalarProperty Name="BankingDetailsAccountNumber" ColumnName="BankingDetailsAccountNumber" />
-                <ScalarProperty Name="BankingDetailsAccountType" ColumnName="BankingDetailsAccountType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3239,17 +3274,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="CashCustomers">
-            <EntityTypeMapping TypeName="FreeMarketModel.CashCustomer">
-              <MappingFragment StoreEntitySet="CashCustomer">
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CashOrderDetails">
             <EntityTypeMapping TypeName="FreeMarketModel.CashOrderDetail">
               <MappingFragment StoreEntitySet="CashOrderDetail">
@@ -3281,21 +3305,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="CashOrders">
-            <EntityTypeMapping TypeName="FreeMarketModel.CashOrder">
-              <MappingFragment StoreEntitySet="CashOrder">
-                <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
-                <ScalarProperty Name="CashTransaction" ColumnName="CashTransaction" />
-                <ScalarProperty Name="PaymentReceived" ColumnName="PaymentReceived" />
-                <ScalarProperty Name="Delivered" ColumnName="Delivered" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="CashCustomerId" ColumnName="CashCustomerId" />
-                <ScalarProperty Name="DatePlaced" ColumnName="DatePlaced" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CalculateDeliveryFee" FunctionName="FreeMarketModel.Store.CalculateDeliveryFee" />
           <FunctionImportMapping FunctionImportName="CalculateDeliveryFeeAdhoc" FunctionName="FreeMarketModel.Store.CalculateDeliveryFeeAdhoc" />
           <FunctionImportMapping FunctionImportName="CalculatePostOfficeFee" FunctionName="FreeMarketModel.Store.CalculatePostOfficeFee" />
@@ -3409,26 +3418,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="FilterCashOrder" FunctionName="FreeMarketModel.Store.FilterCashOrder">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCashOrder_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="DatePlaced" ColumnName="DatePlaced" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="CashCustomerId" ColumnName="CashCustomerId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Delivered" ColumnName="Delivered" />
-                <ScalarProperty Name="PaymentReceived" ColumnName="PaymentReceived" />
-                <ScalarProperty Name="CashTransaction" ColumnName="CashTransaction" />
-                <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="FilterCustomers" FunctionName="FreeMarketModel.Store.FilterCustomers">
             <ResultMapping>
               <ComplexTypeMapping TypeName="FreeMarketModel.FilterCustomers_Result">
@@ -3452,6 +3441,109 @@
                 <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
                 <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CashCustomers">
+            <EntityTypeMapping TypeName="FreeMarketModel.CashCustomer">
+              <MappingFragment StoreEntitySet="CashCustomer">
+                <ScalarProperty Name="ClientVatNumber" ColumnName="ClientVatNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CashOrders">
+            <EntityTypeMapping TypeName="FreeMarketModel.CashOrder">
+              <MappingFragment StoreEntitySet="CashOrder">
+                <ScalarProperty Name="ClientOrderNumber" ColumnName="ClientOrderNumber" />
+                <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
+                <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
+                <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
+                <ScalarProperty Name="CashTransaction" ColumnName="CashTransaction" />
+                <ScalarProperty Name="PaymentReceived" ColumnName="PaymentReceived" />
+                <ScalarProperty Name="Delivered" ColumnName="Delivered" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CashCustomerId" ColumnName="CashCustomerId" />
+                <ScalarProperty Name="DatePlaced" ColumnName="DatePlaced" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FreeMarketOwners">
+            <EntityTypeMapping TypeName="FreeMarketModel.FreeMarketOwner">
+              <MappingFragment StoreEntitySet="FreeMarketOwner">
+                <ScalarProperty Name="BankAccountType" ColumnName="BankAccountType" />
+                <ScalarProperty Name="BankingDetailsAccountType" ColumnName="BankingDetailsAccountType" />
+                <ScalarProperty Name="BankingDetailsAccountNumber" ColumnName="BankingDetailsAccountNumber" />
+                <ScalarProperty Name="BankingDetailsBranchCode" ColumnName="BankingDetailsBranchCode" />
+                <ScalarProperty Name="BankingDetailsBranchName" ColumnName="BankingDetailsBranchName" />
+                <ScalarProperty Name="BankingDetailsBankName" ColumnName="BankingDetailsBankName" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="CellphoneNumber" ColumnName="CellphoneNumber" />
+                <ScalarProperty Name="TelephoneNumber" ColumnName="TelephoneNumber" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCashOrderReport" FunctionName="FreeMarketModel.Store.GetCashOrderReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.GetCashOrderReport_Result">
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerPhone1" ColumnName="CustomerPhone1" />
+                <ScalarProperty Name="CustomerEmail" ColumnName="CustomerEmail" />
+                <ScalarProperty Name="DeliveryAddressLine1" ColumnName="DeliveryAddressLine1" />
+                <ScalarProperty Name="ClientVatNumber" ColumnName="ClientVatNumber" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
+                <ScalarProperty Name="ClientOrderNumber" ColumnName="ClientOrderNumber" />
+                <ScalarProperty Name="GrandTotal" ColumnName="GrandTotal" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="SupportCel" ColumnName="SupportCel" />
+                <ScalarProperty Name="SupportLand" ColumnName="SupportLand" />
+                <ScalarProperty Name="SupportEmail" ColumnName="SupportEmail" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="TownName" ColumnName="TownName" />
+                <ScalarProperty Name="StruisbaaiPostalCode" ColumnName="StruisbaaiPostalCode" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="BankingDetailsBankName" ColumnName="BankingDetailsBankName" />
+                <ScalarProperty Name="BankingDetailsBranchName" ColumnName="BankingDetailsBranchName" />
+                <ScalarProperty Name="BankingDetailsBranchCode" ColumnName="BankingDetailsBranchCode" />
+                <ScalarProperty Name="BankingDetailsAccountNumber" ColumnName="BankingDetailsAccountNumber" />
+                <ScalarProperty Name="BankingDetailsAccountType" ColumnName="BankingDetailsAccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FilterCashOrder" FunctionName="FreeMarketModel.Store.FilterCashOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCashOrder_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DatePlaced" ColumnName="DatePlaced" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="CashCustomerId" ColumnName="CashCustomerId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Delivered" ColumnName="Delivered" />
+                <ScalarProperty Name="PaymentReceived" ColumnName="PaymentReceived" />
+                <ScalarProperty Name="CashTransaction" ColumnName="CashTransaction" />
+                <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
+                <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

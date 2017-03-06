@@ -33,7 +33,6 @@ namespace FreeMarket.Models
         public virtual DbSet<CourierStockMovementLog> CourierStockMovementLogs { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<ExceptionLogging> ExceptionLoggings { get; set; }
-        public virtual DbSet<FreeMarketOwner> FreeMarketOwners { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<OrderStatu> OrderStatus { get; set; }
         public virtual DbSet<PaymentGatewayParameter> PaymentGatewayParameters { get; set; }
@@ -61,12 +60,13 @@ namespace FreeMarket.Models
         public virtual DbSet<Custodian> Custodians { get; set; }
         public virtual DbSet<PaymentGatewayMessage> PaymentGatewayMessages { get; set; }
         public virtual DbSet<Support> Supports { get; set; }
-        public virtual DbSet<CashCustomer> CashCustomers { get; set; }
         public virtual DbSet<CashOrderDetail> CashOrderDetails { get; set; }
-        public virtual DbSet<CashOrder> CashOrders { get; set; }
         public virtual DbSet<ProductSupplier> ProductSuppliers { get; set; }
         public virtual DbSet<CharliesTransportCourierFeeReference> CharliesTransportCourierFeeReferences { get; set; }
         public virtual DbSet<TimeFreightCourierFeeReference> TimeFreightCourierFeeReferences { get; set; }
+        public virtual DbSet<CashCustomer> CashCustomers { get; set; }
+        public virtual DbSet<CashOrder> CashOrders { get; set; }
+        public virtual DbSet<FreeMarketOwner> FreeMarketOwners { get; set; }
     
         public virtual ObjectResult<GetAllCouriersReviewList_Result> GetAllCouriersReviewList()
         {
@@ -391,15 +391,6 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashCustomers_Result>("FilterCashCustomers", filterCriteriaParameter);
         }
     
-        public virtual ObjectResult<FilterCashOrder_Result> FilterCashOrder(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
-        }
-    
         public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
         {
             var filterCriteriaParameter = filterCriteria != null ?
@@ -407,6 +398,28 @@ namespace FreeMarket.Models
                 new ObjectParameter("filterCriteria", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
+        }
+    
+        public virtual ObjectResult<GetCashOrderReport_Result> GetCashOrderReport(Nullable<int> orderNumber, string bankAccountType)
+        {
+            var orderNumberParameter = orderNumber.HasValue ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(int));
+    
+            var bankAccountTypeParameter = bankAccountType != null ?
+                new ObjectParameter("BankAccountType", bankAccountType) :
+                new ObjectParameter("BankAccountType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderReport_Result>("GetCashOrderReport", orderNumberParameter, bankAccountTypeParameter);
+        }
+    
+        public virtual ObjectResult<FilterCashOrder_Result> FilterCashOrder(string filterCriteria)
+        {
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
         }
     }
 }

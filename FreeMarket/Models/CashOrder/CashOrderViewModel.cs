@@ -16,6 +16,11 @@ namespace FreeMarket.Models
         public List<SelectListItem> Custodians { get; set; }
         public ProductCollection Products { get; set; }
 
+        public string SelectedBankAcountOption { get; set; }
+
+        public List<string> BankAcountOptions { get; set; }
+
+
         public static List<CashOrderViewModel> GetOrders(string searchCriteria)
         {
             List<CashOrderViewModel> model = new List<CashOrderViewModel>();
@@ -46,7 +51,8 @@ namespace FreeMarket.Models
                         Delivered = result.Delivered,
                         BankTransfer = result.BankTransfer,
                         CashTransaction = result.CashTransaction,
-                        PaymentReceived = result.PaymentReceived
+                        PaymentReceived = result.PaymentReceived,
+                        InvoiceSent = result.InvoiceSent
                     };
 
                     viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
@@ -89,6 +95,7 @@ namespace FreeMarket.Models
                 model.Order.CustomerEmail = customer.Email;
                 model.Order.CustomerName = customer.Name;
                 model.Order.CustomerPhone = customer.PhoneNumber;
+                model.Order.ClientVatNumber = customer.ClientVatNumber;
 
                 model.OrderDetails = db.GetCashOrderDetails(model.Order.OrderId)
                     .Select(c => new CashOrderDetail
@@ -103,7 +110,7 @@ namespace FreeMarket.Models
                         Description = c.Description,
                         SupplierName = c.SupplierName,
                         Weight = (int)c.Weight,
-                        OrderItemTotal = c.OrderItemTotal
+                        OrderItemTotal = c.OrderItemTotal,
                     })
                     .ToList();
 
@@ -150,6 +157,7 @@ namespace FreeMarket.Models
                         model.Order.CustomerEmail = customer.Email;
                         model.Order.CustomerName = customer.Name;
                         model.Order.CustomerPhone = customer.PhoneNumber;
+                        model.Order.ClientVatNumber = customer.ClientVatNumber;
                     }
                 }
 
@@ -164,6 +172,9 @@ namespace FreeMarket.Models
             }
 
             model.OrderDetails = new List<CashOrderDetail>();
+
+            model.BankAcountOptions = new List<string> { "Personal", "Business" };
+            model.SelectedBankAcountOption = "Personal";
 
             return model;
         }
@@ -199,6 +210,9 @@ namespace FreeMarket.Models
                         Selected = true
                     });
                 }
+
+                model.BankAcountOptions = new List<string> { "Personal", "Business" };
+                model.SelectedBankAcountOption = "Personal";
             }
         }
     }

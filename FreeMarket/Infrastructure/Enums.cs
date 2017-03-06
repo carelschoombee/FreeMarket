@@ -24,7 +24,8 @@ namespace FreeMarket.Models
         StruisbaaiOrderConfirmation,
         PostalConfirmation,
         PostalInstructions,
-        Refund
+        Refund,
+        CashOrderInvoice
     }
 
     public class FreeMarketObject

@@ -17,11 +17,14 @@ namespace FreeMarket.Models
         public int OrderId { get; set; }
         public Nullable<System.DateTime> DatePlaced { get; set; }
         public int CashCustomerId { get; set; }
-        public Nullable<decimal> Total { get; set; }
         public string Status { get; set; }
+        public Nullable<decimal> Total { get; set; }
         public Nullable<bool> Delivered { get; set; }
         public Nullable<bool> PaymentReceived { get; set; }
         public Nullable<bool> CashTransaction { get; set; }
         public Nullable<bool> BankTransfer { get; set; }
+        public Nullable<bool> InvoiceSent { get; set; }
+        public Nullable<decimal> ShippingTotal { get; set; }
+        public string ClientOrderNumber { get; set; }
     }
 }

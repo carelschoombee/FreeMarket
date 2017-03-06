@@ -27,6 +27,39 @@
             @Html.TextBoxFor(m => m.Order.CustomerEmail, new { @class = "form-control" })
         </div>
     </div>
+    
+    @if (Model.Order.InvoiceSent == true)
+    {
+        <div class="form-group">
+            @*@Html.HiddenF(c => c.Order.InvoiceSent)*@
+            @Html.HiddenFor(c => Model.SelectedBankAcountOption)
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Order.InvoiceSent, new { @class = "col-md-4 control-label invoiceSentClass" })
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.Order.InvoiceSent)
+            </div>
+        </div>
+
+        <div id="radioDiv" class="form-group" style="display:none">
+            <table class="table table-responsive table-condensed table-bordered-custom">
+                @foreach (string option in Model.BankAcountOptions)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.RadioButtonFor(c => Model.SelectedBankAcountOption, option, new { @class = "radioControl" })
+                        </td>
+                        <td class="text-center">
+                            Show @option bank account on invoice
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 
     <div class="form-group">
         @Html.LabelFor(m => m.Order.CustomerPhone, new { @class = "col-md-4 control-label" })
@@ -64,11 +97,35 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(m => m.Order.ShippingTotal, new { @class = "col-md-4 control-label" })
+        <div class="col-md-6">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.Order.ShippingTotal, new { @class = "form-control" })
+            @{ Html.EnableClientValidation(true); }
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Order.ClientOrderNumber, new { @class = "col-md-4 control-label" })
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.Order.ClientOrderNumber, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Order.ClientVatNumber, new { @class = "col-md-4 control-label" })
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.Order.ClientVatNumber, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
         @Html.LabelFor(m => m.CustodianName, new { @class = "col-md-4 control-label" })
         <div class="col-md-6">
             @Html.DropDownListFor(model => model.SelectedCustodian, Model.Custodians, new { @class = "form-control" })
         </div>
     </div>
+    
 </div>
 
 <table class="table table-responsive table-bordered-custom">
@@ -119,3 +176,21 @@
         </tr>
     }
 </table>
+
+<script type="text/javascript">
+
+    $('#Order_InvoiceSent').change(function(){
+        var e = document.getElementById("Order_InvoiceSent");
+        var selectedOption = e.options[e.selectedIndex].text;
+
+        if (selectedOption == "True")
+        {
+            $("#radioDiv").show();
+        }
+        else
+        {
+            $("#radioDiv").hide();
+        }
+    });
+
+</script>

@@ -211,6 +211,7 @@ namespace FreeMarket.Models
                     case "OrderConfirmation":
                         rv.LocalReport.ReportPath = HttpContext.Current.Server.MapPath("~/Reports/Report1.rdlc");
                         break;
+
                     default:
                         return new Dictionary<Stream, string>();
 

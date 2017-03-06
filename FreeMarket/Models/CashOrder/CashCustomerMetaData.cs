@@ -41,5 +41,8 @@ namespace FreeMarket.Models
 
         [StringLength(256)]
         public string PhoneNumber { get; set; }
+
+        [DisplayName("Client Vat Number")]
+        public string ClientVatNumber { get; set; }
     }
 }

@@ -363,6 +363,8 @@
             {
                 @Html.AntiForgeryToken()
 
+                <div class="text-center">To view the last 100 cash orders, enter 'all' in the search field below.</div>
+                <br />
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.ActionLink("New Cash Order", "InitiateCashOrder", "Admin", null, new { @class = "btn btn-success" })

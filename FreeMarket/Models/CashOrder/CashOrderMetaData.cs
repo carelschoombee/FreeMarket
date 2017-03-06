@@ -1,8 +1,14 @@
-﻿using System;
+﻿using FreeMarket.FreeMarketDataSetTableAdapters;
+using Microsoft.AspNet.Identity;
+using Microsoft.Reporting.WebForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace FreeMarket.Models
 {
@@ -21,7 +27,132 @@ namespace FreeMarket.Models
         [DisplayName("Address")]
         public string CustomerDeliveryAddress { get; set; }
 
-        public static FreeMarketObject CreateNewCashOrder(CashOrderViewModel model)
+        [DisplayName("Client Vat Number")]
+        public string ClientVatNumber { get; set; }
+
+        public static Dictionary<Stream, string> GetReport(string reportType, int orderNumber, string bankAccountType)
+        {
+            Stream stream = new MemoryStream();
+            Dictionary<Stream, string> outCollection = new Dictionary<Stream, string>();
+
+            try
+            {
+                GetCashOrderReportTableAdapter ta = new GetCashOrderReportTableAdapter();
+                FreeMarketDataSet ds = new FreeMarketDataSet();
+
+                ds.GetCashOrderReport.Clear();
+                ds.EnforceConstraints = false;
+
+                ta.Fill(ds.GetCashOrderReport, orderNumber, bankAccountType);
+
+                ReportDataSource rds = new ReportDataSource();
+                rds.Name = "DataSet2";
+                rds.Value = ds.GetCashOrderReport;
+
+                ReportViewer rv = new Microsoft.Reporting.WebForms.ReportViewer();
+                rv.ProcessingMode = ProcessingMode.Local;
+
+                switch (reportType)
+                {
+                    case "CashOrderInvoice":
+                        rv.LocalReport.ReportPath = HttpContext.Current.Server.MapPath("~/Reports/Report7.rdlc");
+                        break;
+
+                    default:
+                        return new Dictionary<Stream, string>();
+                }
+
+                rv.LocalReport.DataSources.Add(rds);
+                rv.LocalReport.EnableHyperlinks = true;
+                rv.LocalReport.Refresh();
+
+                byte[] streamBytes = null;
+                string mimeType = "";
+                string encoding = "";
+                string filenameExtension = "";
+                string[] streamids = null;
+                Warning[] warnings = null;
+
+                streamBytes = rv.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+                stream = new MemoryStream(streamBytes);
+
+                outCollection.Add(stream, mimeType);
+            }
+            catch (Exception e)
+            {
+                ExceptionLogging.LogException(e);
+            }
+
+            return outCollection;
+        }
+
+        public static async void SendInvoice(int orderNumber, string bankAccountType)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                CashOrder order = db.CashOrders.Find(orderNumber);
+
+                if (order == null)
+                    return;
+
+                CashCustomer customer = db.CashCustomers.Find(order.CashCustomerId);
+
+                if (customer == null)
+                    return;
+
+                Support supportInfo = db.Supports.FirstOrDefault();
+
+                Dictionary<Stream, string> invoice = CashOrder.GetReport(ReportType.CashOrderInvoice.ToString(), orderNumber, bankAccountType);
+
+                IdentityMessage iMessage = new IdentityMessage();
+                iMessage.Destination = customer.Email;
+
+                string message1 = CreateConfirmationMessageCustomer();
+
+                iMessage.Body = string.Format((message1), customer.Name, supportInfo.MainContactName, supportInfo.Landline, supportInfo.Cellphone, supportInfo.Email);
+                iMessage.Subject = string.Format("Schoombee and Son Order");
+
+                EmailService email = new EmailService();
+
+                await email.SendAsync(iMessage, invoice.FirstOrDefault().Key);
+            }
+        }
+
+        private static string CreateConfirmationMessageCustomer()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                string line1 = db.SiteConfigurations
+                    .Where(c => c.Key == "OrderConfirmationEmailLine1")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line2 = db.SiteConfigurations
+                    .Where(c => c.Key == "OrderConfirmationEmailLine2")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line3 = db.SiteConfigurations
+                    .Where(c => c.Key == "OrderConfirmationEmailLine3")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line4 = db.SiteConfigurations
+                    .Where(c => c.Key == "OrderConfirmationEmailLine4")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line5 = db.SiteConfigurations
+                    .Where(c => c.Key == "OrderConfirmationEmailLine5")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                return line1 + line2 + line3 + line4 + line5;
+            }
+        }
+
+        public async static Task<FreeMarketObject> CreateNewCashOrder(CashOrderViewModel model)
         {
             FreeMarketObject result = new FreeMarketObject { Result = FreeMarketResult.NoResult, Argument = null, Message = null };
 
@@ -36,7 +167,8 @@ namespace FreeMarket.Models
                         DeliveryAddress = model.Order.CustomerDeliveryAddress,
                         Email = model.Order.CustomerEmail,
                         Name = model.Order.CustomerName,
-                        PhoneNumber = model.Order.CustomerPhone
+                        PhoneNumber = model.Order.CustomerPhone,
+                        ClientVatNumber = model.Order.ClientVatNumber
                     };
 
                     db.CashCustomers.Add(customer);
@@ -48,6 +180,7 @@ namespace FreeMarket.Models
                     customer.Email = model.Order.CustomerEmail;
                     customer.Name = model.Order.CustomerName;
                     customer.PhoneNumber = model.Order.CustomerPhone;
+                    customer.ClientVatNumber = model.Order.ClientVatNumber;
 
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -68,7 +201,10 @@ namespace FreeMarket.Models
                     Delivered = model.Order.Delivered,
                     PaymentReceived = model.Order.PaymentReceived,
                     BankTransfer = model.Order.BankTransfer,
-                    CashTransaction = model.Order.CashTransaction
+                    CashTransaction = model.Order.CashTransaction,
+                    InvoiceSent = model.Order.InvoiceSent,
+                    ShippingTotal = model.Order.ShippingTotal,
+                    ClientOrderNumber = model.Order.ClientOrderNumber
                 };
 
                 db.CashOrders.Add(order);
@@ -113,6 +249,9 @@ namespace FreeMarket.Models
 
                 db.SaveChanges();
 
+                if (order.InvoiceSent == true && !string.IsNullOrEmpty(customer.Email))
+                    SendInvoice(order.OrderId, model.SelectedBankAcountOption);
+
                 if (customer != null && order != null && db.CashOrderDetails.Any(c => c.CashOrderId == order.OrderId))
                     result.Result = FreeMarketResult.Success;
                 else
@@ -122,7 +261,7 @@ namespace FreeMarket.Models
             return result;
         }
 
-        public static FreeMarketObject ModifyOrder(CashOrderViewModel model)
+        public async static Task<FreeMarketObject> ModifyOrder(CashOrderViewModel model)
         {
             FreeMarketObject result = new FreeMarketObject { Result = FreeMarketResult.NoResult, Argument = null, Message = null };
 
@@ -134,6 +273,7 @@ namespace FreeMarket.Models
                 customer.Email = model.Order.CustomerEmail;
                 customer.Name = model.Order.CustomerName;
                 customer.PhoneNumber = model.Order.CustomerPhone;
+                customer.ClientVatNumber = model.Order.ClientVatNumber;
 
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -215,6 +355,9 @@ namespace FreeMarket.Models
                 order.BankTransfer = model.Order.BankTransfer;
                 order.CashTransaction = model.Order.CashTransaction;
                 order.PaymentReceived = model.Order.PaymentReceived;
+                order.ShippingTotal = model.Order.ShippingTotal;
+                order.ClientOrderNumber = model.Order.ClientOrderNumber;
+                order.InvoiceSent = model.Order.InvoiceSent;
 
                 string status;
                 if (model.Order.Delivered == true && model.Order.PaymentReceived == true)
@@ -226,6 +369,12 @@ namespace FreeMarket.Models
 
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                if (model.Order.InvoiceSent != null)
+                {
+                    if (order.InvoiceSent == true && !string.IsNullOrEmpty(customer.Email))
+                        SendInvoice(order.OrderId, model.SelectedBankAcountOption);
+                }
 
                 if (customer != null && order != null && db.CashOrderDetails.Any(c => c.CashOrderId == order.OrderId))
                     result.Result = FreeMarketResult.Success;
@@ -301,5 +450,16 @@ namespace FreeMarket.Models
 
         [DisplayName("Bank Transfer")]
         public bool BankTransfer { get; set; }
+
+        [DisplayName("Send Invoice By Email")]
+        public bool InvoiceSent { get; set; }
+
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        [DisplayName("Shipping Total")]
+        public decimal ShippingTotal { get; set; }
+
+        [DisplayName("Client Order Number")]
+        public string ClientOrderNumber { get; set; }
     }
 }

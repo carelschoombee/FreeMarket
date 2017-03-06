@@ -38,6 +38,17 @@
                                     max: 1100
                                     }
                             }
+                        },
+                        'Order.ShippingTotal': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The field is required.'
+                                },
+                                regexp: {
+                                    regexp: /^[\d,\s]+$/,
+                                    message: 'Only numbers, spaces and commas.'
+                                }
+                            }
                         }
                     }
                 })

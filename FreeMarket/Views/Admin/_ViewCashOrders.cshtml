@@ -46,6 +46,8 @@
                 @result.Order.CustomerDeliveryAddress
                 <br />
                 <br />
+                Invoice Sent By Email: <span class="text-info">@result.Order.InvoiceSent</span>
+                <br />
                 Delivered: <span class="text-info">@result.Order.Delivered</span>
                 <br />
                 Payment Received: <span class="text-info">@result.Order.PaymentReceived</span>
@@ -53,6 +55,9 @@
                 Cash: <span class="text-info">@result.Order.CashTransaction</span>
                 <br />
                 Bank Transfer: <span class="text-info">@result.Order.BankTransfer</span>
+                <br />
+                @Html.ActionLink("Download Personal Invoice", "DownloadCashReport", "Admin", new { orderNumber = result.Order.OrderId, bankAccount = "Personal" }, null)
+                @Html.ActionLink("Download Business Invoice", "DownloadCashReport", "Admin", new { orderNumber = result.Order.OrderId, bankAccount = "Business" }, null)
             </td>
             <td>
                 @string.Format("{0:C}", result.Order.Total)
