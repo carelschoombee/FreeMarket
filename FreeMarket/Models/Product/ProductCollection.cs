@@ -321,8 +321,7 @@ namespace FreeMarket.Models
                 product.Prices.Add(new SelectListItem
                 {
                     Text = specialPrice,
-                    Value = product.SpecialPricePerUnit.ToString(),
-                    Selected = true
+                    Value = product.SpecialPricePerUnit.ToString()
                 });
             }
 
@@ -336,8 +335,7 @@ namespace FreeMarket.Models
                 product.Prices.Add(new SelectListItem
                 {
                     Text = retailPrice,
-                    Value = product.RetailPricePerUnit.ToString(),
-                    Selected = true
+                    Value = product.RetailPricePerUnit.ToString()
                 });
             }
 

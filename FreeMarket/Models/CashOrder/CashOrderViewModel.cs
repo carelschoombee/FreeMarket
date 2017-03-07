@@ -127,6 +127,19 @@ namespace FreeMarket.Models
                         model.Products.Products[i].CashQuantity = qty.Quantity;
                     else
                         model.Products.Products[i].CashQuantity = 0;
+
+                    foreach (SelectListItem item in model.Products.Products[i].Prices)
+                    {
+                        decimal price = model.OrderDetails.Where(c => c.ProductNumber == model.Products.Products[i].ProductNumber)
+                            .Select(c => c.Price)
+                            .FirstOrDefault();
+
+                        if (price > 0 && item.Value == price.ToString())
+                        {
+                            item.Selected = true;
+                        }
+                    }
+                    
                 }
 
                 model.Custodians = db.Custodians.Select
@@ -190,27 +203,6 @@ namespace FreeMarket.Models
                         Text = c.CustodianName,
                         Value = c.CustodianNumber.ToString()
                     }).ToList();
-
-                foreach (Product product in model.Products.Products)
-                {
-                    string normalPrice = string.Format("{0:C}", product.PricePerUnit);
-                    string specialPrice = string.Format("{0:C}", product.SpecialPricePerUnit);
-
-                    product.Prices = new List<SelectListItem>();
-
-                    product.Prices.Add(new SelectListItem
-                    {
-                        Text = normalPrice,
-                        Value = product.PricePerUnit.ToString()
-                    });
-
-                    product.Prices.Add(new SelectListItem
-                    {
-                        Text = specialPrice,
-                        Value = product.SpecialPricePerUnit.ToString(),
-                        Selected = true
-                    });
-                }
 
                 model.BankAcountOptions = new List<string> { "Personal", "Business" };
                 model.SelectedBankAcountOption = "Personal";
