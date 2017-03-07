@@ -400,6 +400,14 @@ namespace FreeMarket.Models
             }
         }
 
+        public static List<GetDeliveryLabelsCashOrder_Result> GetDeliveryLabels()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                return db.GetDeliveryLabelsCashOrder().ToList();
+            }
+        }
+
         public static void AddStockToCustodian(int orderId, int productNumber, int supplierNumber, int custodianNumber, int quantity)
         {
             using (FreeMarketEntities db = new FreeMarketEntities())

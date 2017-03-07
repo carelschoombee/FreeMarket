@@ -791,6 +791,7 @@
           <Parameter Name="supplierNumber" Type="int" Mode="In" />
         </Function>
         <Function Name="GetDeliveryLabels" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetDeliveryLabelsCashOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDeliveryTypeHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerNumber" Type="nvarchar" Mode="In" />
         </Function>
@@ -1355,8 +1356,9 @@
             <Parameter Name="BankAccountType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="FilterCashOrder" ReturnType="Collection(FreeMarketModel.FilterCashOrder_Result)">
-            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          <Parameter Name="filterCriteria" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="GetDeliveryLabelsCashOrder" ReturnType="Collection(FreeMarketModel.GetDeliveryLabelsCashOrder_Result)" />
           </EntityContainer>
         <EntityType Name="SystemAction">
           <Key>
@@ -2390,6 +2392,11 @@
           <Property Type="Boolean" Name="BankTransfer" Nullable="true" />
           <Property Type="Boolean" Name="InvoiceSent" Nullable="true" />
           <Property Type="Decimal" Name="ShippingTotal" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="GetDeliveryLabelsCashOrder_Result">
+          <Property Type="String" Name="From" Nullable="true" MaxLength="614" />
+          <Property Type="String" Name="To" Nullable="true" />
+          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3546,6 +3553,15 @@
                 <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
                 <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
                 <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDeliveryLabelsCashOrder" FunctionName="FreeMarketModel.Store.GetDeliveryLabelsCashOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.GetDeliveryLabelsCashOrder_Result">
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

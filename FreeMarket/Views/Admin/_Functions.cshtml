@@ -114,10 +114,18 @@
     </tr>
     <tr>
         <td>
-            <div><span class="glyphicon glyphicon-download"></span>&nbsp;@Html.ActionLink("Download Labels", "ExportToCsv")</div>
+            <div><span class="glyphicon glyphicon-download"></span>&nbsp;@Html.ActionLink("Download PayGate Order Labels", "ExportToCsv", new { id = "PayGateOrders" })</div>
         </td>
         <td>
-            Download labels for current confirmed orders.
+            Download labels for current confirmed PayGate orders.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div><span class="glyphicon glyphicon-download"></span>&nbsp;@Html.ActionLink("Download Cash Order Labels", "ExportToCsv", new { id = "CashOrders" })</div>
+        </td>
+        <td>
+            Download labels for current confirmed Cash Orders orders.
         </td>
     </tr>
     <tr>

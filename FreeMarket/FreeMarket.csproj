@@ -338,6 +338,9 @@
     <Compile Include="Models\GetCustodianInfo_Result.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetDeliveryLabelsCashOrder_Result.cs">
+      <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetDeliveryLabels_Result.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>

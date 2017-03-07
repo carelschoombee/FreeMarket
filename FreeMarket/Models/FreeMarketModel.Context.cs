@@ -421,5 +421,10 @@ namespace FreeMarket.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
         }
+    
+        public virtual ObjectResult<GetDeliveryLabelsCashOrder_Result> GetDeliveryLabelsCashOrder()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDeliveryLabelsCashOrder_Result>("GetDeliveryLabelsCashOrder");
+        }
     }
 }

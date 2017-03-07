@@ -1303,27 +1303,59 @@ namespace FreeMarket.Controllers
         {
             using (FreeMarketEntities db = new FreeMarketEntities())
             {
-                var temp = OrderHeader.GetDeliveryLabels();
+                if (id == "PayGateOrders")
+                {
+                    var temp = OrderHeader.GetDeliveryLabels();
 
-                string csv = String.Empty;
+                    string csv = String.Empty;
 
-                id = id ?? String.Empty;
+                    id = id ?? String.Empty;
 
-                var listCSV = temp
-                        .Select(c =>
-                            new
-                            {
-                                c.DeliveryAddress,
-                                c.From,
-                                c.To
-                            })
-                        .ToList();
+                    var listCSV = temp
+                            .Select(c =>
+                                new
+                                {
+                                    c.DeliveryAddress,
+                                    c.From,
+                                    c.To
+                                })
+                            .ToList();
 
-                csv = listCSV.ToCsv();
+                    csv = listCSV.ToCsv();
 
-                string title = string.Format("Labels {0}.csv", DateTime.Now);
+                    string title = string.Format("Labels {0}.csv", DateTime.Now);
 
-                return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", title);
+                    return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", title);
+                }
+                else if (id == "CashOrders")
+                {
+                    var temp = CashOrder.GetDeliveryLabels();
+
+                    string csv = String.Empty;
+
+                    id = id ?? String.Empty;
+
+                    var listCSV = temp
+                            .Select(c =>
+                                new
+                                {
+                                    c.DeliveryAddress,
+                                    c.From,
+                                    c.To
+                                })
+                            .ToList();
+
+                    csv = listCSV.ToCsv();
+
+                    string title = string.Format("Labels {0}.csv", DateTime.Now);
+
+                    return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", title);
+                }
+                else
+                {
+                    TempData["message"] = "There are no labels to download at present";
+                    return View("Index");
+                }
             }
         }
 
