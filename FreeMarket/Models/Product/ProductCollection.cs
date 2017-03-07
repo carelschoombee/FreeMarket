@@ -34,8 +34,8 @@ namespace FreeMarket.Models
                         Size = c.Size,
                         SupplierName = c.SupplierName,
                         SupplierNumber = c.SupplierNumberID,
-                        SpecialPricePerUnit = c.SpecialPricePerUnit ?? c.PricePerUnit,
-                        RetailPricePerUnit = c.RetailPricePerUnit ?? c.PricePerUnit,
+                        SpecialPricePerUnit = c.SpecialPricePerUnit ?? -1,
+                        RetailPricePerUnit = c.RetailPricePerUnit ?? -1,
                         Weight = c.Weight
                     }
                     ).ToList();
@@ -57,33 +57,7 @@ namespace FreeMarket.Models
                         product.MainImageNumber = imageNumber;
                         product.SecondaryImageNumber = imageNumberSecondary;
 
-                        product.Prices = new List<SelectListItem>();
-
-                        string normalPrice = string.Format("{0:C}", product.PricePerUnit);
-                        string specialPrice = string.Format("{0:C}", product.SpecialPricePerUnit);
-                        string retailPrice = string.Format("{0:C}", product.RetailPricePerUnit);
-
-                        product.Prices.Add(new SelectListItem
-                        {
-                            Text = normalPrice,
-                            Value = product.PricePerUnit.ToString()
-                        });
-
-                        product.Prices.Add(new SelectListItem
-                        {
-                            Text = specialPrice,
-                            Value = product.SpecialPricePerUnit.ToString(),
-                            Selected = true
-                        });
-
-                        product.Prices.Add(new SelectListItem
-                        {
-                            Text = retailPrice,
-                            Value = product.RetailPricePerUnit.ToString(),
-                            Selected = true
-                        });
-
-                        product.CashQuantity = 0;
+                        SetupProduct(product);
                     }
                 }
 
@@ -207,25 +181,7 @@ namespace FreeMarket.Models
                         product.MainImageNumber = imageNumber;
                         product.SecondaryImageNumber = imageNumberSecondary;
 
-                        product.Prices = new List<SelectListItem>();
-
-                        string normalPrice = string.Format("{0:C}", product.PricePerUnit);
-                        string specialPrice = string.Format("{0:C}", product.SpecialPricePerUnit);
-
-                        product.Prices.Add(new SelectListItem
-                        {
-                            Text = normalPrice,
-                            Value = product.PricePerUnit.ToString()
-                        });
-
-                        product.Prices.Add(new SelectListItem
-                        {
-                            Text = specialPrice,
-                            Value = product.SpecialPricePerUnit.ToString(),
-                            Selected = true
-                        });
-
-                        product.CashQuantity = 0;
+                        SetupProduct(product);
                     }
                 }
 
@@ -339,6 +295,53 @@ namespace FreeMarket.Models
 
                 return allProducts;
             }
+        }
+
+        public static void SetupProduct(Product product)
+        {
+            product.Prices = new List<SelectListItem>();
+
+            string normalPrice = string.Format("{0:C} (Normal Price)", product.PricePerUnit);
+            string specialPrice = "";
+            string retailPrice = "";
+
+            product.Prices.Add(new SelectListItem
+            {
+                Text = normalPrice,
+                Value = product.PricePerUnit.ToString()
+            });
+
+            if (product.SpecialPricePerUnit == -1 || product.SpecialPricePerUnit == product.PricePerUnit || product.SpecialPricePerUnit == product.RetailPricePerUnit)
+            {
+                specialPrice = "";
+            }
+            else
+            {
+                specialPrice = string.Format("{0:C} (Special Price)", product.SpecialPricePerUnit);
+                product.Prices.Add(new SelectListItem
+                {
+                    Text = specialPrice,
+                    Value = product.SpecialPricePerUnit.ToString(),
+                    Selected = true
+                });
+            }
+
+            if (product.RetailPricePerUnit == -1 || product.RetailPricePerUnit == product.PricePerUnit || product.RetailPricePerUnit == product.SpecialPricePerUnit)
+            {
+                retailPrice = "";
+            }
+            else
+            {
+                retailPrice = string.Format("{0:C} (Retail Price)", product.RetailPricePerUnit);
+                product.Prices.Add(new SelectListItem
+                {
+                    Text = retailPrice,
+                    Value = product.RetailPricePerUnit.ToString(),
+                    Selected = true
+                });
+            }
+
+            product.CashQuantity = 0;
         }
 
         public override string ToString()
