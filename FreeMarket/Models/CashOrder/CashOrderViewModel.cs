@@ -53,7 +53,8 @@ namespace FreeMarket.Models
                         CashTransaction = result.CashTransaction,
                         PaymentReceived = result.PaymentReceived,
                         InvoiceSent = result.InvoiceSent,
-                        ShippingTotal = result.ShippingTotal
+                        ShippingTotal = result.ShippingTotal,
+                        ContactName = result.ContactName
                     };
 
                     viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
@@ -97,6 +98,7 @@ namespace FreeMarket.Models
                 model.Order.CustomerName = customer.Name;
                 model.Order.CustomerPhone = customer.PhoneNumber;
                 model.Order.ClientVatNumber = customer.ClientVatNumber;
+                model.Order.ContactName = customer.ContactName;
 
                 model.OrderDetails = db.GetCashOrderDetails(model.Order.OrderId)
                     .Select(c => new CashOrderDetail
@@ -111,7 +113,7 @@ namespace FreeMarket.Models
                         Description = c.Description,
                         SupplierName = c.SupplierName,
                         Weight = (int)c.Weight,
-                        OrderItemTotal = c.OrderItemTotal,
+                        OrderItemTotal = c.OrderItemTotal
                     })
                     .ToList();
 
@@ -139,7 +141,7 @@ namespace FreeMarket.Models
                             item.Selected = true;
                         }
                     }
-                    
+
                 }
 
                 model.Custodians = db.Custodians.Select
@@ -172,6 +174,7 @@ namespace FreeMarket.Models
                         model.Order.CustomerName = customer.Name;
                         model.Order.CustomerPhone = customer.PhoneNumber;
                         model.Order.ClientVatNumber = customer.ClientVatNumber;
+                        model.Order.ContactName = customer.ContactName;
                     }
                 }
 

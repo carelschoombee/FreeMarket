@@ -155,6 +155,7 @@ namespace FreeMarket.Controllers
         public ActionResult SearchCashOrders(Dashboard model)
         {
             List<CashOrderViewModel> cashOrders = new List<CashOrderViewModel>();
+            List<CashOrderViewModel> temp = new List<CashOrderViewModel>();
 
             ModelState.Remove("SelectedYear");
 
@@ -162,12 +163,17 @@ namespace FreeMarket.Controllers
             {
                 using (FreeMarketEntities db = new FreeMarketEntities())
                 {
-                    cashOrders = CashOrderViewModel.GetOrders(model.CashSalesCriteria);
+                    temp = CashOrderViewModel.GetOrders(model.CashSalesCriteria);
 
                     if (cashOrders == null)
-                    {
                         return Content("");
-                    }
+
+                    if (model.CashSalesFilter)
+                        cashOrders = temp
+                            .Where(c => c.Order.PaymentReceived == null || c.Order.PaymentReceived == false)
+                            .ToList();
+                    else
+                        cashOrders = temp;
                 }
 
                 return PartialView("_ViewCashOrders", cashOrders);
@@ -628,6 +634,7 @@ namespace FreeMarket.Controllers
             if (!model.Products.Products.Any(c => c.CashQuantity > 0))
             {
                 ModelState.AddModelError("", "The order must contain at least one item.");
+                model.Products = ProductCollection.GetAllProducts();
                 CashOrderViewModel.InitializeDropDowns(model);
                 return View("CreateCashOrder", model);
             }

@@ -373,6 +373,24 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateLocalDeliveryFeeAdhoc", weightParameter, postalCodeParameter);
         }
     
+        public virtual ObjectResult<GetCashOrderReport_Result> GetCashOrderReport(Nullable<int> orderNumber, string bankAccountType)
+        {
+            var orderNumberParameter = orderNumber.HasValue ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(int));
+    
+            var bankAccountTypeParameter = bankAccountType != null ?
+                new ObjectParameter("BankAccountType", bankAccountType) :
+                new ObjectParameter("BankAccountType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderReport_Result>("GetCashOrderReport", orderNumberParameter, bankAccountTypeParameter);
+        }
+    
+        public virtual ObjectResult<GetDeliveryLabelsCashOrder_Result> GetDeliveryLabelsCashOrder()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDeliveryLabelsCashOrder_Result>("GetDeliveryLabelsCashOrder");
+        }
+    
         public virtual ObjectResult<FilterAuditUser_Result> FilterAuditUser(string filterCriteria)
         {
             var filterCriteriaParameter = filterCriteria != null ?
@@ -391,28 +409,6 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashCustomers_Result>("FilterCashCustomers", filterCriteriaParameter);
         }
     
-        public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
-        {
-            var filterCriteriaParameter = filterCriteria != null ?
-                new ObjectParameter("filterCriteria", filterCriteria) :
-                new ObjectParameter("filterCriteria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
-        }
-    
-        public virtual ObjectResult<GetCashOrderReport_Result> GetCashOrderReport(Nullable<int> orderNumber, string bankAccountType)
-        {
-            var orderNumberParameter = orderNumber.HasValue ?
-                new ObjectParameter("OrderNumber", orderNumber) :
-                new ObjectParameter("OrderNumber", typeof(int));
-    
-            var bankAccountTypeParameter = bankAccountType != null ?
-                new ObjectParameter("BankAccountType", bankAccountType) :
-                new ObjectParameter("BankAccountType", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderReport_Result>("GetCashOrderReport", orderNumberParameter, bankAccountTypeParameter);
-        }
-    
         public virtual ObjectResult<FilterCashOrder_Result> FilterCashOrder(string filterCriteria)
         {
             var filterCriteriaParameter = filterCriteria != null ?
@@ -422,9 +418,13 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCashOrder_Result>("FilterCashOrder", filterCriteriaParameter);
         }
     
-        public virtual ObjectResult<GetDeliveryLabelsCashOrder_Result> GetDeliveryLabelsCashOrder()
+        public virtual ObjectResult<FilterCustomers_Result> FilterCustomers(string filterCriteria)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDeliveryLabelsCashOrder_Result>("GetDeliveryLabelsCashOrder");
+            var filterCriteriaParameter = filterCriteria != null ?
+                new ObjectParameter("filterCriteria", filterCriteria) :
+                new ObjectParameter("filterCriteria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
         }
     }
 }

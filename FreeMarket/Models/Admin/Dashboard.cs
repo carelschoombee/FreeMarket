@@ -47,6 +47,9 @@ namespace FreeMarket.Models
         [DisplayName("Filter")]
         public string CashSalesCriteria { get; set; }
 
+        [DisplayName("Filter")]
+        public bool CashSalesFilter { get; set; }
+
         public decimal TotalSales { get; set; }
 
         public Dashboard()

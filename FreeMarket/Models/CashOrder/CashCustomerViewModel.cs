@@ -20,7 +20,9 @@ namespace FreeMarket.Models
                         Email = c.Email,
                         Id = (int)c.Id,
                         Name = c.Name,
-                        PhoneNumber = c.PhoneNumber
+                        PhoneNumber = c.PhoneNumber,
+                        ClientVatNumber = c.ClientVatNumber,
+                        ContactName = c.ContactName
                     })
                     .ToList();
             }

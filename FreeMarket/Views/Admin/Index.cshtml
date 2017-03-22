@@ -374,6 +374,9 @@
                         @Html.ValidationMessageFor(m => m.CashSalesCriteria, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
+                        Payment Outstanding @Html.EditorFor(c => c.CashSalesFilter)
+                    </div>
+                    <div class="col-md-3">
                         <input type="submit" value="Filter" class="btn btn-primary btn-sm" />
                     </div>
                 </div>

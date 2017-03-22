@@ -15,8 +15,11 @@ namespace FreeMarket.Models
     [MetadataType(typeof(CashOrderMetaData))]
     public partial class CashOrder
     {
-        [DisplayName("Name")]
+        [DisplayName("Company Name")]
         public string CustomerName { get; set; }
+
+        [DisplayName("Contact Name")]
+        public string ContactName { get; set; }
 
         [DisplayName("Email")]
         public string CustomerEmail { get; set; }
@@ -168,7 +171,8 @@ namespace FreeMarket.Models
                         Email = model.Order.CustomerEmail,
                         Name = model.Order.CustomerName,
                         PhoneNumber = model.Order.CustomerPhone,
-                        ClientVatNumber = model.Order.ClientVatNumber
+                        ClientVatNumber = model.Order.ClientVatNumber,
+                        ContactName = model.Order.ContactName
                     };
 
                     db.CashCustomers.Add(customer);
@@ -181,6 +185,7 @@ namespace FreeMarket.Models
                     customer.Name = model.Order.CustomerName;
                     customer.PhoneNumber = model.Order.CustomerPhone;
                     customer.ClientVatNumber = model.Order.ClientVatNumber;
+                    customer.ContactName = model.Order.ContactName;
 
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -274,6 +279,7 @@ namespace FreeMarket.Models
                 customer.Name = model.Order.CustomerName;
                 customer.PhoneNumber = model.Order.CustomerPhone;
                 customer.ClientVatNumber = model.Order.ClientVatNumber;
+                customer.ContactName = model.Order.ContactName;
 
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -358,6 +364,7 @@ namespace FreeMarket.Models
                 order.ShippingTotal = model.Order.ShippingTotal;
                 order.ClientOrderNumber = model.Order.ClientOrderNumber;
                 order.InvoiceSent = model.Order.InvoiceSent;
+                order.ContactName = model.Order.ContactName;
 
                 string status;
                 if (model.Order.Delivered == true && model.Order.PaymentReceived == true)
@@ -469,5 +476,8 @@ namespace FreeMarket.Models
 
         [DisplayName("Client Order Number")]
         public string ClientOrderNumber { get; set; }
+
+        [DisplayName("Invoice Date")]
+        public DateTime DatePlaced { get; set; }
     }
 }

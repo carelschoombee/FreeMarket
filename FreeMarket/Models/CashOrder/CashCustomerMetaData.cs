@@ -44,5 +44,8 @@ namespace FreeMarket.Models
 
         [DisplayName("Client Vat Number")]
         public string ClientVatNumber { get; set; }
+
+        [DisplayName("Contact Name")]
+        public string ContactName { get; set; }
     }
 }

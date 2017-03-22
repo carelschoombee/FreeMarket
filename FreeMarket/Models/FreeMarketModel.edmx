@@ -64,6 +64,7 @@
           <Property Name="Email" Type="nvarchar" MaxLength="256" />
           <Property Name="PhoneNumber" Type="nvarchar(max)" />
           <Property Name="ClientVatNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="ContactName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CashOrder">
           <Key>
@@ -1339,15 +1340,6 @@
             <Parameter Name="postalCode" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="TimeFreightCourierFeeReferences" EntityType="FreeMarketModel.TimeFreightCourierFeeReference" />
-          <FunctionImport Name="FilterAuditUser" ReturnType="Collection(FreeMarketModel.FilterAuditUser_Result)">
-          <Parameter Name="filterCriteria" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="FilterCashCustomers" ReturnType="Collection(FreeMarketModel.FilterCashCustomers_Result)">
-          <Parameter Name="filterCriteria" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="FilterCustomers" ReturnType="Collection(FreeMarketModel.FilterCustomers_Result)">
-          <Parameter Name="filterCriteria" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="CashCustomers" EntityType="FreeMarketModel.CashCustomer" />
           <EntitySet Name="CashOrders" EntityType="FreeMarketModel.CashOrder" />
           <EntitySet Name="FreeMarketOwners" EntityType="FreeMarketModel.FreeMarketOwner" />
@@ -1355,10 +1347,19 @@
             <Parameter Name="OrderNumber" Mode="In" Type="Int32" />
             <Parameter Name="BankAccountType" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="FilterCashOrder" ReturnType="Collection(FreeMarketModel.FilterCashOrder_Result)">
-          <Parameter Name="filterCriteria" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetDeliveryLabelsCashOrder" ReturnType="Collection(FreeMarketModel.GetDeliveryLabelsCashOrder_Result)" />
+          <FunctionImport Name="FilterAuditUser" ReturnType="Collection(FreeMarketModel.FilterAuditUser_Result)">
+            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FilterCashCustomers" ReturnType="Collection(FreeMarketModel.FilterCashCustomers_Result)">
+            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FilterCashOrder" ReturnType="Collection(FreeMarketModel.FilterCashOrder_Result)">
+            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FilterCustomers" ReturnType="Collection(FreeMarketModel.FilterCustomers_Result)">
+            <Parameter Name="filterCriteria" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="SystemAction">
           <Key>
@@ -2263,43 +2264,6 @@
           <Property Name="DialingCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryFee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
         </EntityType>
-        <ComplexType Name="FilterAuditUser_Result">
-          <Property Type="Int64" Name="ActionNumber" Nullable="true" />
-          <Property Type="DateTime" Name="DateTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Identity" Nullable="true" MaxLength="100" />
-          <Property Type="Int16" Name="Action" Nullable="true" />
-          <Property Type="String" Name="ActionDescription" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Parameters" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="FilterCashCustomers_Result">
-          <Property Type="Int32" Name="Id" Nullable="true" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="FilterCustomers_Result">
-          <Property Type="String" Name="Id" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="String" Name="PreferredCommunicationMethod" Nullable="true" />
-          <Property Type="String" Name="SecondaryPhoneNumber" Nullable="true" />
-          <Property Type="String" Name="UnConfirmedEmail" Nullable="true" />
-          <Property Type="String" Name="DefaultAddress" Nullable="true" />
-          <Property Type="Boolean" Name="UnsubscribeFromAllCorrespondence" Nullable="true" />
-          <Property Type="Boolean" Name="UnsubscribeFromRatings" Nullable="true" />
-          <Property Type="DateTime" Name="LastVisited" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
-          <Property Type="Boolean" Name="EmailConfirmed" Nullable="true" />
-          <Property Type="String" Name="PasswordHash" Nullable="true" />
-          <Property Type="String" Name="SecurityStamp" Nullable="true" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-          <Property Type="Boolean" Name="PhoneNumberConfirmed" Nullable="true" />
-          <Property Type="Boolean" Name="TwoFactorEnabled" Nullable="true" />
-          <Property Type="DateTime" Name="LockoutEndDateUtc" Nullable="true" Precision="23" />
-          <Property Type="Boolean" Name="LockoutEnabled" Nullable="true" />
-          <Property Type="Int32" Name="AccessFailedCount" Nullable="true" />
-          <Property Type="String" Name="UserName" Nullable="true" MaxLength="256" />
-        </ComplexType>
         <EntityType Name="CashCustomer">
           <Key>
             <PropertyRef Name="Id" />
@@ -2310,6 +2274,7 @@
           <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ClientVatNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CashOrder">
           <Key>
@@ -2375,6 +2340,28 @@
           <Property Type="String" Name="BankingDetailsAccountNumber" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="BankingDetailsAccountType" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="GetDeliveryLabelsCashOrder_Result">
+          <Property Type="String" Name="From" Nullable="true" MaxLength="614" />
+          <Property Type="String" Name="To" Nullable="true" />
+          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
+        </ComplexType>
+        <ComplexType Name="FilterAuditUser_Result">
+          <Property Type="Int64" Name="ActionNumber" Nullable="true" />
+          <Property Type="DateTime" Name="DateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Identity" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="Action" Nullable="true" />
+          <Property Type="String" Name="ActionDescription" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Parameters" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="FilterCashCustomers_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="String" Name="ContactName" Nullable="true" />
+          <Property Type="String" Name="ClientVatNumber" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="FilterCashOrder_Result">
           <Property Type="Int32" Name="Id" Nullable="true" />
           <Property Type="DateTime" Name="DatePlaced" Nullable="true" Precision="23" />
@@ -2392,11 +2379,29 @@
           <Property Type="Boolean" Name="BankTransfer" Nullable="true" />
           <Property Type="Boolean" Name="InvoiceSent" Nullable="true" />
           <Property Type="Decimal" Name="ShippingTotal" Nullable="true" Precision="19" />
+          <Property Type="String" Name="ContactName" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GetDeliveryLabelsCashOrder_Result">
-          <Property Type="String" Name="From" Nullable="true" MaxLength="614" />
-          <Property Type="String" Name="To" Nullable="true" />
-          <Property Type="String" Name="DeliveryAddress" Nullable="true" MaxLength="1100" />
+        <ComplexType Name="FilterCustomers_Result">
+          <Property Type="String" Name="Id" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="String" Name="PreferredCommunicationMethod" Nullable="true" />
+          <Property Type="String" Name="SecondaryPhoneNumber" Nullable="true" />
+          <Property Type="String" Name="UnConfirmedEmail" Nullable="true" />
+          <Property Type="String" Name="DefaultAddress" Nullable="true" />
+          <Property Type="Boolean" Name="UnsubscribeFromAllCorrespondence" Nullable="true" />
+          <Property Type="Boolean" Name="UnsubscribeFromRatings" Nullable="true" />
+          <Property Type="DateTime" Name="LastVisited" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="Boolean" Name="EmailConfirmed" Nullable="true" />
+          <Property Type="String" Name="PasswordHash" Nullable="true" />
+          <Property Type="String" Name="SecurityStamp" Nullable="true" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="Boolean" Name="PhoneNumberConfirmed" Nullable="true" />
+          <Property Type="Boolean" Name="TwoFactorEnabled" Nullable="true" />
+          <Property Type="DateTime" Name="LockoutEndDateUtc" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="LockoutEnabled" Nullable="true" />
+          <Property Type="Int32" Name="AccessFailedCount" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="256" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3403,58 +3408,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="FilterAuditUser" FunctionName="FreeMarketModel.Store.FilterAuditUser">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="FreeMarketModel.FilterAuditUser_Result">
-                <ScalarProperty Name="ActionNumber" ColumnName="ActionNumber" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="Identity" ColumnName="Identity" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="ActionDescription" ColumnName="ActionDescription" />
-                <ScalarProperty Name="Parameters" ColumnName="Parameters" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="FilterCashCustomers" FunctionName="FreeMarketModel.Store.FilterCashCustomers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCashCustomers_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="FilterCustomers" FunctionName="FreeMarketModel.Store.FilterCustomers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCustomers_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PreferredCommunicationMethod" ColumnName="PreferredCommunicationMethod" />
-                <ScalarProperty Name="SecondaryPhoneNumber" ColumnName="SecondaryPhoneNumber" />
-                <ScalarProperty Name="UnConfirmedEmail" ColumnName="UnConfirmedEmail" />
-                <ScalarProperty Name="DefaultAddress" ColumnName="DefaultAddress" />
-                <ScalarProperty Name="UnsubscribeFromAllCorrespondence" ColumnName="UnsubscribeFromAllCorrespondence" />
-                <ScalarProperty Name="UnsubscribeFromRatings" ColumnName="UnsubscribeFromRatings" />
-                <ScalarProperty Name="LastVisited" ColumnName="LastVisited" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="CashCustomers">
             <EntityTypeMapping TypeName="FreeMarketModel.CashCustomer">
               <MappingFragment StoreEntitySet="CashCustomer">
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
                 <ScalarProperty Name="ClientVatNumber" ColumnName="ClientVatNumber" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -3534,6 +3491,40 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDeliveryLabelsCashOrder" FunctionName="FreeMarketModel.Store.GetDeliveryLabelsCashOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.GetDeliveryLabelsCashOrder_Result">
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FilterAuditUser" FunctionName="FreeMarketModel.Store.FilterAuditUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.FilterAuditUser_Result">
+                <ScalarProperty Name="ActionNumber" ColumnName="ActionNumber" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="Identity" ColumnName="Identity" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="ActionDescription" ColumnName="ActionDescription" />
+                <ScalarProperty Name="Parameters" ColumnName="Parameters" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FilterCashCustomers" FunctionName="FreeMarketModel.Store.FilterCashCustomers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCashCustomers_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="ClientVatNumber" ColumnName="ClientVatNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="FilterCashOrder" FunctionName="FreeMarketModel.Store.FilterCashOrder">
             <ResultMapping>
               <ComplexTypeMapping TypeName="FreeMarketModel.FilterCashOrder_Result">
@@ -3553,15 +3544,33 @@
                 <ScalarProperty Name="BankTransfer" ColumnName="BankTransfer" />
                 <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
                 <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetDeliveryLabelsCashOrder" FunctionName="FreeMarketModel.Store.GetDeliveryLabelsCashOrder">
+          <FunctionImportMapping FunctionImportName="FilterCustomers" FunctionName="FreeMarketModel.Store.FilterCustomers">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="FreeMarketModel.GetDeliveryLabelsCashOrder_Result">
-                <ScalarProperty Name="From" ColumnName="From" />
-                <ScalarProperty Name="To" ColumnName="To" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+              <ComplexTypeMapping TypeName="FreeMarketModel.FilterCustomers_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PreferredCommunicationMethod" ColumnName="PreferredCommunicationMethod" />
+                <ScalarProperty Name="SecondaryPhoneNumber" ColumnName="SecondaryPhoneNumber" />
+                <ScalarProperty Name="UnConfirmedEmail" ColumnName="UnConfirmedEmail" />
+                <ScalarProperty Name="DefaultAddress" ColumnName="DefaultAddress" />
+                <ScalarProperty Name="UnsubscribeFromAllCorrespondence" ColumnName="UnsubscribeFromAllCorrespondence" />
+                <ScalarProperty Name="UnsubscribeFromRatings" ColumnName="UnsubscribeFromRatings" />
+                <ScalarProperty Name="LastVisited" ColumnName="LastVisited" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

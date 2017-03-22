@@ -6,11 +6,25 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger", @style = "font-size:20px" })
 
     <div class="form-group">
+        @Html.LabelFor(m => m.Order.DatePlaced, new { @class = "col-md-4 control-label" })
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.Order.DatePlaced)
+        </div>
+    </div>
+
+    <div class="form-group">
         @Html.LabelFor(m => m.Order.CustomerName, new { @class = "col-md-4 control-label" })
         <div class="col-md-6">
             @Html.TextBoxFor(m => m.Order.CustomerName, new { @class = "form-control" })
             @Html.HiddenFor(m => m.Order.CashCustomerId)
             @Html.HiddenFor(m => m.Order.OrderId)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Order.ContactName, new { @class = "col-md-4 control-label" })
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.Order.ContactName, new { @class = "form-control" })
         </div>
     </div>
 
