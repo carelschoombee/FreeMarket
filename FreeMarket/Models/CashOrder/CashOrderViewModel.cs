@@ -99,6 +99,7 @@ namespace FreeMarket.Models
                 model.Order.CustomerPhone = customer.PhoneNumber;
                 model.Order.ClientVatNumber = customer.ClientVatNumber;
                 model.Order.ContactName = customer.ContactName;
+                model.Order.HeadOfficeAddress = customer.HeadOfficeAddress;
 
                 model.OrderDetails = db.GetCashOrderDetails(model.Order.OrderId)
                     .Select(c => new CashOrderDetail
@@ -175,6 +176,7 @@ namespace FreeMarket.Models
                         model.Order.CustomerPhone = customer.PhoneNumber;
                         model.Order.ClientVatNumber = customer.ClientVatNumber;
                         model.Order.ContactName = customer.ContactName;
+                        model.Order.HeadOfficeAddress = customer.HeadOfficeAddress;
                     }
                 }
 

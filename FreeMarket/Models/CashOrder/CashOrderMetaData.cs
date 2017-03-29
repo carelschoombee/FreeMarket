@@ -27,8 +27,11 @@ namespace FreeMarket.Models
         [DisplayName("Phone")]
         public string CustomerPhone { get; set; }
 
-        [DisplayName("Address")]
+        [DisplayName("Delivery Address")]
         public string CustomerDeliveryAddress { get; set; }
+
+        [DisplayName("Head Office Address")]
+        public string HeadOfficeAddress { get; set; }
 
         [DisplayName("Client Vat Number")]
         public string ClientVatNumber { get; set; }
@@ -113,8 +116,8 @@ namespace FreeMarket.Models
 
                 string message1 = CreateConfirmationMessageCustomer();
 
-                iMessage.Body = string.Format((message1), customer.Name, supportInfo.MainContactName, supportInfo.Landline, supportInfo.Cellphone, supportInfo.Email);
-                iMessage.Subject = string.Format("Schoombee and Son Order");
+                iMessage.Body = string.Format((message1), customer.Name, orderNumber, supportInfo.MainContactName, supportInfo.Landline, supportInfo.Cellphone, supportInfo.Email);
+                iMessage.Subject = string.Format("{0} {1}", "Schoombee and Son Invoice", orderNumber.ToString());
 
                 EmailService email = new EmailService();
 
@@ -127,31 +130,11 @@ namespace FreeMarket.Models
             using (FreeMarketEntities db = new FreeMarketEntities())
             {
                 string line1 = db.SiteConfigurations
-                    .Where(c => c.Key == "OrderConfirmationEmailLine1")
+                    .Where(c => c.Key == "CashInvoiceEmail")
                     .Select(c => c.Value)
                     .FirstOrDefault();
 
-                string line2 = db.SiteConfigurations
-                    .Where(c => c.Key == "OrderConfirmationEmailLine2")
-                    .Select(c => c.Value)
-                    .FirstOrDefault();
-
-                string line3 = db.SiteConfigurations
-                    .Where(c => c.Key == "OrderConfirmationEmailLine3")
-                    .Select(c => c.Value)
-                    .FirstOrDefault();
-
-                string line4 = db.SiteConfigurations
-                    .Where(c => c.Key == "OrderConfirmationEmailLine4")
-                    .Select(c => c.Value)
-                    .FirstOrDefault();
-
-                string line5 = db.SiteConfigurations
-                    .Where(c => c.Key == "OrderConfirmationEmailLine5")
-                    .Select(c => c.Value)
-                    .FirstOrDefault();
-
-                return line1 + line2 + line3 + line4 + line5;
+                return line1;
             }
         }
 
@@ -172,7 +155,8 @@ namespace FreeMarket.Models
                         Name = model.Order.CustomerName,
                         PhoneNumber = model.Order.CustomerPhone,
                         ClientVatNumber = model.Order.ClientVatNumber,
-                        ContactName = model.Order.ContactName
+                        ContactName = model.Order.ContactName,
+                        HeadOfficeAddress = model.Order.HeadOfficeAddress
                     };
 
                     db.CashCustomers.Add(customer);
@@ -186,6 +170,10 @@ namespace FreeMarket.Models
                     customer.PhoneNumber = model.Order.CustomerPhone;
                     customer.ClientVatNumber = model.Order.ClientVatNumber;
                     customer.ContactName = model.Order.ContactName;
+                    customer.HeadOfficeAddress = model.Order.HeadOfficeAddress;
+
+                    if (string.IsNullOrEmpty(customer.HeadOfficeAddress))
+                        customer.HeadOfficeAddress = "Head Office";
 
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -280,6 +268,10 @@ namespace FreeMarket.Models
                 customer.PhoneNumber = model.Order.CustomerPhone;
                 customer.ClientVatNumber = model.Order.ClientVatNumber;
                 customer.ContactName = model.Order.ContactName;
+                customer.HeadOfficeAddress = model.Order.HeadOfficeAddress;
+
+                if (string.IsNullOrEmpty(customer.HeadOfficeAddress))
+                    customer.HeadOfficeAddress = "Head Office";
 
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

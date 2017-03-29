@@ -22,6 +22,9 @@ namespace FreeMarket.Models
         {
             using (FreeMarketEntities db = new FreeMarketEntities())
             {
+                if (string.IsNullOrEmpty(model.HeadOfficeAddress))
+                    model.HeadOfficeAddress = "Head Office";
+
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -36,6 +39,10 @@ namespace FreeMarket.Models
         [DisplayName("Delivery Address")]
         [StringLength(1100)]
         public string DeliveryAddress { get; set; }
+
+        [DisplayName("Head Office Address")]
+        [StringLength(1100)]
+        public string HeadOfficeAddress { get; set; }
 
         public string Email { get; set; }
 

@@ -21,5 +21,6 @@ namespace FreeMarket.Models
         public string PhoneNumber { get; set; }
         public string ClientVatNumber { get; set; }
         public string ContactName { get; set; }
+        public string HeadOfficeAddress { get; set; }
     }
 }

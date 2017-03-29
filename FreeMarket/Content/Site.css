@@ -11,6 +11,23 @@
     /*url("//db.onlinewebfonts.com/t/ca6f91c0cad2fe33614026d17117601d.svg#Edwardian Script ITC") format("svg");*/
 }
 
+.navbar-custom {
+    color:white;
+    background: #5A3F37; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #5A3F37 , #2C7744); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #5A3F37 , #2C7744); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#topnavbar {
+	margin: 0;
+}
+#topnavbar.affix {
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+
 input::-webkit-calendar-picker-indicator{
     display: none;
 }

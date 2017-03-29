@@ -18,6 +18,8 @@ namespace FreeMarket.Models
         public string CustomerEmail { get; set; }
         public string DeliveryAddressLine1 { get; set; }
         public string ClientVatNumber { get; set; }
+        public string ContactName { get; set; }
+        public string HeadOfficeAddress { get; set; }
         public int OrderNumber { get; set; }
         public Nullable<decimal> SubTotal { get; set; }
         public Nullable<decimal> ShippingTotal { get; set; }

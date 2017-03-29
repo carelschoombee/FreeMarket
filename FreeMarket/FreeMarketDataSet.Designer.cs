@@ -1101,6 +1101,12 @@ namespace FreeMarket {
             
             private global::System.Data.DataColumn columnDeliveryAddressLine1;
             
+            private global::System.Data.DataColumn columnClientVatNumber;
+            
+            private global::System.Data.DataColumn columnContactName;
+            
+            private global::System.Data.DataColumn columnHeadOfficeAddress;
+            
             private global::System.Data.DataColumn columnOrderNumber;
             
             private global::System.Data.DataColumn columnSubTotal;
@@ -1108,8 +1114,6 @@ namespace FreeMarket {
             private global::System.Data.DataColumn columnShippingTotal;
             
             private global::System.Data.DataColumn columnClientOrderNumber;
-            
-            private global::System.Data.DataColumn columnClientVatNumber;
             
             private global::System.Data.DataColumn columnGrandTotal;
             
@@ -1216,6 +1220,30 @@ namespace FreeMarket {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ClientVatNumberColumn {
+                get {
+                    return this.columnClientVatNumber;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ContactNameColumn {
+                get {
+                    return this.columnContactName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn HeadOfficeAddressColumn {
+                get {
+                    return this.columnHeadOfficeAddress;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn OrderNumberColumn {
                 get {
                     return this.columnOrderNumber;
@@ -1243,14 +1271,6 @@ namespace FreeMarket {
             public global::System.Data.DataColumn ClientOrderNumberColumn {
                 get {
                     return this.columnClientOrderNumber;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ClientVatNumberColumn {
-                get {
-                    return this.columnClientVatNumber;
                 }
             }
             
@@ -1448,10 +1468,12 @@ namespace FreeMarket {
                         string CustomerPhone1, 
                         string CustomerEmail, 
                         string DeliveryAddressLine1, 
+                        string ClientVatNumber, 
+                        string ContactName, 
+                        string HeadOfficeAddress, 
                         decimal SubTotal, 
                         decimal ShippingTotal, 
                         string ClientOrderNumber, 
-                        string ClientVatNumber, 
                         decimal GrandTotal, 
                         decimal Price, 
                         int Quantity, 
@@ -1477,11 +1499,13 @@ namespace FreeMarket {
                         CustomerPhone1,
                         CustomerEmail,
                         DeliveryAddressLine1,
+                        ClientVatNumber,
+                        ContactName,
+                        HeadOfficeAddress,
                         null,
                         SubTotal,
                         ShippingTotal,
                         ClientOrderNumber,
-                        ClientVatNumber,
                         GrandTotal,
                         Price,
                         Quantity,
@@ -1534,11 +1558,13 @@ namespace FreeMarket {
                 this.columnCustomerPhone1 = base.Columns["CustomerPhone1"];
                 this.columnCustomerEmail = base.Columns["CustomerEmail"];
                 this.columnDeliveryAddressLine1 = base.Columns["DeliveryAddressLine1"];
+                this.columnClientVatNumber = base.Columns["ClientVatNumber"];
+                this.columnContactName = base.Columns["ContactName"];
+                this.columnHeadOfficeAddress = base.Columns["HeadOfficeAddress"];
                 this.columnOrderNumber = base.Columns["OrderNumber"];
                 this.columnSubTotal = base.Columns["SubTotal"];
                 this.columnShippingTotal = base.Columns["ShippingTotal"];
                 this.columnClientOrderNumber = base.Columns["ClientOrderNumber"];
-                this.columnClientVatNumber = base.Columns["ClientVatNumber"];
                 this.columnGrandTotal = base.Columns["GrandTotal"];
                 this.columnPrice = base.Columns["Price"];
                 this.columnQuantity = base.Columns["Quantity"];
@@ -1571,6 +1597,12 @@ namespace FreeMarket {
                 base.Columns.Add(this.columnCustomerEmail);
                 this.columnDeliveryAddressLine1 = new global::System.Data.DataColumn("DeliveryAddressLine1", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDeliveryAddressLine1);
+                this.columnClientVatNumber = new global::System.Data.DataColumn("ClientVatNumber", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnClientVatNumber);
+                this.columnContactName = new global::System.Data.DataColumn("ContactName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnContactName);
+                this.columnHeadOfficeAddress = new global::System.Data.DataColumn("HeadOfficeAddress", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHeadOfficeAddress);
                 this.columnOrderNumber = new global::System.Data.DataColumn("OrderNumber", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnOrderNumber);
                 this.columnSubTotal = new global::System.Data.DataColumn("SubTotal", typeof(decimal), null, global::System.Data.MappingType.Element);
@@ -1579,8 +1611,6 @@ namespace FreeMarket {
                 base.Columns.Add(this.columnShippingTotal);
                 this.columnClientOrderNumber = new global::System.Data.DataColumn("ClientOrderNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnClientOrderNumber);
-                this.columnClientVatNumber = new global::System.Data.DataColumn("ClientVatNumber", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnClientVatNumber);
                 this.columnGrandTotal = new global::System.Data.DataColumn("GrandTotal", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGrandTotal);
                 this.columnPrice = new global::System.Data.DataColumn("Price", typeof(decimal), null, global::System.Data.MappingType.Element);
@@ -1626,6 +1656,9 @@ namespace FreeMarket {
                 this.columnCustomerPhone1.MaxLength = 2147483647;
                 this.columnCustomerEmail.MaxLength = 256;
                 this.columnDeliveryAddressLine1.MaxLength = 1100;
+                this.columnClientVatNumber.MaxLength = 100;
+                this.columnContactName.MaxLength = 2147483647;
+                this.columnHeadOfficeAddress.MaxLength = 1100;
                 this.columnOrderNumber.AutoIncrement = true;
                 this.columnOrderNumber.AutoIncrementSeed = -1;
                 this.columnOrderNumber.AutoIncrementStep = -1;
@@ -1633,7 +1666,6 @@ namespace FreeMarket {
                 this.columnOrderNumber.ReadOnly = true;
                 this.columnOrderNumber.Unique = true;
                 this.columnClientOrderNumber.MaxLength = 100;
-                this.columnClientVatNumber.MaxLength = 100;
                 this.columnGrandTotal.ReadOnly = true;
                 this.columnPrice.AllowDBNull = false;
                 this.columnQuantity.AllowDBNull = false;
@@ -2599,6 +2631,55 @@ namespace FreeMarket {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ClientVatNumber {
+                get {
+                    try {
+                        return ((string)(this[this.tableGetCashOrderReport.ClientVatNumberColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ClientVatNumber\' in table \'GetCashOrderReport\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableGetCashOrderReport.ClientVatNumberColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ContactName {
+                get {
+                    try {
+                        return ((string)(this[this.tableGetCashOrderReport.ContactNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ContactName\' in table \'GetCashOrderReport\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableGetCashOrderReport.ContactNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string HeadOfficeAddress {
+                get {
+                    try {
+                        return ((string)(this[this.tableGetCashOrderReport.HeadOfficeAddressColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'HeadOfficeAddress\' in table \'GetCashOrderReport\' is DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tableGetCashOrderReport.HeadOfficeAddressColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public int OrderNumber {
                 get {
                     return ((int)(this[this.tableGetCashOrderReport.OrderNumberColumn]));
@@ -2654,22 +2735,6 @@ namespace FreeMarket {
                 }
                 set {
                     this[this.tableGetCashOrderReport.ClientOrderNumberColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string ClientVatNumber {
-                get {
-                    try {
-                        return ((string)(this[this.tableGetCashOrderReport.ClientVatNumberColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ClientVatNumber\' in table \'GetCashOrderReport\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableGetCashOrderReport.ClientVatNumberColumn] = value;
                 }
             }
             
@@ -2966,6 +3031,42 @@ namespace FreeMarket {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsClientVatNumberNull() {
+                return this.IsNull(this.tableGetCashOrderReport.ClientVatNumberColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetClientVatNumberNull() {
+                this[this.tableGetCashOrderReport.ClientVatNumberColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsContactNameNull() {
+                return this.IsNull(this.tableGetCashOrderReport.ContactNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetContactNameNull() {
+                this[this.tableGetCashOrderReport.ContactNameColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsHeadOfficeAddressNull() {
+                return this.IsNull(this.tableGetCashOrderReport.HeadOfficeAddressColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetHeadOfficeAddressNull() {
+                this[this.tableGetCashOrderReport.HeadOfficeAddressColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsSubTotalNull() {
                 return this.IsNull(this.tableGetCashOrderReport.SubTotalColumn);
             }
@@ -2998,18 +3099,6 @@ namespace FreeMarket {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetClientOrderNumberNull() {
                 this[this.tableGetCashOrderReport.ClientOrderNumberColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsClientVatNumberNull() {
-                return this.IsNull(this.tableGetCashOrderReport.ClientVatNumberColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetClientVatNumberNull() {
-                this[this.tableGetCashOrderReport.ClientVatNumberColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3531,11 +3620,13 @@ namespace FreeMarket.FreeMarketDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("CustomerPhone1", "CustomerPhone1");
             tableMapping.ColumnMappings.Add("CustomerEmail", "CustomerEmail");
             tableMapping.ColumnMappings.Add("DeliveryAddressLine1", "DeliveryAddressLine1");
+            tableMapping.ColumnMappings.Add("ClientVatNumber", "ClientVatNumber");
+            tableMapping.ColumnMappings.Add("ContactName", "ContactName");
+            tableMapping.ColumnMappings.Add("HeadOfficeAddress", "HeadOfficeAddress");
             tableMapping.ColumnMappings.Add("OrderNumber", "OrderNumber");
             tableMapping.ColumnMappings.Add("SubTotal", "SubTotal");
             tableMapping.ColumnMappings.Add("ShippingTotal", "ShippingTotal");
             tableMapping.ColumnMappings.Add("ClientOrderNumber", "ClientOrderNumber");
-            tableMapping.ColumnMappings.Add("ClientVatNumber", "ClientVatNumber");
             tableMapping.ColumnMappings.Add("GrandTotal", "GrandTotal");
             tableMapping.ColumnMappings.Add("Price", "Price");
             tableMapping.ColumnMappings.Add("Quantity", "Quantity");
@@ -3562,8 +3653,7 @@ namespace FreeMarket.FreeMarketDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=localhost;Initial Catalog=FreeMarket;User ID=sa;Password=!Free#Pecans" +
-                "#4";
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

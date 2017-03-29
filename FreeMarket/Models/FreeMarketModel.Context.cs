@@ -373,19 +373,6 @@ namespace FreeMarket.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("CalculateLocalDeliveryFeeAdhoc", weightParameter, postalCodeParameter);
         }
     
-        public virtual ObjectResult<GetCashOrderReport_Result> GetCashOrderReport(Nullable<int> orderNumber, string bankAccountType)
-        {
-            var orderNumberParameter = orderNumber.HasValue ?
-                new ObjectParameter("OrderNumber", orderNumber) :
-                new ObjectParameter("OrderNumber", typeof(int));
-    
-            var bankAccountTypeParameter = bankAccountType != null ?
-                new ObjectParameter("BankAccountType", bankAccountType) :
-                new ObjectParameter("BankAccountType", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderReport_Result>("GetCashOrderReport", orderNumberParameter, bankAccountTypeParameter);
-        }
-    
         public virtual ObjectResult<GetDeliveryLabelsCashOrder_Result> GetDeliveryLabelsCashOrder()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDeliveryLabelsCashOrder_Result>("GetDeliveryLabelsCashOrder");
@@ -425,6 +412,19 @@ namespace FreeMarket.Models
                 new ObjectParameter("filterCriteria", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FilterCustomers_Result>("FilterCustomers", filterCriteriaParameter);
+        }
+    
+        public virtual ObjectResult<GetCashOrderReport_Result> GetCashOrderReport(Nullable<int> orderNumber, string bankAccountType)
+        {
+            var orderNumberParameter = orderNumber.HasValue ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(int));
+    
+            var bankAccountTypeParameter = bankAccountType != null ?
+                new ObjectParameter("BankAccountType", bankAccountType) :
+                new ObjectParameter("BankAccountType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCashOrderReport_Result>("GetCashOrderReport", orderNumberParameter, bankAccountTypeParameter);
         }
     }
 }

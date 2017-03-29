@@ -4,9 +4,9 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DefaultConnectionIndex="2" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="FreeMarketConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="FreeMarketConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.FreeMarketConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
-          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DefaultConnection" IsAppSettingsProperty="true" Modifier="Assembly" Name="DefaultConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DefaultConnection.ConnectionString" Provider="System.Data.SqlClient" />
-          <Connection ConnectionStringObject="Data Source=localhost;Initial Catalog=FreeMarket;User ID=sa;Password=!Free#Pecans#4" IsAppSettingsProperty="false" Modifier="Assembly" Name="FreeMarketConnectionString (FreeMarket)" ParameterPrefix="@" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="FreeMarketConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="FreeMarketConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.FreeMarketConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DefaultConnection" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="DefaultConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DefaultConnection.ConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="FreeMarketConnectionString1" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="FreeMarketConnectionString1 (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.FreeMarketConnectionString1.ConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetOrderReportTableAdapter" GeneratorDataComponentClassName="GetOrderReportTableAdapter" Name="GetOrderReport" UserDataComponentName="GetOrderReportTableAdapter">
@@ -62,7 +62,7 @@
           </TableAdapter>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetCashOrderReportTableAdapter" GeneratorDataComponentClassName="GetCashOrderReportTableAdapter" Name="GetCashOrderReport" UserDataComponentName="GetCashOrderReportTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FreeMarketConnectionString (FreeMarket)" DbObjectName="FreeMarket.dbo.GetCashOrderReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="DefaultConnection (Web.config)" DbObjectName="FreeMarket.dbo.GetCashOrderReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                     <CommandText>dbo.GetCashOrderReport</CommandText>
@@ -80,11 +80,13 @@
               <Mapping SourceColumn="CustomerPhone1" DataSetColumn="CustomerPhone1" />
               <Mapping SourceColumn="CustomerEmail" DataSetColumn="CustomerEmail" />
               <Mapping SourceColumn="DeliveryAddressLine1" DataSetColumn="DeliveryAddressLine1" />
+              <Mapping SourceColumn="ClientVatNumber" DataSetColumn="ClientVatNumber" />
+              <Mapping SourceColumn="ContactName" DataSetColumn="ContactName" />
+              <Mapping SourceColumn="HeadOfficeAddress" DataSetColumn="HeadOfficeAddress" />
               <Mapping SourceColumn="OrderNumber" DataSetColumn="OrderNumber" />
               <Mapping SourceColumn="SubTotal" DataSetColumn="SubTotal" />
               <Mapping SourceColumn="ShippingTotal" DataSetColumn="ShippingTotal" />
               <Mapping SourceColumn="ClientOrderNumber" DataSetColumn="ClientOrderNumber" />
-              <Mapping SourceColumn="ClientVatNumber" DataSetColumn="ClientVatNumber" />
               <Mapping SourceColumn="GrandTotal" DataSetColumn="GrandTotal" />
               <Mapping SourceColumn="Price" DataSetColumn="Price" />
               <Mapping SourceColumn="Quantity" DataSetColumn="Quantity" />
@@ -115,7 +117,7 @@
   <xs:element name="FreeMarketDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="FreeMarketDataSet" msprop:Generator_UserDSName="FreeMarketDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="GetOrderReport" msprop:Generator_TableClassName="GetOrderReportDataTable" msprop:Generator_TableVarName="tableGetOrderReport" msprop:Generator_TablePropName="GetOrderReport" msprop:Generator_RowDeletingName="GetOrderReportRowDeleting" msprop:Generator_RowChangingName="GetOrderReportRowChanging" msprop:Generator_RowEvHandlerName="GetOrderReportRowChangeEventHandler" msprop:Generator_RowDeletedName="GetOrderReportRowDeleted" msprop:Generator_UserTableName="GetOrderReport" msprop:Generator_RowChangedName="GetOrderReportRowChanged" msprop:Generator_RowEvArgName="GetOrderReportRowChangeEvent" msprop:Generator_RowClassName="GetOrderReportRow">
+        <xs:element name="GetOrderReport" msprop:Generator_TableClassName="GetOrderReportDataTable" msprop:Generator_TableVarName="tableGetOrderReport" msprop:Generator_RowChangedName="GetOrderReportRowChanged" msprop:Generator_TablePropName="GetOrderReport" msprop:Generator_RowDeletingName="GetOrderReportRowDeleting" msprop:Generator_RowChangingName="GetOrderReportRowChanging" msprop:Generator_RowEvHandlerName="GetOrderReportRowChangeEventHandler" msprop:Generator_RowDeletedName="GetOrderReportRowDeleted" msprop:Generator_RowClassName="GetOrderReportRow" msprop:Generator_UserTableName="GetOrderReport" msprop:Generator_RowEvArgName="GetOrderReportRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Price" msprop:Generator_ColumnVarNameInTable="columnPrice" msprop:Generator_ColumnPropNameInRow="Price" msprop:Generator_ColumnPropNameInTable="PriceColumn" msprop:Generator_UserColumnName="Price" type="xs:decimal" />
@@ -280,7 +282,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GetCashOrderReport" msprop:Generator_TableClassName="GetCashOrderReportDataTable" msprop:Generator_TableVarName="tableGetCashOrderReport" msprop:Generator_RowChangedName="GetCashOrderReportRowChanged" msprop:Generator_TablePropName="GetCashOrderReport" msprop:Generator_RowDeletingName="GetCashOrderReportRowDeleting" msprop:Generator_RowChangingName="GetCashOrderReportRowChanging" msprop:Generator_RowEvHandlerName="GetCashOrderReportRowChangeEventHandler" msprop:Generator_RowDeletedName="GetCashOrderReportRowDeleted" msprop:Generator_RowClassName="GetCashOrderReportRow" msprop:Generator_UserTableName="GetCashOrderReport" msprop:Generator_RowEvArgName="GetCashOrderReportRowChangeEvent">
+        <xs:element name="GetCashOrderReport" msprop:Generator_TableClassName="GetCashOrderReportDataTable" msprop:Generator_TableVarName="tableGetCashOrderReport" msprop:Generator_TablePropName="GetCashOrderReport" msprop:Generator_RowDeletingName="GetCashOrderReportRowDeleting" msprop:Generator_RowChangingName="GetCashOrderReportRowChanging" msprop:Generator_RowEvHandlerName="GetCashOrderReportRowChangeEventHandler" msprop:Generator_RowDeletedName="GetCashOrderReportRowDeleted" msprop:Generator_UserTableName="GetCashOrderReport" msprop:Generator_RowChangedName="GetCashOrderReportRowChanged" msprop:Generator_RowEvArgName="GetCashOrderReportRowChangeEvent" msprop:Generator_RowClassName="GetCashOrderReportRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="CustomerName" msprop:Generator_ColumnVarNameInTable="columnCustomerName" msprop:Generator_ColumnPropNameInRow="CustomerName" msprop:Generator_ColumnPropNameInTable="CustomerNameColumn" msprop:Generator_UserColumnName="CustomerName">
@@ -311,17 +313,31 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="OrderNumber" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnOrderNumber" msprop:Generator_ColumnPropNameInRow="OrderNumber" msprop:Generator_ColumnPropNameInTable="OrderNumberColumn" msprop:Generator_UserColumnName="OrderNumber" type="xs:int" />
-              <xs:element name="SubTotal" msprop:Generator_ColumnVarNameInTable="columnSubTotal" msprop:Generator_ColumnPropNameInRow="SubTotal" msprop:Generator_ColumnPropNameInTable="SubTotalColumn" msprop:Generator_UserColumnName="SubTotal" type="xs:decimal" minOccurs="0" />
-              <xs:element name="ShippingTotal" msprop:Generator_ColumnVarNameInTable="columnShippingTotal" msprop:Generator_ColumnPropNameInRow="ShippingTotal" msprop:Generator_ColumnPropNameInTable="ShippingTotalColumn" msprop:Generator_UserColumnName="ShippingTotal" type="xs:decimal" minOccurs="0" />
-              <xs:element name="ClientOrderNumber" msprop:Generator_ColumnVarNameInTable="columnClientOrderNumber" msprop:Generator_ColumnPropNameInRow="ClientOrderNumber" msprop:Generator_ColumnPropNameInTable="ClientOrderNumberColumn" msprop:Generator_UserColumnName="ClientOrderNumber" minOccurs="0">
+              <xs:element name="ClientVatNumber" msprop:Generator_ColumnVarNameInTable="columnClientVatNumber" msprop:Generator_ColumnPropNameInRow="ClientVatNumber" msprop:Generator_ColumnPropNameInTable="ClientVatNumberColumn" msprop:Generator_UserColumnName="ClientVatNumber" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="ClientVatNumber" msprop:Generator_ColumnVarNameInTable="columnClientVatNumber" msprop:Generator_ColumnPropNameInRow="ClientVatNumber" msprop:Generator_ColumnPropNameInTable="ClientVatNumberColumn" msprop:Generator_UserColumnName="ClientVatNumber" minOccurs="0">
+              <xs:element name="ContactName" msprop:Generator_ColumnVarNameInTable="columnContactName" msprop:Generator_ColumnPropNameInRow="ContactName" msprop:Generator_ColumnPropNameInTable="ContactNameColumn" msprop:Generator_UserColumnName="ContactName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="HeadOfficeAddress" msprop:Generator_ColumnVarNameInTable="columnHeadOfficeAddress" msprop:Generator_ColumnPropNameInRow="HeadOfficeAddress" msprop:Generator_ColumnPropNameInTable="HeadOfficeAddressColumn" msprop:Generator_UserColumnName="HeadOfficeAddress" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="OrderNumber" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnOrderNumber" msprop:Generator_ColumnPropNameInRow="OrderNumber" msprop:Generator_ColumnPropNameInTable="OrderNumberColumn" msprop:Generator_UserColumnName="OrderNumber" type="xs:int" />
+              <xs:element name="SubTotal" msprop:Generator_ColumnVarNameInTable="columnSubTotal" msprop:Generator_ColumnPropNameInRow="SubTotal" msprop:Generator_ColumnPropNameInTable="SubTotalColumn" msprop:Generator_UserColumnName="SubTotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ShippingTotal" msprop:Generator_ColumnVarNameInTable="columnShippingTotal" msprop:Generator_ColumnPropNameInRow="ShippingTotal" msprop:Generator_ColumnPropNameInTable="ShippingTotalColumn" msprop:Generator_UserColumnName="ShippingTotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ClientOrderNumber" msprop:Generator_ColumnVarNameInTable="columnClientOrderNumber" msprop:Generator_ColumnPropNameInRow="ClientOrderNumber" msprop:Generator_ColumnPropNameInTable="ClientOrderNumberColumn" msprop:Generator_UserColumnName="ClientOrderNumber" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />

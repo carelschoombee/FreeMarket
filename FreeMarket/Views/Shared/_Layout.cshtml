@@ -18,10 +18,19 @@
     @Scripts.Render("~/bundles/bootstrapValidator")
     @Scripts.Render("~/bundles/animsition")
     @Scripts.Render("~/bundles/morris")
+    @Scripts.Render("~/bundles/bootstrap")
 
 </head>
 <body>
-    <nav role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container" id="banner">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img class="img-responsive center-block" src="~/Content/Images/Banner S and S.png" />
+            </div>
+        </div>
+    </div>
+
+    <nav role="navigation" class="navbar navbar-inverse navbar-static-top navbar-custom" id="topnavbar">
         <div class="container">
 
             <!-- Title -->
@@ -76,12 +85,6 @@
             </div>
         </div>
     </nav>
-
-    <div class="row">
-        <div class="col-md-12 well-banner well-sm text-center">
-            <span style="font-size:60px; color:gold; font-family: 'Pacifico', cursive">Schoombee & Son</span>@*&nbsp;<img src="~/Content/Images/ramLogo.jpg" width="64" height="90" />*@
-        </div>
-    </div>
     
     @if (System.Web.Configuration.WebConfigurationManager.AppSettings["specialMessage"] == "true")
     {
@@ -242,11 +245,15 @@
                 $('#EditModal').removeData('bs.modal');
                 $('#EditModal').modal('show');
             });
-            });
+        });
+
+        $('#topnavbar').affix({
+            offset: {
+                top: $('#banner').height()
+            }   
+        });	
 
     </script>
-
-    @Scripts.Render("~/bundles/bootstrap")
 
     @RenderSection("scripts", required: false)
 
