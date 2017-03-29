@@ -220,6 +220,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\Ellumin8Controller.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -291,6 +292,33 @@
     </Compile>
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\Ellumin8Models.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ellumin8Models.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\Ellumin8Models.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ellumin8Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\Ellumin8Models.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ellumin8Models.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\QuotationClient.cs">
+      <DependentUpon>Ellumin8Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\QuotationDetail.cs">
+      <DependentUpon>Ellumin8Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\QuotationHeader.cs">
+      <DependentUpon>Ellumin8Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ellumin8\QuotationProduct.cs">
+      <DependentUpon>Ellumin8Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Error\ErrorHelpers.cs" />
     <Compile Include="Models\FilterAuditUser_Result.cs">
@@ -595,6 +623,16 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\star-rating.css" />
     <Content Include="Content\star-rating.min.css" />
+    <Content Include="Models\Ellumin8\Ellumin8Models.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Ellumin8Models.edmx</DependentUpon>
+      <LastGenOutput>Ellumin8Models.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Ellumin8\Ellumin8Models.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Ellumin8Models.edmx</DependentUpon>
+      <LastGenOutput>Ellumin8Models.cs</LastGenOutput>
+    </Content>
     <Content Include="robots.txt" />
     <Content Include="Scripts\animsition.js" />
     <Content Include="Scripts\animsition.min.js" />
@@ -675,6 +713,13 @@
     </None>
     <Content Include="FreeMarketDataSet.xss">
       <DependentUpon>FreeMarketDataSet.xsd</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Ellumin8\Ellumin8Models.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Ellumin8Models.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Ellumin8\Ellumin8Models.edmx.diagram">
+      <DependentUpon>Ellumin8Models.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FreeMarketDeploy.pubxml" />
     <None Include="Properties\Settings.settings">

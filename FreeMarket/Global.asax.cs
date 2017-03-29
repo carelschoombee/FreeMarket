@@ -28,6 +28,15 @@ namespace FreeMarket
                 if (Roles.RoleExists("Administrator") == false)
                     Roles.CreateRole("Administrator");
 
+                if (Roles.RoleExists("Ellumin8") == false)
+                    Roles.CreateRole("Ellumin8");
+
+                if (!Roles.IsUserInRole("carelschoombee@gmail.co.za", "Ellumin8"))
+                    Roles.AddUserToRole("carelschoombee@gmail.co.za", "Ellumin8");
+
+                if (!Roles.IsUserInRole("carel@schoombeeandson.co.za", "Ellumin8"))
+                    Roles.AddUserToRole("carel@schoombeeandson.co.za", "Ellumin8");
+
                 if (!Roles.IsUserInRole("carel@schoombeeandson.co.za", "Administrator"))
                     Roles.AddUserToRole("carel@schoombeeandson.co.za", "Administrator");
 
@@ -36,7 +45,7 @@ namespace FreeMarket
             }
             catch (Exception e)
             {
-
+                ExceptionLogging.LogException(e);
             }
         }
     }

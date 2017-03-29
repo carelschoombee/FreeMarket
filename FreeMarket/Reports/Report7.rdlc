@@ -41,7 +41,7 @@
         <rd:DefaultName>Textbox3</rd:DefaultName>
         <Top>1.67693cm</Top>
         <Left>4.44922cm</Left>
-        <Height>0.8015cm</Height>
+        <Height>0.50517cm</Height>
         <Width>5.31985cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -60,7 +60,7 @@
         <Sizing>FitProportional</Sizing>
         <Top>1.67693cm</Top>
         <Left>3.41489cm</Left>
-        <Height>0.8015cm</Height>
+        <Height>0.50517cm</Height>
         <Width>0.82267cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
@@ -73,9 +73,9 @@
         <Source>Embedded</Source>
         <Value>LandLine</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>2.59132cm</Top>
+        <Top>2.35849cm</Top>
         <Left>3.41489cm</Left>
-        <Height>0.865cm</Height>
+        <Height>0.53339cm</Height>
         <Width>0.82267cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -101,9 +101,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>2.61954cm</Top>
+        <Top>2.38671cm</Top>
         <Left>4.44923cm</Left>
-        <Height>0.8015cm</Height>
+        <Height>0.50517cm</Height>
         <Width>5.31984cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -120,10 +120,10 @@
         <Source>Embedded</Source>
         <Value>email</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>3.59743cm</Top>
+        <Top>3.03298cm</Top>
         <Left>3.41489cm</Left>
-        <Height>0.8015cm</Height>
-        <Width>0.85795cm</Width>
+        <Height>0.46989cm</Height>
+        <Width>0.82267cm</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -148,9 +148,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>3.56215cm</Top>
+        <Top>2.9977cm</Top>
         <Left>4.44922cm</Left>
-        <Height>0.8015cm</Height>
+        <Height>0.50517cm</Height>
         <Width>5.31985cm</Width>
         <ZIndex>6</ZIndex>
         <Style>
@@ -4686,7 +4686,7 @@
         <rd:DefaultName>Textbox278</rd:DefaultName>
         <Top>7.10517cm</Top>
         <Height>2.78722cm</Height>
-        <Width>16.91922cm</Width>
+        <Width>16.88394cm</Width>
         <ZIndex>11</ZIndex>
         <Style>
           <Border>
@@ -4704,8 +4704,8 @@
         <Source>Embedded</Source>
         <Value>Invoice</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>4.39893cm</Top>
-        <Left>7.84573cm</Left>
+        <Top>4.3366cm</Top>
+        <Left>12.65056cm</Left>
         <Height>1.08795cm</Height>
         <Width>1.92333cm</Width>
         <ZIndex>12</ZIndex>
@@ -4730,6 +4730,79 @@
           </Border>
         </Style>
       </Image>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Fields!StreetAddress.Value</Value>
+                <Style>
+                  <FontStyle>Normal</FontStyle>
+                  <FontWeight>Normal</FontWeight>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Fields!TownName.Value</Value>
+                <Style>
+                  <FontStyle>Normal</FontStyle>
+                  <FontWeight>Normal</FontWeight>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Fields!StruisbaaiPostalCode.Value</Value>
+                <Style>
+                  <FontStyle>Normal</FontStyle>
+                  <FontWeight>Normal</FontWeight>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Fields!Province.Value</Value>
+                <Style>
+                  <FontStyle>Normal</FontStyle>
+                  <FontWeight>Normal</FontWeight>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>3.64398cm</Top>
+        <Left>3.45016cm</Left>
+        <Height>1.7453cm</Height>
+        <Width>6.31891cm</Width>
+        <ZIndex>14</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>9.07397in</Height>
     <Style>
