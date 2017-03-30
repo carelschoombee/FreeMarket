@@ -117,7 +117,7 @@ namespace FreeMarket.Models
                 string message1 = CreateConfirmationMessageCustomer();
 
                 iMessage.Body = string.Format((message1), customer.Name, orderNumber, supportInfo.MainContactName, supportInfo.Landline, supportInfo.Cellphone, supportInfo.Email);
-                iMessage.Subject = string.Format("{0} {1}", "Schoombee and Son Invoice", orderNumber.ToString());
+                iMessage.Subject = string.Format("{0} {1}", "Schoombee & Son Invoice", orderNumber.ToString());
 
                 EmailService email = new EmailService();
 
