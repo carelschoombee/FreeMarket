@@ -22,6 +22,7 @@ namespace FreeMarket.Models
         public List<OrderHeader> InTransitOrders { get; set; }
         public List<OrderHeader> RefundPending { get; set; }
         public List<OrderHeader> RefundableOrders { get; set; }
+        public List<CashOrderViewModel> CashOrders { get; set; }
 
         [DisplayName("Time Period")]
         [Required]
@@ -121,6 +122,7 @@ namespace FreeMarket.Models
                 InTransitOrders = db.OrderHeaders.Where(c => c.OrderStatus == "InTransit").OrderBy(c => c.DeliveryDate).ToList();
                 RefundPending = db.OrderHeaders.Where(c => c.OrderStatus == "RefundPending").OrderBy(c => c.DeliveryDate).ToList();
                 RefundableOrders = db.OrderHeaders.Where(c => c.OrderStatus == "Confirmed" || c.OrderStatus == "InTransit").ToList();
+                CashOrders = CashOrderViewModel.GetOrders("all");
 
                 TotalSales = SalesInformation.SalesDetails.Sum(c => c.Value);
 

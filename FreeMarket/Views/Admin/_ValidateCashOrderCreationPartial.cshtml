@@ -1,57 +1,70 @@
 ﻿<script type="text/javascript">
 
+    $(document).on('change', '#Order_InvoiceSent', function () {
+        var checkedValue = $('#Order_InvoiceSent:checked').val();
+        if (checkedValue == "true") {
+            $("#radioDiv").show();
+        }
+        else {
+            $("#radioDiv").hide();
+        }
+    });
+
     $(document).ready(function () {
-        $('#createCashOrderForm')
-                .bootstrapValidator({
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        'Order.CustomerName': {
-                            validators: {
-                                notEmpty: {
-                                    message: 'The field is required.'
-                                }
-                            }
-                        },
-                        'Order.CustomerEmail': {
-                            validators: {
-                                emailAddress: {
-                                    message: 'Email addresses only.'
-                                }
-                            }
-                        },
-                        'Order.CustomerPhoneNumber': {
-                            validators: {
-                                stringLength: {
-                                    message: 'Max string length is 256.',
-                                    max: 256
-                                }                            
-                            }
-                        },
-                        'Order.CustomerDeliveryAddress': {
-                            validators: {
-                                stringLength: {
-                                    message: 'Max string length is 1100.',
-                                    max: 1100
-                                    }
-                            }
-                        },
-                        'Order.ShippingTotal': {
-                            validators: {
-                                notEmpty: {
-                                    message: 'The field is required.'
-                                },
-                                regexp: {
-                                    regexp: /^[\d,\s]+$/,
-                                    message: 'Only numbers, spaces and commas.'
-                                }
-                            }
-                        }
-                    }
-                })
+        if ($("#SelectedCustomerType").val().length > 0) {
+            $.ajax({
+                url: '@Url.Action("GetCashOrderForm", "Admin")',
+                type: 'POST',
+                data: {
+                    id: $("#SelectedCustomerType").val(),
+                }
+            }).done
+               (function (data) {
+                   $('#FormElements').html(data);
+                   $('#createCashOrderForm').removeData('validator');
+                   $('#createCashOrderForm').removeData('unobtrusiveValidation');
+                   $.validator.unobtrusive.parse('#createCashOrderForm');
+               });
+        }
+        else {
+            $('#FormElements').empty();
+        }
+    });
+
+    $("#SelectedCustomerType").change(function () {
+        if ($("#SelectedCustomerType").val().length > 0) {
+            $.ajax({
+                url: '@Url.Action("GetCashOrderForm", "Admin")',
+                type: 'POST',
+                data: {
+                    id: $("#SelectedCustomerType").val(),
+                }
+            }).done
+               (function (data) {
+                   $('#FormElements').html(data);
+                   $('#createCashOrderForm').removeData('validator');
+                   $('#createCashOrderForm').removeData('unobtrusiveValidation');
+                   $.validator.unobtrusive.parse('#createCashOrderForm');
+               });
+        }
+        else {
+            $('#FormElements').empty();
+        }
+    });
+
+    $(document).on('change', '#SelectedShippingType', function () {
+        if ($("#SelectedShippingType").val() == "Free") {
+            $("#ShippingInfo").hide();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
+        else if ($("#SelectedShippingType").val() == "Charge") {
+            $("#ShippingInfo").show();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
     });
 
 </script>

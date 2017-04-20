@@ -54,5 +54,7 @@ namespace FreeMarket.Models
 
         [DisplayName("Contact Name")]
         public string ContactName { get; set; }
+
+        public string Type { get; set; }
     }
 }

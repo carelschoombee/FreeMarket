@@ -1,0 +1,43 @@
+﻿<script type="text/javascript">
+
+    $(document).on('change', '#Order_InvoiceSent', function () {
+        var checkedValue = $('#Order_InvoiceSent:checked').val();
+        if (checkedValue == "true") {
+            $("#radioDiv").show();
+        }
+        else {
+            $("#radioDiv").hide();
+        }
+    });
+
+    $(document).ready(function () {
+        if ($("#SelectedShippingType").val() == "Free") {
+            $("#ShippingInfo").hide();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
+        else if ($("#SelectedShippingType").val() == "Charge") {
+            $("#ShippingInfo").show();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
+    });
+
+    $(document).on('change', '#SelectedShippingType', function () {
+        if ($("#SelectedShippingType").val() == "Free") {
+            $("#ShippingInfo").hide();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
+        else if ($("#SelectedShippingType").val() == "Charge") {
+            $("#ShippingInfo").show();
+            $('#createCashOrderForm').removeData('validator');
+            $('#createCashOrderForm').removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#createCashOrderForm');
+        }
+    });
+
+</script>

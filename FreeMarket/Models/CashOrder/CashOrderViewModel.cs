@@ -9,6 +9,8 @@ namespace FreeMarket.Models
     {
         public CashOrder Order { get; set; }
         public List<CashOrderDetail> OrderDetails { get; set; }
+
+        [DisplayName("Custodian")]
         public int SelectedCustodian { get; set; }
 
         [DisplayName("Custodian")]
@@ -20,6 +22,15 @@ namespace FreeMarket.Models
 
         public List<string> BankAcountOptions { get; set; }
 
+        public List<SelectListItem> CustomerType { get; set; }
+
+        [DisplayName("Select Type of Customer")]
+        public string SelectedCustomerType { get; set; }
+
+        public List<SelectListItem> ShippingType { get; set; }
+
+        [DisplayName("Shipping")]
+        public string SelectedShippingType { get; set; }
 
         public static List<CashOrderViewModel> GetOrders(string searchCriteria)
         {
@@ -151,6 +162,25 @@ namespace FreeMarket.Models
                         Text = c.CustodianName,
                         Value = c.CustodianNumber.ToString()
                     }).ToList();
+
+                model.SelectedCustomerType = customer.Type;
+
+                if (model.Order.ShippingTotal > 0)
+                {
+                    model.SelectedShippingType = "Charge";
+                    model.ShippingType = new List<SelectListItem> {
+                    new SelectListItem { Text = "Free Delivery", Selected = false, Value = "Free" },
+                    new SelectListItem { Text = "Specify Delivery Cost", Selected = true, Value = "Charge" }
+                    };
+                }
+                else
+                {
+                    model.SelectedShippingType = "Free";
+                    model.ShippingType = new List<SelectListItem> {
+                    new SelectListItem { Text = "Free Delivery", Selected = true, Value = "Free" },
+                    new SelectListItem { Text = "Specify Delivery Cost", Selected = false, Value = "Charge" }
+                    };
+                }
             }
 
             return model;
@@ -195,6 +225,18 @@ namespace FreeMarket.Models
             model.BankAcountOptions = new List<string> { "Personal", "Business" };
             model.SelectedBankAcountOption = "Personal";
 
+            model.CustomerType = new List<SelectListItem> {
+                new SelectListItem { Text = "Normal Customer", Selected = false, Value = "NormalCustomer" },
+                new SelectListItem { Text = "Company / Retail", Selected = false, Value = "CompanyRetail" }
+            };
+
+            model.ShippingType = new List<SelectListItem> {
+                new SelectListItem { Text = "Free Delivery", Selected = true, Value = "Free" },
+                new SelectListItem { Text = "Specify Delivery Cost", Selected = false, Value = "Charge" }
+            };
+
+            model.Order.ShippingTotal = 0;
+
             return model;
         }
 
@@ -211,6 +253,17 @@ namespace FreeMarket.Models
 
                 model.BankAcountOptions = new List<string> { "Personal", "Business" };
                 model.SelectedBankAcountOption = "Personal";
+
+                model.CustomerType = new List<SelectListItem> {
+                    new SelectListItem { Text = "Normal Customer", Selected = false, Value = "NormalCustomer" },
+                    new SelectListItem { Text = "Company / Retail", Selected = false, Value = "CompanyRetail" }
+                };
+
+                model.ShippingType = new List<SelectListItem> {
+                    new SelectListItem { Text = "Free Delivery", Selected = true, Value = "Free" },
+                    new SelectListItem { Text = "Specify Delivery Cost", Selected = false, Value = "Charge" }
+                };
+
             }
         }
     }

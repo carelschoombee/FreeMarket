@@ -15,10 +15,11 @@ namespace FreeMarket.Models
     [MetadataType(typeof(CashOrderMetaData))]
     public partial class CashOrder
     {
-        [DisplayName("Company Name")]
+        [DisplayName("Company Name / Customer Name")]
+        [Required]
         public string CustomerName { get; set; }
 
-        [DisplayName("Contact Name")]
+        [DisplayName("Contact Name at Company")]
         public string ContactName { get; set; }
 
         [DisplayName("Email")]
@@ -156,7 +157,8 @@ namespace FreeMarket.Models
                         PhoneNumber = model.Order.CustomerPhone,
                         ClientVatNumber = model.Order.ClientVatNumber,
                         ContactName = model.Order.ContactName,
-                        HeadOfficeAddress = model.Order.HeadOfficeAddress
+                        HeadOfficeAddress = model.Order.HeadOfficeAddress,
+                        Type = model.SelectedCustomerType
                     };
 
                     db.CashCustomers.Add(customer);
@@ -185,9 +187,13 @@ namespace FreeMarket.Models
                 else
                     status = "In Progress";
 
+                if (model.SelectedShippingType == "Free")
+                    model.Order.ShippingTotal = 0;
+
                 CashOrder order = new CashOrder
                 {
                     CashCustomerId = customer.Id,
+                    CustomerName = model.Order.CustomerName,
                     DatePlaced = DateTime.Now,
                     Status = status,
                     Total = model.Order.ShippingTotal,
@@ -366,8 +372,15 @@ namespace FreeMarket.Models
 
                 order.Status = status;
 
-                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+
+                }
 
                 if (model.Order.InvoiceSent != null)
                 {
@@ -463,7 +476,7 @@ namespace FreeMarket.Models
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
-        [DisplayName("Shipping Total")]
+        [DisplayName("Cost of Shipping")]
         public decimal ShippingTotal { get; set; }
 
         [DisplayName("Client Order Number")]

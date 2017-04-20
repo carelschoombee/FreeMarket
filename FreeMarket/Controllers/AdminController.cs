@@ -23,6 +23,16 @@ namespace FreeMarket.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult GetCashOrderForm(string id)
+        {
+            CashOrderViewModel model = CashOrderViewModel.CreateNewOrder();
+
+            model.SelectedCustomerType = id;
+
+            return PartialView("_CashOrderCustomerTypePartial", model);
+        }
+
         public ActionResult GetAddress(string userId, string addressName)
         {
             CustomerAddress address = new CustomerAddress();

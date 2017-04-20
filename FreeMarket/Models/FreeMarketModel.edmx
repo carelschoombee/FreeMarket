@@ -66,6 +66,7 @@
           <Property Name="ClientVatNumber" Type="nvarchar" MaxLength="100" />
           <Property Name="ContactName" Type="nvarchar(max)" />
           <Property Name="HeadOfficeAddress" Type="nvarchar" MaxLength="1100" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CashOrder">
           <Key>
@@ -2277,6 +2278,7 @@
           <Property Name="ClientVatNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ContactName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="HeadOfficeAddress" Type="String" MaxLength="1100" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CashOrder">
           <Key>
@@ -3415,6 +3417,7 @@
           <EntitySetMapping Name="CashCustomers">
             <EntityTypeMapping TypeName="FreeMarketModel.CashCustomer">
               <MappingFragment StoreEntitySet="CashCustomer">
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="HeadOfficeAddress" ColumnName="HeadOfficeAddress" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />
                 <ScalarProperty Name="ClientVatNumber" ColumnName="ClientVatNumber" />

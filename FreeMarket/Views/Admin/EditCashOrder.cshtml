@@ -18,8 +18,27 @@
             @Html.AntiForgeryToken()
 
             <div class="well well-modal">
-                
-                @Html.Partial("_CreateCashOrderPartial", Model)
+
+                <div id="parent" class="center_div">
+                    @if (Model.Order.DatePlaced != null)
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Order.DatePlaced, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-6">
+                                @Html.DisplayFor(m => m.Order.DatePlaced)
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SelectedCustodian, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.SelectedCustodian, Model.Custodians, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Partial("_CashOrderCustomerTypePartial", Model)
 
                 <hr />
 
@@ -43,4 +62,4 @@
     
 </div>
 
-@Html.Partial("_ValidateCashOrderCreationPartial")
+@Html.Partial("_ValidateCashOrderEditPartial")

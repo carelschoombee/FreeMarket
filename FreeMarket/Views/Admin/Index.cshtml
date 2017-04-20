@@ -363,7 +363,7 @@
             {
                 @Html.AntiForgeryToken()
 
-                <div class="text-center">To view the last 100 cash orders, enter 'all' in the search field below.</div>
+                <div class="text-center">To view all orders, enter 'all' in the search field below.</div>
                 <br />
                 <div class="form-group">
                     <div class="col-md-3">
@@ -392,7 +392,7 @@
             <br />
 
             <div id="cashSalesResults">
-
+                @Html.Partial("_ViewCashOrders", Model.CashOrders)
             </div>
         </div>
         <div class="tab-pane" id="auditing">
