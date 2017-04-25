@@ -173,15 +173,32 @@ namespace FreeMarket.Controllers
             {
                 using (FreeMarketEntities db = new FreeMarketEntities())
                 {
-                    temp = CashOrderViewModel.GetOrders(model.CashSalesCriteria);
+                    switch (model.SelectedCashOrderSearchCriteria)
+                    {
+                        case "AllRecords":
+                            temp = CashOrderViewModel.GetOrders("all");
+                            break;
+                        case "OutstandingPayments":
+                            temp = CashOrderViewModel.GetOutstandingPaymentOrders();
+                            break;
+                        case "UndeliveredOrders":
+                            temp = CashOrderViewModel.GetUndeliveredOrders();
+                            break;
+                        case "CashTransactions":
+                            temp = CashOrderViewModel.GetCashPaymentOrders();
+                            break;
+                        case "BankTransfers":
+                            temp = CashOrderViewModel.GetBankTransferPaymentOrders();
+                            break;
+                        case "TextSearch":
+                            temp = CashOrderViewModel.GetOrders(model.CashSalesCriteria);
+                            break;
+                    }
+
 
                     if (cashOrders == null)
                         return Content("");
 
-                    if (model.CashSalesFilter)
-                        cashOrders = temp
-                            .Where(c => c.Order.PaymentReceived == null || c.Order.PaymentReceived == false)
-                            .ToList();
                     else
                         cashOrders = temp;
                 }

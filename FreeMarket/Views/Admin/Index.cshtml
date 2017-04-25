@@ -363,18 +363,17 @@
             {
                 @Html.AntiForgeryToken()
 
-                <div class="text-center">To view all orders, enter 'all' in the search field below.</div>
-                <br />
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.ActionLink("New Cash Order", "InitiateCashOrder", "Admin", null, new { @class = "btn btn-success" })
                     </div>
                     <div class="col-md-3">
+                        @Html.DropDownListFor(model => Model.SelectedCashOrderSearchCriteria, Model.CashOrderSearchCriteria, new { @class = "form-control-inline" })
+                        @Html.ValidationMessageFor(m => m.SelectedCashOrderSearchCriteria, "", new { @class = "text-danger" })
+                    </div>
+                    <div id="cashSearchPartial" class="col-md-3" style="display:none">
                         @Html.TextBoxFor(c => c.CashSalesCriteria, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.CashSalesCriteria, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-3">
-                        Payment Outstanding @Html.EditorFor(c => c.CashSalesFilter)
                     </div>
                     <div class="col-md-3">
                         <input type="submit" value="Filter" class="btn btn-primary btn-sm" />
@@ -732,6 +731,17 @@
         else
         {
             <text>$("#YearView").show();</text>
+        }
+    });
+
+    $("#SelectedCashOrderSearchCriteria").change(function () {
+        if ($("#SelectedCashOrderSearchCriteria").val() == "TextSearch")
+        {
+            $("#cashSearchPartial").show();
+        }
+        else
+        {
+            $("#cashSearchPartial").hide();
         }
     });
 

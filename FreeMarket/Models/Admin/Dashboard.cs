@@ -133,9 +133,10 @@ namespace FreeMarket.Models
                 {
                     new SelectListItem() { Text = "All Records", Value = "AllRecords", Selected = true },
                     new SelectListItem() { Text = "Outstanding Payments", Value = "OutstandingPayments", Selected = false },
-                    new SelectListItem() { Text = "Delivered Orders", Value = "DeliveredOrders", Selected = false },
+                    new SelectListItem() { Text = "Undelivered Orders", Value = "UndeliveredOrders", Selected = false },
                     new SelectListItem() { Text = "Cash Transactions", Value = "CashTransactions", Selected = false },
-                    new SelectListItem() { Text = "Bank Transfers", Value = "BankTransfers", Selected = false }
+                    new SelectListItem() { Text = "Bank Transfers", Value = "BankTransfers", Selected = false },
+                    new SelectListItem() { Text = "Text Search", Value = "TextSearch", Selected = false }
                 };
 
                 List<AuditUser> hits = new List<AuditUser>();

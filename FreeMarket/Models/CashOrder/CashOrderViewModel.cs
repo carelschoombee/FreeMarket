@@ -92,6 +92,238 @@ namespace FreeMarket.Models
             return model;
         }
 
+        public static List<CashOrderViewModel> GetOutstandingPaymentOrders()
+        {
+            List<CashOrderViewModel> model = new List<CashOrderViewModel>();
+
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                List<FilterCashOrder_Result> orders = db.FilterCashOrder("all")
+                    .Where(c => c.PaymentReceived == false).ToList();
+
+                if (orders == null)
+                    return model;
+
+                foreach (FilterCashOrder_Result result in orders)
+                {
+                    CashOrderViewModel viewModel = new CashOrderViewModel();
+                    viewModel.Order = new CashOrder
+                    {
+                        CashCustomerId = (int)result.CashCustomerId,
+                        OrderId = (int)result.OrderId,
+                        Total = (int)result.Total,
+                        CustomerDeliveryAddress = result.DeliveryAddress,
+                        CustomerEmail = result.Email,
+                        CustomerName = result.Name,
+                        CustomerPhone = result.PhoneNumber,
+                        DatePlaced = result.DatePlaced,
+                        Delivered = result.Delivered,
+                        BankTransfer = result.BankTransfer,
+                        CashTransaction = result.CashTransaction,
+                        PaymentReceived = result.PaymentReceived,
+                        InvoiceSent = result.InvoiceSent,
+                        ShippingTotal = result.ShippingTotal,
+                        ContactName = result.ContactName
+                    };
+
+                    viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
+                        .Select(c => new CashOrderDetail
+                        {
+                            CashOrderId = c.CashOrderId,
+                            CashOrderItemId = c.CashOrderItemId,
+                            CustodianNumber = c.CustodianNumber,
+                            Price = c.Price,
+                            ProductNumber = c.ProductNumber,
+                            Quantity = c.Quantity,
+                            SupplierNumber = c.SupplierNumber,
+                            Description = c.Description,
+                            SupplierName = c.SupplierName,
+                            Weight = c.Weight,
+                            OrderItemTotal = c.OrderItemTotal
+                        })
+                        .ToList();
+
+                    model.Add(viewModel);
+                }
+            }
+
+            return model;
+        }
+
+        public static List<CashOrderViewModel> GetUndeliveredOrders()
+        {
+            List<CashOrderViewModel> model = new List<CashOrderViewModel>();
+
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                List<FilterCashOrder_Result> orders = db.FilterCashOrder("all")
+                    .Where(c => c.Delivered == false).ToList();
+
+                if (orders == null)
+                    return model;
+
+                foreach (FilterCashOrder_Result result in orders)
+                {
+                    CashOrderViewModel viewModel = new CashOrderViewModel();
+                    viewModel.Order = new CashOrder
+                    {
+                        CashCustomerId = (int)result.CashCustomerId,
+                        OrderId = (int)result.OrderId,
+                        Total = (int)result.Total,
+                        CustomerDeliveryAddress = result.DeliveryAddress,
+                        CustomerEmail = result.Email,
+                        CustomerName = result.Name,
+                        CustomerPhone = result.PhoneNumber,
+                        DatePlaced = result.DatePlaced,
+                        Delivered = result.Delivered,
+                        BankTransfer = result.BankTransfer,
+                        CashTransaction = result.CashTransaction,
+                        PaymentReceived = result.PaymentReceived,
+                        InvoiceSent = result.InvoiceSent,
+                        ShippingTotal = result.ShippingTotal,
+                        ContactName = result.ContactName
+                    };
+
+                    viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
+                        .Select(c => new CashOrderDetail
+                        {
+                            CashOrderId = c.CashOrderId,
+                            CashOrderItemId = c.CashOrderItemId,
+                            CustodianNumber = c.CustodianNumber,
+                            Price = c.Price,
+                            ProductNumber = c.ProductNumber,
+                            Quantity = c.Quantity,
+                            SupplierNumber = c.SupplierNumber,
+                            Description = c.Description,
+                            SupplierName = c.SupplierName,
+                            Weight = c.Weight,
+                            OrderItemTotal = c.OrderItemTotal
+                        })
+                        .ToList();
+
+                    model.Add(viewModel);
+                }
+            }
+
+            return model;
+        }
+
+        public static List<CashOrderViewModel> GetCashPaymentOrders()
+        {
+            List<CashOrderViewModel> model = new List<CashOrderViewModel>();
+
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                List<FilterCashOrder_Result> orders = db.FilterCashOrder("all")
+                    .Where(c => c.CashTransaction == true).ToList();
+
+                if (orders == null)
+                    return model;
+
+                foreach (FilterCashOrder_Result result in orders)
+                {
+                    CashOrderViewModel viewModel = new CashOrderViewModel();
+                    viewModel.Order = new CashOrder
+                    {
+                        CashCustomerId = (int)result.CashCustomerId,
+                        OrderId = (int)result.OrderId,
+                        Total = (int)result.Total,
+                        CustomerDeliveryAddress = result.DeliveryAddress,
+                        CustomerEmail = result.Email,
+                        CustomerName = result.Name,
+                        CustomerPhone = result.PhoneNumber,
+                        DatePlaced = result.DatePlaced,
+                        Delivered = result.Delivered,
+                        BankTransfer = result.BankTransfer,
+                        CashTransaction = result.CashTransaction,
+                        PaymentReceived = result.PaymentReceived,
+                        InvoiceSent = result.InvoiceSent,
+                        ShippingTotal = result.ShippingTotal,
+                        ContactName = result.ContactName
+                    };
+
+                    viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
+                        .Select(c => new CashOrderDetail
+                        {
+                            CashOrderId = c.CashOrderId,
+                            CashOrderItemId = c.CashOrderItemId,
+                            CustodianNumber = c.CustodianNumber,
+                            Price = c.Price,
+                            ProductNumber = c.ProductNumber,
+                            Quantity = c.Quantity,
+                            SupplierNumber = c.SupplierNumber,
+                            Description = c.Description,
+                            SupplierName = c.SupplierName,
+                            Weight = c.Weight,
+                            OrderItemTotal = c.OrderItemTotal
+                        })
+                        .ToList();
+
+                    model.Add(viewModel);
+                }
+            }
+
+            return model;
+        }
+
+        public static List<CashOrderViewModel> GetBankTransferPaymentOrders()
+        {
+            List<CashOrderViewModel> model = new List<CashOrderViewModel>();
+
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                List<FilterCashOrder_Result> orders = db.FilterCashOrder("all")
+                    .Where(c => c.BankTransfer == true).ToList();
+
+                if (orders == null)
+                    return model;
+
+                foreach (FilterCashOrder_Result result in orders)
+                {
+                    CashOrderViewModel viewModel = new CashOrderViewModel();
+                    viewModel.Order = new CashOrder
+                    {
+                        CashCustomerId = (int)result.CashCustomerId,
+                        OrderId = (int)result.OrderId,
+                        Total = (int)result.Total,
+                        CustomerDeliveryAddress = result.DeliveryAddress,
+                        CustomerEmail = result.Email,
+                        CustomerName = result.Name,
+                        CustomerPhone = result.PhoneNumber,
+                        DatePlaced = result.DatePlaced,
+                        Delivered = result.Delivered,
+                        BankTransfer = result.BankTransfer,
+                        CashTransaction = result.CashTransaction,
+                        PaymentReceived = result.PaymentReceived,
+                        InvoiceSent = result.InvoiceSent,
+                        ShippingTotal = result.ShippingTotal,
+                        ContactName = result.ContactName
+                    };
+
+                    viewModel.OrderDetails = db.GetCashOrderDetails(viewModel.Order.OrderId)
+                        .Select(c => new CashOrderDetail
+                        {
+                            CashOrderId = c.CashOrderId,
+                            CashOrderItemId = c.CashOrderItemId,
+                            CustodianNumber = c.CustodianNumber,
+                            Price = c.Price,
+                            ProductNumber = c.ProductNumber,
+                            Quantity = c.Quantity,
+                            SupplierNumber = c.SupplierNumber,
+                            Description = c.Description,
+                            SupplierName = c.SupplierName,
+                            Weight = c.Weight,
+                            OrderItemTotal = c.OrderItemTotal
+                        })
+                        .ToList();
+
+                    model.Add(viewModel);
+                }
+            }
+
+            return model;
+        }
+
         public static CashOrderViewModel GetOrder(int id)
         {
             CashOrderViewModel model = new CashOrderViewModel();
