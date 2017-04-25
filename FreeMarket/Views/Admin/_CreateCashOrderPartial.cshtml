@@ -22,12 +22,22 @@
         </div>
     </div>
 
-    @if (Model.CustomerType != null)
+    @if (Model.CustomerType != null && string.IsNullOrEmpty(Model.SelectedCustomerType))
     {
         <div class="form-group">
             @Html.LabelFor(m => m.SelectedCustomerType, new { @class = "col-md-4 control-label" })
             <div class="col-md-6">
                 @Html.DropDownListFor(model => model.SelectedCustomerType, Model.CustomerType, "Choose", new { @class = "form-control" })
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.SelectedCustomerType, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(model => model.SelectedCustomerType, Model.CustomerType, "Choose", new { @class = "form-control", @disabled = "disabled"})
+                @Html.HiddenFor(c => c.SelectedCustomerType)
             </div>
         </div>
     }

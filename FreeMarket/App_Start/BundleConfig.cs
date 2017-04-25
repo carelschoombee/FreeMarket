@@ -38,6 +38,11 @@ namespace FreeMarket
                       "~/Scripts/raphael.min.js",
                       "~/Scripts/morris.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/globalisation").Include(
+                      "~/Scripts/globalize.0.1.3/globalize.js",
+                      "~/Scripts/globalize.0.1.3/cultures/globalize.culture.en-ZA.js"
+                    ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       //"~/Content/bootstrap-theme.min.css",
                       "~/Content/bootstrap.css",

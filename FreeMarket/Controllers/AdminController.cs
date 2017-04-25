@@ -24,9 +24,9 @@ namespace FreeMarket.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetCashOrderForm(string id)
+        public ActionResult GetCashOrderForm(string id, int customerNumber = 0)
         {
-            CashOrderViewModel model = CashOrderViewModel.CreateNewOrder();
+            CashOrderViewModel model = CashOrderViewModel.CreateNewOrder(customerNumber);
 
             model.SelectedCustomerType = id;
 

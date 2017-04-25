@@ -53,6 +53,9 @@ namespace FreeMarket.Models
 
         public decimal TotalSales { get; set; }
 
+        public string SelectedCashOrderSearchCriteria { get; set; }
+        public List<SelectListItem> CashOrderSearchCriteria { get; set; }
+
         public Dashboard()
         {
 
@@ -125,6 +128,15 @@ namespace FreeMarket.Models
                 CashOrders = CashOrderViewModel.GetOrders("all");
 
                 TotalSales = SalesInformation.SalesDetails.Sum(c => c.Value);
+
+                CashOrderSearchCriteria = new List<SelectListItem>()
+                {
+                    new SelectListItem() { Text = "All Records", Value = "AllRecords", Selected = true },
+                    new SelectListItem() { Text = "Outstanding Payments", Value = "OutstandingPayments", Selected = false },
+                    new SelectListItem() { Text = "Delivered Orders", Value = "DeliveredOrders", Selected = false },
+                    new SelectListItem() { Text = "Cash Transactions", Value = "CashTransactions", Selected = false },
+                    new SelectListItem() { Text = "Bank Transfers", Value = "BankTransfers", Selected = false }
+                };
 
                 List<AuditUser> hits = new List<AuditUser>();
                 hits = db.AuditUsers.Where(c => c.Action == 32).ToList();

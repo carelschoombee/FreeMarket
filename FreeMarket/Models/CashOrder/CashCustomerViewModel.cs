@@ -6,6 +6,15 @@ namespace FreeMarket.Models
     public class CashCustomerViewModel
     {
         public string CustomerCriteria { get; set; }
+        public List<CashCustomer> AllCustomers { get; set; }
+
+        public CashCustomerViewModel()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                AllCustomers = db.CashCustomers.ToList();
+            }
+        }
 
         public static List<CashCustomer> GetCustomers(string customerCriteria)
         {

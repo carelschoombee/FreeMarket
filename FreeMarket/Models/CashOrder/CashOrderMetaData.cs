@@ -363,6 +363,7 @@ namespace FreeMarket.Models
                 order.ClientOrderNumber = model.Order.ClientOrderNumber;
                 order.InvoiceSent = model.Order.InvoiceSent;
                 order.ContactName = model.Order.ContactName;
+                order.CustomerName = model.Order.CustomerName;
 
                 string status;
                 if (model.Order.Delivered == true && model.Order.PaymentReceived == true)
@@ -372,15 +373,8 @@ namespace FreeMarket.Models
 
                 order.Status = status;
 
-                try
-                {
-                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-
-                }
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
 
                 if (model.Order.InvoiceSent != null)
                 {

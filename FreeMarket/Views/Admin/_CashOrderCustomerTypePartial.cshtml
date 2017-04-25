@@ -237,8 +237,8 @@
     {
         <tr>
             <td>
-                <img class="img-thumbnail" src="@Url.Action("RenderImage", "Image", new { id = Model.Products.Products[i].SecondaryImageNumber})" alt="@Model.Products.Products[i].Description" title="@Model.Products.Products[i].Description" />
-                @Html.HiddenFor(c => Model.Products.Products[i].SecondaryImageNumber)
+                <img class="img-thumbnail" src="@Url.Action("RenderImage", "Image", new { id = Model.Products.Products[i].MainImageNumber})" alt="@Model.Products.Products[i].Description" title="@Model.Products.Products[i].Description" />
+                @Html.HiddenFor(c => Model.Products.Products[i].MainImageNumber)
             </td>
             <td class="text-center">
                 @Model.Products.Products[i].Weight KG @Model.Products.Products[i].Description from @Model.Products.Products[i].SupplierName

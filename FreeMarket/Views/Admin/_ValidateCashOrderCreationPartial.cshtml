@@ -1,4 +1,7 @@
-﻿<script type="text/javascript">
+﻿@using FreeMarket.Models
+@model CashOrderViewModel
+
+<script type="text/javascript">
 
     $(document).on('change', '#Order_InvoiceSent', function () {
         var checkedValue = $('#Order_InvoiceSent:checked').val();
@@ -11,12 +14,32 @@
     });
 
     $(document).ready(function () {
+        Globalize.culture(this.culture);
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || jQuery.isNumeric(Globalize.parseFloat(value));
+        };
+
+        $.validator.methods.date = function (value, element) {
+            return (this.optional(element) || Globalize.parseDate(value));
+        };
+
+        jQuery.extend(jQuery.validator.methods, {
+            range: function (value, element, param) {
+                var val = Globalize.parseFloat(value);
+                return this.optional(element) || (val >= param[0] && val <= param[1]);
+            }
+        });
+    });
+
+    $(document).ready(function () {
         if ($("#SelectedCustomerType").val().length > 0) {
             $.ajax({
                 url: '@Url.Action("GetCashOrderForm", "Admin")',
                 type: 'POST',
                 data: {
                     id: $("#SelectedCustomerType").val(),
+                    customerNumber: @Model.Order.CashCustomerId,
                 }
             }).done
                (function (data) {
@@ -38,6 +61,7 @@
                 type: 'POST',
                 data: {
                     id: $("#SelectedCustomerType").val(),
+                    customerNumber: @Model.Order.CashCustomerId,
                 }
             }).done
                (function (data) {

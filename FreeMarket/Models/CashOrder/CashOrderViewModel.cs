@@ -208,6 +208,7 @@ namespace FreeMarket.Models
                         model.Order.ContactName = customer.ContactName;
                         model.Order.HeadOfficeAddress = customer.HeadOfficeAddress;
                     }
+                    model.SelectedCustomerType = customer.Type;
                 }
 
                 model.Products = ProductCollection.GetAllProducts();

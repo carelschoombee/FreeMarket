@@ -15,6 +15,11 @@ namespace FreeMarket.Models
 
             object actualValue = null;
 
+            if (valueResult.AttemptedValue.StartsWith("12345"))
+            {
+                int i = 0;
+            }
+
             if (valueResult.AttemptedValue != string.Empty)
             {
                 try
