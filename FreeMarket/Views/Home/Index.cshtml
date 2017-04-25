@@ -6,48 +6,52 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="parent" class="center_div container">
-    <div class="row">
-        <h1 class="text-center">Welcome</h1>
-        <hr />
-    </div>
-    <div class="row">
-        @Html.Partial("_ProductCarousel", Model)
-    </div>
-    <div class="row well">
-
-        @Html.Raw(Model.WelcomeText)
-        
-    </div>
-    <div class="row well text-center">
-
-        We offer the following payment options:
-        @Html.Partial("_PaymentOptions")
-        
-    </div>
-
-</div>
-
 <div class="container">
-    <div class="col-sm-12">
-        <div class="row">
-            <h1 class="text-center">Premium Snacking Nuts</h1>
-            <hr />
+    <div>
+        <div id="parent" class="center_div">
+            <div class="row">
+                <h1 class="text-center">Welcome</h1>
+                <hr />
+            </div>
+            <div class="row">
+                @Html.Partial("_ProductCarousel", Model)
+            </div>
+            <div class="row well">
+
+                @Html.Raw(Model.WelcomeText)
+
+            </div>
+            <div class="row well text-center">
+
+                We offer the following payment options:
+                @Html.Partial("_PaymentOptions")
+
+            </div>
+
         </div>
-        @Html.Action("GetSnackingNuts", "Product")
-        <div class="row">
-            <h1 class="text-center">Baking Nuts</h1>
-            <hr />
-        </div>
-        @Html.Action("GetBakingNuts", "Product")
     </div>
-    <div class="col-sm-12">
-        <div class="row text-center">
-            @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "freemarket-link" })
+
+    <div>
+        <div>
+
+            <div class="row">
+                <h1 class="text-center">Premium Snacking Nuts</h1>
+                <hr />
+            </div>
+            @Html.Action("GetSnackingNuts", "Product")
+            <div class="row">
+                <h1 class="text-center">Baking Nuts</h1>
+                <hr />
+            </div>
+            @Html.Action("GetBakingNuts", "Product")
+
+            <div class="row text-center">
+                @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "freemarket-link" })
+            </div>
+
         </div>
     </div>
 </div>
-
 <div id="loadingDiv" style="display:none;"></div>
 
 @Html.Partial("_TermsAndConditionsContainer")
