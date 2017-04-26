@@ -12,6 +12,7 @@
                 @Html.ValidationMessageFor(m => m.Order.CustomerName, "", new { @class = "text-danger" })
                 @Html.HiddenFor(m => m.Order.CashCustomerId)
                 @Html.HiddenFor(m => m.Order.OrderId)
+                @Html.HiddenFor(m => m.SelectedCustomerType)
             </div>
         </div>
 
@@ -77,6 +78,7 @@
                 @Html.ValidationMessageFor(m => m.Order.CustomerName, "", new { @class = "text-danger" })
                 @Html.HiddenFor(m => m.Order.CashCustomerId)
                 @Html.HiddenFor(m => m.Order.OrderId)
+                @Html.HiddenFor(m => m.SelectedCustomerType)
             </div>
         </div>
 

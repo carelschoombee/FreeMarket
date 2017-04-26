@@ -7,14 +7,14 @@ namespace FreeMarket.Models
     {
         public CashCustomer Customer { get; set; }
         public List<CashOrder> Orders { get; set; }
-        public List<List<CashOrderDetail>> OrderDetails { get; set; }
+        public List<CashOrderDetail> OrderDetails { get; set; }
         public CashCustomerMetaInformation MetaData { get; set; }
 
         public ReportCustomer()
         {
             Customer = new CashCustomer();
             Orders = new List<CashOrder>();
-            OrderDetails = new List<List<CashOrderDetail>>();
+            OrderDetails = new List<CashOrderDetail>();
         }
 
         public static List<ReportCustomer> GetReportCustomers(string filterType)
@@ -40,7 +40,7 @@ namespace FreeMarket.Models
                         .OrderByDescending(c => c.DatePlaced)
                         .ToList();
 
-                    List<List<CashOrderDetail>> allOrderDetails = new List<List<CashOrderDetail>>();
+                    List<CashOrderDetail> allOrderDetails = new List<CashOrderDetail>();
                     List<CashOrderDetail> cashOrderDetails = new List<CashOrderDetail>();
                     List<CashCustomerMetaInformation> MetaData = new List<CashCustomerMetaInformation>();
 
@@ -51,7 +51,10 @@ namespace FreeMarket.Models
                             .OrderByDescending(c => c.Quantity)
                             .ToList();
 
-                        allOrderDetails.Add(cashOrderDetails);
+                        foreach(CashOrderDetail item in cashOrderDetails)
+                        {
+                            allOrderDetails.Add(item);
+                        }
                     }
 
                     CashCustomerMetaInformation metaData = new CashCustomerMetaInformation();

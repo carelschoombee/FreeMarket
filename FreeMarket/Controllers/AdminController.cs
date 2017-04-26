@@ -714,6 +714,8 @@ namespace FreeMarket.Controllers
                 return RedirectToAction("Index", "Admin");
             }
 
+            model.Products = ProductCollection.GetAllProducts();
+            CashOrderViewModel.InitializeDropDowns(model);
             return View("CreateCashOrder", model);
         }
 
@@ -737,6 +739,8 @@ namespace FreeMarket.Controllers
                 return RedirectToAction("Index", "Admin");
             }
 
+            model.Products = ProductCollection.GetAllProducts();
+            CashOrderViewModel.InitializeDropDowns(model);
             return View("EditCashOrder", model);
         }
 

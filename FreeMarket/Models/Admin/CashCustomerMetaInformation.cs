@@ -14,39 +14,40 @@ namespace FreeMarket.Models
             ProductsBought = new List<ProductMetaInformation>();
         }
 
-        public void ExtractMetaData(List<CashOrder> cashOrders, List<List<CashOrderDetail>> cashOrderDetails)
+        public void ExtractMetaData(List<CashOrder> cashOrders, List<CashOrderDetail> cashOrderDetails)
         {
-            foreach (List<CashOrderDetail> detailsList in cashOrderDetails)
+            foreach (CashOrderDetail detail in cashOrderDetails)
             {
-                foreach (CashOrderDetail detail in detailsList)
+                if (ProductsBought
+                    .Where(c => c.Product.ProductNumber == detail.ProductNumber && c.Product.SupplierNumber == detail.SupplierNumber)
+                    .FirstOrDefault() == null)
                 {
-                    if (ProductsBought
-                        .Where(c => c.Product.ProductNumber == detail.ProductNumber && c.Product.SupplierNumber == detail.SupplierNumber)
-                        .FirstOrDefault() == null)
+                    Product p = Product.GetProduct(detail.ProductNumber, detail.SupplierNumber);
+
+                    ProductsBought.Add(new ProductMetaInformation()
                     {
-                        Product p = Product.GetProduct(detail.ProductNumber, detail.SupplierNumber);
-                        int totalSold = detailsList.Where(c => c.ProductNumber == detail.ProductNumber
-                            && c.SupplierNumber == detail.SupplierNumber)
-                            .Sum(c => c.Quantity);
-                        decimal totalWeightSold = totalSold * p.Weight;
-                        int latestOrder = detailsList
-                            .Where(c => c.ProductNumber == detail.ProductNumber && c.SupplierNumber == detail.SupplierNumber)
-                            .Max(c => c.CashOrderId);
-                        DateTime? lastPurchased = cashOrders.Where(c => c.OrderId == latestOrder).FirstOrDefault().DatePlaced;
-                        decimal totalSales = detailsList.Where(c => c.ProductNumber == detail.ProductNumber && c.SupplierNumber == detail.SupplierNumber)
-                            .Sum(c => c.OrderItemTotal);
-
-                        ProductsBought.Add(new ProductMetaInformation()
-                        {
-                            Product = p,
-                            TotalQuantitySold = totalSold,
-                            TotalWeightSold = totalWeightSold,
-                            LastPurchased = lastPurchased,
-                            TotalSales = totalSales
-                        });
-                    }
+                        Product = p,
+                    });
                 }
+            }
 
+            foreach (ProductMetaInformation p in ProductsBought)
+            {
+                int totalSold = cashOrderDetails.Where(c => c.ProductNumber == p.Product.ProductNumber
+                            && c.SupplierNumber == p.Product.SupplierNumber)
+                            .Sum(c => c.Quantity);
+                decimal totalWeightSold = totalSold * p.Product.Weight;
+                int latestOrder = cashOrderDetails
+                    .Where(c => c.ProductNumber == p.Product.ProductNumber && c.SupplierNumber == p.Product.SupplierNumber)
+                    .Max(c => c.CashOrderId);
+                DateTime? lastPurchased = cashOrders.Where(c => c.OrderId == latestOrder).FirstOrDefault().DatePlaced;
+                decimal totalSales = cashOrderDetails.Where(c => c.ProductNumber == p.Product.ProductNumber && c.SupplierNumber == p.Product.SupplierNumber)
+                    .Sum(c => c.OrderItemTotal);
+
+                p.TotalQuantitySold = totalSold;
+                p.TotalWeightSold = totalWeightSold;
+                p.LastPurchased = lastPurchased;
+                p.TotalSales = totalSales;
             }
 
             TotalSalesAccrossAllProducts = ProductsBought.Sum(c => c.TotalSales);
