@@ -80,6 +80,7 @@
 
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#home" data-toggle="tab">Charts</a></li>
+        <li><a href="#reports" data-toggle="tab">Reports</a></li>
         <li><a href="#dispatch" data-toggle="tab">Orders to be Dispatched</a></li>
         <li><a href="#orders" data-toggle="tab">In Transit Orders</a></li>
         <li><a href="#customers" data-toggle="tab">Customers</a></li>
@@ -89,7 +90,6 @@
         <li><a href="#refunds" data-toggle="tab">Refunds</a></li>
         <li><a href="#cashSales" data-toggle="tab">Cash Sales</a></li>
         <li><a href="#auditing" data-toggle="tab">Auditing</a></li>
-        @*<li><a href="#articles" data-toggle="tab">Articles</a></li>*@
     </ul>
 
     <div class="tab-content">
@@ -222,6 +222,31 @@
                         <div id="itemsInOrders" style="height: 250px;"></div>
                     }
                 </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="reports">
+            <h2 class="text-center">Reports</h2>
+            <hr />
+
+            <div class="form-group">
+                @Html.Label("Select Report:", new { @class = "control-label col-md-4" })
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => Model.SelectedReport, Model.SelectedReportOptions, new { @class = "form-control-inline" })
+                    @Html.ValidationMessageFor(m => m.SelectedReport, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group center_div">
+                <div class="col-sm-12">
+                    <br />
+                </div>
+            </div>
+
+            <br />
+            <br />
+
+            <div id="reportResult">
+                @Html.Partial("_ViewCustomerReport", Model.ReportCustomers)
             </div>
         </div>
         <div class="tab-pane" id="dispatch">
@@ -743,6 +768,19 @@
         {
             $("#cashSearchPartial").hide();
         }
+    });
+
+    $("#SelectedReport").change(function () {
+        $.ajax({
+            url: '@Url.Action("DisplayReport", "Admin")',
+            type: 'POST',
+            data: {
+                id: $("#SelectedReport").val(),
+            }
+        }).done
+            (function (data) {
+                $('#reportResult').html(data);
+            });
     });
 
 </script>

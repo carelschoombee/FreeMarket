@@ -245,7 +245,10 @@
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\Admin\AdminOrderHistoryViewModel.cs" />
     <Compile Include="Models\Admin\AspNetUserCustomer.cs" />
+    <Compile Include="Models\Admin\CashCustomerMetaInformation.cs" />
     <Compile Include="Models\Admin\CouriersCollection.cs" />
+    <Compile Include="Models\Admin\ProductMetaInformation.cs" />
+    <Compile Include="Models\Admin\ReportCustomer.cs" />
     <Compile Include="Models\Admin\SupportMetaData.cs" />
     <Compile Include="Models\Admin\CustodianMetaData.cs" />
     <Compile Include="Models\Admin\DepartmentMetaData.cs" />
@@ -1278,6 +1281,8 @@
     <Content Include="Views\Admin\_CashOrderCustomerTypePartial.cshtml" />
     <Content Include="Views\Admin\_ValidateCashOrderEditPartial.cshtml" />
     <Content Include="Views\Product\_CourierContainer.cshtml" />
+    <Content Include="Views\Admin\_ViewCustomerReport.cshtml" />
+    <Content Include="Views\Admin\ViewCashOrdersByCustomer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

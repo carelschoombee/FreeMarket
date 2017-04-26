@@ -23,6 +23,45 @@ namespace FreeMarket.Controllers
             return View(model);
         }
 
+        public ActionResult ViewCashCustomerData(int id)
+        {
+            List<CashOrderViewModel> model = CashOrderViewModel.GetOrders("all").Where(c => c.Order.CashCustomerId == id).ToList();
+            return View("ViewCashOrdersByCustomer", model);
+        }
+
+        [HttpPost]
+        public ActionResult DisplayReport(string id)
+        {
+            ModelState.Remove("SelectedYear");
+
+            if (ModelState.IsValid)
+            {
+                List<ReportCustomer> model = new List<ReportCustomer>();
+
+                using (FreeMarketEntities db = new FreeMarketEntities())
+                {
+                    switch (id)
+                    {
+                        case "SalesCustomerAll":
+                            model = ReportCustomer.GetReportCustomers("all");
+                            return PartialView("_ViewCustomerReport", model);
+                        case "SalesCustomerIndividual":
+                            model = ReportCustomer.GetReportCustomers("NormalCustomer");
+                            return PartialView("_ViewCustomerReport", model);
+                        case "SalesCustomerCompany":
+                            model = ReportCustomer.GetReportCustomers("CompanyRetail");
+                            return PartialView("_ViewCustomerReport", model);
+                        default:
+                            return Content("");
+                    }
+                }
+            }
+            else
+            {
+                return Content("");
+            }
+        }
+
         [HttpPost]
         public ActionResult GetCashOrderForm(string id, int customerNumber = 0)
         {

@@ -56,6 +56,11 @@ namespace FreeMarket.Models
         public string SelectedCashOrderSearchCriteria { get; set; }
         public List<SelectListItem> CashOrderSearchCriteria { get; set; }
 
+        public string SelectedReport { get; set; }
+        public List<SelectListItem> SelectedReportOptions { get; set; }
+
+        public List<ReportCustomer> ReportCustomers { get; set; }
+
         public Dashboard()
         {
 
@@ -139,6 +144,13 @@ namespace FreeMarket.Models
                     new SelectListItem() { Text = "Text Search", Value = "TextSearch", Selected = false }
                 };
 
+                SelectedReportOptions = new List<SelectListItem>()
+                {
+                    new SelectListItem() { Text = "Sales by Customer, All", Value = "SalesCustomerAll", Selected = true },
+                    new SelectListItem() { Text = "Sales by Customer, Individual", Value = "SalesCustomerIndividual", Selected = false },
+                    new SelectListItem() { Text = "Sales by Customer, Company", Value = "SalesCustomerCompany", Selected = false }
+                };
+
                 List<AuditUser> hits = new List<AuditUser>();
                 hits = db.AuditUsers.Where(c => c.Action == 32).ToList();
                 if (hits.Count > 0)
@@ -155,6 +167,8 @@ namespace FreeMarket.Models
                 {
                     ExceptionLogging.LogException(e);
                 }
+
+                ReportCustomers = ReportCustomer.GetReportCustomers("all");
             }
         }
     }

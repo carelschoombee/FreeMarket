@@ -1,0 +1,74 @@
+﻿@using FreeMarket.Models
+@model List<ReportCustomer>
+
+@{ int i = 0; }
+
+<table class="table table-bordered-custom table-responsive">
+    <tr>
+        <th>
+            Ranking #
+        </th>
+        <th>
+            Customer
+        </th>
+        <th>
+            Accumulated Sales
+        </th>
+        <th>
+            Report Data
+        </th>
+    </tr>
+    @foreach (ReportCustomer data in Model)
+    {
+        i++;
+        <tr>
+            <td>
+                @i
+            </td>
+            <td>
+                @Html.ActionLink(data.Customer.Name, "ViewCashCustomerData", "Admin", new { id = data.Customer.Id }, new { @class = "freemarket-link", @style = "color:yellow" })
+                <div><span style="white-space:pre-line">@data.Customer.DeliveryAddress</span></div>
+                <div>@data.Customer.PhoneNumber</div>
+                <div>@data.Customer.Email</div>
+            </td>
+            <td>
+                <div>@string.Format("{0:C}", data.MetaData.TotalSalesAccrossAllProducts)</div>
+            </td>
+            <td>
+                <table class="well">
+                    <tr>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Last Purchased
+                        </th>
+                        <th>
+                            Total Qty Sold
+                        </th>
+                        <th>
+                            Total Sales
+                        </th>
+                    </tr>
+                    @foreach (var item in data.MetaData.ProductsBought)
+                    {
+                        <tr>
+                            <td>
+                                @item.Product.Weight KG @item.Product.Description
+                            </td>
+                            <td>
+                                @string.Format("{0:D}", @item.LastPurchased)
+                            </td>
+                            <td>
+                                @item.TotalQuantitySold units (@item.TotalWeightSold KG)
+                            </td>
+                            <td>
+                                @string.Format("{0:C}", @item.TotalSales)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+    }
+</table>
