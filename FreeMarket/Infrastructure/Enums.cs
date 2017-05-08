@@ -25,7 +25,8 @@ namespace FreeMarket.Models
         PostalConfirmation,
         PostalInstructions,
         Refund,
-        CashOrderInvoice
+        CashOrderInvoice,
+        Invoice
     }
 
     public class FreeMarketObject

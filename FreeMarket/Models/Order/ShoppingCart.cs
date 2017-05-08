@@ -11,6 +11,15 @@ namespace FreeMarket.Models
         public OrderHeader Order { get; set; }
         public CartBody Body { get; set; }
 
+        public ShoppingCart(int orderNumber)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                Order = db.OrderHeaders.Find(orderNumber);
+                Body = CartBody.GetDetailsForShoppingCart(Order.OrderNumber);
+            }
+        }
+
         public OrderDetail GetOrderDetail(int productNumber, int supplierNumber)
         {
             return Body.OrderDetails

@@ -62,6 +62,7 @@
         <EntityTypeShape EntityType="FreeMarketModel.CashCustomer" Width="1.5" PointX="9.375" PointY="10.75" />
         <EntityTypeShape EntityType="FreeMarketModel.CashOrder" Width="1.5" PointX="19.375" PointY="0.75" />
         <EntityTypeShape EntityType="FreeMarketModel.FreeMarketOwner" Width="1.5" PointX="19.375" PointY="5.75" />
+        <EntityTypeShape EntityType="FreeMarketModel.PaymentOption" Width="1.5" PointX="7.375" PointY="14.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

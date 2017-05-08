@@ -84,6 +84,7 @@ namespace FreeMarket.Models
                         PaymentReceived = false,
                         TotalOrderValue = 0,
                         CourierNumber = 1,
+                        PaymentOption = 1,
 
                         DeliveryAddress = address.ToString(),
                         DeliveryAddressLine1 = address.AddressLine1,
@@ -98,6 +99,7 @@ namespace FreeMarket.Models
                         DeliveryType = deliveryType,
                         DateDispatched = null,
                         DateRefunded = null,
+                        InvoiceSent = false,
 
                         CustomerName = user.Name,
                         CustomerEmail = user.Email,
@@ -193,6 +195,9 @@ namespace FreeMarket.Models
 
                 switch (reportType)
                 {
+                    case "Invoice":
+                        rv.LocalReport.ReportPath = HttpContext.Current.Server.MapPath("~/Reports/Report8.rdlc");
+                        break;
                     case "Refund":
                         rv.LocalReport.ReportPath = HttpContext.Current.Server.MapPath("~/Reports/Report6.rdlc");
                         break;
@@ -460,6 +465,110 @@ namespace FreeMarket.Models
 
                 string line4 = db.SiteConfigurations
                     .Where(c => c.Key == "OrderRefundLine4")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                return line1 + line2 + line3 + line4;
+            }
+        }
+
+        public async static void SendInvoice(string customerNumber, int orderNumber)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                OrderHeader order = db.OrderHeaders.Find(orderNumber);
+
+                if (order == null)
+                    return;
+
+                ApplicationUser user = System.Web.HttpContext
+                            .Current
+                            .GetOwinContext()
+                            .GetUserManager<ApplicationUserManager>()
+                            .FindById(customerNumber);
+
+                if (user == null)
+                    return;
+
+                Support supportInfo = db.Supports
+                   .FirstOrDefault();
+
+                Dictionary<Stream, string> orderSummary = new Dictionary<Stream, string>();
+
+                orderSummary = GetReport(ReportType.Invoice.ToString(), orderNumber);
+
+                SendInvoiceEmailToCustomer(order, user, supportInfo, orderSummary);
+
+                SendInvoiceSmsToCustomer(user, order);
+
+                order.InvoiceSent = true;
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        private async static void SendInvoiceSmsToCustomer(ApplicationUser user, OrderHeader order)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                DateTime dateDispatch = DateTime.Now;
+                DateTime dateArrive = DateTime.Now;
+
+                dateDispatch = GetDispatchDay((DateTime)order.DeliveryDate);
+                dateArrive = GetArriveDay((DateTime)order.DeliveryDate);
+
+                string message = "";
+
+                message = db.SiteConfigurations
+                        .Where(c => c.Key == "InvoiceSmsLine1")
+                        .Select(c => c.Value)
+                        .FirstOrDefault();
+
+                SMSHelper helper = new SMSHelper();
+
+                await helper.SendMessage(string.Format(message
+                    , user.Name
+                    , order.OrderNumber)
+                    , user.PhoneNumber);
+            }
+        }
+
+        private async static void SendInvoiceEmailToCustomer(OrderHeader order, ApplicationUser user, Support supportInfo, Dictionary<Stream, string> orderSummary)
+        {
+            IdentityMessage iMessage = new IdentityMessage();
+            iMessage.Destination = user.Email;
+
+            string message1 = CreateInvoiceMessageCustomer();
+
+            iMessage.Body = string.Format((message1), user.Name, supportInfo.MainContactName, supportInfo.Landline, supportInfo.Cellphone, supportInfo.Email);
+            iMessage.Subject = string.Format("Schoombee & Son Order");
+
+            EmailService email = new EmailService();
+
+            await email.SendAsync(iMessage, orderSummary.FirstOrDefault().Key);
+        }
+
+        private static string CreateInvoiceMessageCustomer()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                string line1 = db.SiteConfigurations
+                    .Where(c => c.Key == "InvoiceLine1")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line2 = db.SiteConfigurations
+                    .Where(c => c.Key == "InvoiceLine2")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line3 = db.SiteConfigurations
+                    .Where(c => c.Key == "InvoiceLine3")
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+                string line4 = db.SiteConfigurations
+                    .Where(c => c.Key == "InvoiceLine4")
                     .Select(c => c.Value)
                     .FirstOrDefault();
 
@@ -1164,6 +1273,39 @@ namespace FreeMarket.Models
             using (FreeMarketEntities db = new FreeMarketEntities())
             {
                 return db.GetDeliveryLabels().ToList();
+            }
+        }
+
+        public static List<OrderHeader> RefreshInvoiceCollection()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                return db.OrderHeaders
+                    .Where(c => c.OrderStatus == "Invoiced")
+                    .OrderByDescending(c => c.OrderNumber)
+                    .ToList();
+            }
+        }
+
+        public static List<OrderHeader> RefreshConfirmedCollection()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                return db.OrderHeaders
+                    .Where(c => c.OrderStatus == "Confirmed")
+                    .OrderByDescending(c => c.OrderNumber)
+                    .ToList();
+            }
+        }
+
+        public static List<OrderHeader> RefreshInTransitCollection()
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                return db.OrderHeaders
+                    .Where(c => c.OrderStatus == "InTransit")
+                    .OrderByDescending(c => c.OrderNumber)
+                    .ToList();
             }
         }
 

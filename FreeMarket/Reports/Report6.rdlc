@@ -4753,18 +4753,6 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="Price">
-          <DataField>Price</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="OrderItemValue">
-          <DataField>OrderItemValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ItemNumber">
-          <DataField>ItemNumber</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="CustomerName">
           <DataField>CustomerName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -4801,22 +4789,6 @@
           <DataField>OrderNumber</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="PreferredDeliveyrDate">
-          <DataField>PreferredDeliveyrDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="SupportCel">
-          <DataField>SupportCel</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SupportLand">
-          <DataField>SupportLand</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SupportEmail">
-          <DataField>SupportEmail</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="PreferredDeliveryDate">
           <DataField>PreferredDeliveryDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
@@ -4833,9 +4805,21 @@
           <DataField>TotalOrderValue</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="Price">
+          <DataField>Price</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
         <Field Name="Quantity">
           <DataField>Quantity</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Total">
+          <DataField>Total</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DeliveryType">
+          <DataField>DeliveryType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Description">
           <DataField>Description</DataField>
@@ -4849,9 +4833,17 @@
           <DataField>Weight</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="Total">
-          <DataField>Total</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="SupportCel">
+          <DataField>SupportCel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SupportLand">
+          <DataField>SupportLand</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SupportEmail">
+          <DataField>SupportEmail</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CourierName">
           <DataField>CourierName</DataField>
@@ -4863,10 +4855,6 @@
         </Field>
         <Field Name="MainContactEmailAddress">
           <DataField>MainContactEmailAddress</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DeliveryType">
-          <DataField>DeliveryType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="StreetAddress">
@@ -4883,6 +4871,30 @@
         </Field>
         <Field Name="Province">
           <DataField>Province</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BankingDetailsBankName">
+          <DataField>BankingDetailsBankName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BankingDetailsBranchName">
+          <DataField>BankingDetailsBranchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BankingDetailsBranchCode">
+          <DataField>BankingDetailsBranchCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BankingDetailsAccountType">
+          <DataField>BankingDetailsAccountType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BankingDetailsAccountNumber">
+          <DataField>BankingDetailsAccountNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProofOfPaymentEmail">
+          <DataField>ProofOfPaymentEmail</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

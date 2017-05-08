@@ -18,6 +18,8 @@ namespace FreeMarket.Models
         public string CustomerSearchCriteria { get; set; }
         public List<AspNetUser> Customers { get; set; }
 
+        public List<OrderHeader> AllOrders { get; set; }
+        public List<OrderHeader> Invoices { get; set; }
         public List<OrderHeader> ConfirmedOrders { get; set; }
         public List<OrderHeader> InTransitOrders { get; set; }
         public List<OrderHeader> RefundPending { get; set; }
@@ -126,9 +128,11 @@ namespace FreeMarket.Models
 
                 RatingsInformation = new RatingsInfo();
                 Customers = new List<AspNetUser>();
-                ConfirmedOrders = db.OrderHeaders.Where(c => c.OrderStatus == "Confirmed").OrderBy(c => c.DeliveryDate).ToList();
-                InTransitOrders = db.OrderHeaders.Where(c => c.OrderStatus == "InTransit").OrderBy(c => c.DeliveryDate).ToList();
-                RefundPending = db.OrderHeaders.Where(c => c.OrderStatus == "RefundPending").OrderBy(c => c.DeliveryDate).ToList();
+                AllOrders = db.OrderHeaders.OrderByDescending(c => c.OrderNumber).ToList();
+                Invoices = db.OrderHeaders.Where(c => c.OrderStatus == "Invoiced").OrderByDescending(c => c.OrderNumber).ToList();
+                ConfirmedOrders = db.OrderHeaders.Where(c => c.OrderStatus == "Confirmed").OrderByDescending(c => c.OrderNumber).ToList();
+                InTransitOrders = db.OrderHeaders.Where(c => c.OrderStatus == "InTransit").OrderByDescending(c => c.OrderNumber).ToList();
+                RefundPending = db.OrderHeaders.Where(c => c.OrderStatus == "RefundPending").OrderByDescending(c => c.OrderNumber).ToList();
                 RefundableOrders = db.OrderHeaders.Where(c => c.OrderStatus == "Confirmed" || c.OrderStatus == "InTransit").ToList();
                 CashOrders = CashOrderViewModel.GetOrders("all");
 

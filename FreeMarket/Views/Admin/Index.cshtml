@@ -13,6 +13,11 @@
         //LoadingElementId = "loadingDiv",
     };
 
+    AjaxOptions ajaxOptsPaid = new AjaxOptions
+    {
+        UpdateTargetId = "paidTable",
+    };
+
     AjaxOptions reviewAjaxOpts = new AjaxOptions
     {
         UpdateTargetId = "ratingsTable",
@@ -81,9 +86,11 @@
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#home" data-toggle="tab">Charts</a></li>
         <li><a href="#reports" data-toggle="tab">Reports</a></li>
+        <li><a href="#invoices" data-toggle="tab">Invoices</a></li>
         <li><a href="#dispatch" data-toggle="tab">Orders to be Dispatched</a></li>
-        <li><a href="#orders" data-toggle="tab">In Transit Orders</a></li>
+        <li><a href="#orders" data-toggle="tab">Orders In Transit</a></li>
         <li><a href="#customers" data-toggle="tab">Customers</a></li>
+        <li><a href="#orderRecord" data-toggle="tab">Order Record</a></li>
         <li><a href="#orderSearch" data-toggle="tab">Search Order</a></li>
         <li><a href="#ratings" data-toggle="tab">Ratings</a></li>
         <li><a href="#profile" data-toggle="tab">Functions</a></li>
@@ -224,6 +231,22 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane" id="invoices">
+            <div class="text-center">
+                <h2>Invoices</h2>
+                @Ajax.ActionLink("Refresh", "RefreshInvoices", null, ajaxOptsPaid, new { @class = "btn btn-success" })
+                <br />
+            </div>
+
+            @using (Ajax.BeginForm("MarkPaid", "Admin", null, ajaxOptsPaid))
+            {
+                @Html.AntiForgeryToken()
+
+                <div id="paidTable">
+                    @Html.Partial("_Invoices", Model.Invoices)
+                </div>
+            }
+        </div>
         <div class="tab-pane" id="reports">
             <h2 class="text-center">Reports</h2>
             <hr />
@@ -250,6 +273,12 @@
             </div>
         </div>
         <div class="tab-pane" id="dispatch">
+            <div class="text-center">
+                <h2>Confirmed Orders</h2>
+                @Ajax.ActionLink("Refresh", "RefreshConfirmed", null, ajaxOptsInTransit, new { @class = "btn btn-success" })
+                <br />
+            </div>
+
             @using (Ajax.BeginForm("MarkInTransit", "Admin", null, ajaxOptsInTransit))
             {
                 @Html.AntiForgeryToken()
@@ -267,6 +296,11 @@
             }
         </div>
         <div class="tab-pane" id="orders">
+             <div class="text-center">
+                <h2>Orders In Transit </h2>
+                @Ajax.ActionLink("Refresh", "RefreshInTransit", null, ajaxOpts, new { @class = "btn btn-success" })
+                <br />
+            </div>
             @using (Ajax.BeginForm("MarkComplete", "Admin", null, ajaxOpts))
             {
                 @Html.AntiForgeryToken()
@@ -297,6 +331,17 @@
                 }
 
             </div>
+        </div>
+        <div class="tab-pane" id="orderRecord">
+            <div class="text-center">
+                <h2>View all Orders</h2>
+                <br />
+            </div>
+
+            @if (Model.AllOrders != null)
+            {
+                @Html.Partial("_AllOrders", Model.AllOrders)
+            }
         </div>
         <div class="tab-pane" id="orderSearch">
             <h2 class="text-center">Search Orders</h2>

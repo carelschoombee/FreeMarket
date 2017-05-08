@@ -216,6 +216,7 @@
           <Property Name="BankingDetailsAccountNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="BankingDetailsAccountType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="BankAccountType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProofOfPaymentEmail" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -280,6 +281,8 @@
           <Property Name="DateDispatched" Type="datetime" />
           <Property Name="DateRefunded" Type="datetime" />
           <Property Name="TrackingCodes" Type="nvarchar" MaxLength="700" />
+          <Property Name="PaymentOption" Type="int" />
+          <Property Name="InvoiceSent" Type="bit" />
         </EntityType>
         <EntityType Name="OrderStatus">
           <Key>
@@ -348,6 +351,15 @@
           </Key>
           <Property Name="TransactionCode" Type="int" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PaymentOption">
+          <Key>
+            <PropertyRef Name="PaymentOptionID" />
+          </Key>
+          <Property Name="PaymentOptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+          <Property Name="LongDescription" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PostalFees">
           <Key>
@@ -856,6 +868,7 @@
           <EntitySet Name="PaymentGatewayParameter" EntityType="Self.PaymentGatewayParameter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentGatewayPaymentMethods" EntityType="Self.PaymentGatewayPaymentMethods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentGatewayTransactionStatus" EntityType="Self.PaymentGatewayTransactionStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentOption" EntityType="Self.PaymentOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostalFees" EntityType="Self.PostalFees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PreferredCommunicationMethod" EntityType="Self.PreferredCommunicationMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PriceHistory" EntityType="Self.PriceHistory" Schema="dbo" store:Type="Tables" />
@@ -1362,6 +1375,7 @@
             <Parameter Name="OrderNumber" Mode="In" Type="Int32" />
             <Parameter Name="BankAccountType" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="PaymentOptions" EntityType="FreeMarketModel.PaymentOption" />
           </EntityContainer>
         <EntityType Name="SystemAction">
           <Key>
@@ -1709,6 +1723,8 @@
           <Property Name="DateDispatched" Type="DateTime" Precision="3" />
           <Property Name="DateRefunded" Type="DateTime" Precision="3" />
           <Property Name="TrackingCodes" Type="String" MaxLength="700" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentOption" Type="Int32" />
+          <Property Name="InvoiceSent" Type="Boolean" />
         </EntityType>
         <Association Name="FK_OrderDetail_OrderHeader">
           <End Type="FreeMarketModel.OrderHeader" Role="OrderHeader" Multiplicity="1" />
@@ -2082,6 +2098,12 @@
           <Property Type="String" Name="TownName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="StruisbaaiPostalCode" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Province" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsBankName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BankingDetailsBranchName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BankingDetailsBranchCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsAccountType" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="BankingDetailsAccountNumber" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ProofOfPaymentEmail" Nullable="true" MaxLength="100" />
         </ComplexType>
         <ComplexType Name="GetDeliveryLabels_Result">
           <Property Type="String" Name="From" Nullable="true" MaxLength="665" />
@@ -2313,6 +2335,7 @@
           <Property Name="BankingDetailsAccountNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankingDetailsAccountType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankAccountType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProofOfPaymentEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="GetDeliveryLabelsCashOrder_Result">
           <Property Type="String" Name="From" Nullable="true" MaxLength="614" />
@@ -2409,6 +2432,15 @@
           <Property Type="String" Name="BankingDetailsAccountNumber" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="BankingDetailsAccountType" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="PaymentOption">
+          <Key>
+            <PropertyRef Name="PaymentOptionID" />
+          </Key>
+          <Property Name="PaymentOptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <Property Name="LongDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2789,6 +2821,8 @@
           <EntitySetMapping Name="OrderHeaders">
             <EntityTypeMapping TypeName="FreeMarketModel.OrderHeader">
               <MappingFragment StoreEntitySet="OrderHeader">
+                <ScalarProperty Name="InvoiceSent" ColumnName="InvoiceSent" />
+                <ScalarProperty Name="PaymentOption" ColumnName="PaymentOption" />
                 <ScalarProperty Name="TrackingCodes" ColumnName="TrackingCodes" />
                 <ScalarProperty Name="DateRefunded" ColumnName="DateRefunded" />
                 <ScalarProperty Name="DateDispatched" ColumnName="DateDispatched" />
@@ -3218,6 +3252,12 @@
                 <ScalarProperty Name="TownName" ColumnName="TownName" />
                 <ScalarProperty Name="StruisbaaiPostalCode" ColumnName="StruisbaaiPostalCode" />
                 <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="BankingDetailsBankName" ColumnName="BankingDetailsBankName" />
+                <ScalarProperty Name="BankingDetailsBranchName" ColumnName="BankingDetailsBranchName" />
+                <ScalarProperty Name="BankingDetailsBranchCode" ColumnName="BankingDetailsBranchCode" />
+                <ScalarProperty Name="BankingDetailsAccountType" ColumnName="BankingDetailsAccountType" />
+                <ScalarProperty Name="BankingDetailsAccountNumber" ColumnName="BankingDetailsAccountNumber" />
+                <ScalarProperty Name="ProofOfPaymentEmail" ColumnName="ProofOfPaymentEmail" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3450,6 +3490,7 @@
           <EntitySetMapping Name="FreeMarketOwners">
             <EntityTypeMapping TypeName="FreeMarketModel.FreeMarketOwner">
               <MappingFragment StoreEntitySet="FreeMarketOwner">
+                <ScalarProperty Name="ProofOfPaymentEmail" ColumnName="ProofOfPaymentEmail" />
                 <ScalarProperty Name="BankAccountType" ColumnName="BankAccountType" />
                 <ScalarProperty Name="BankingDetailsAccountType" ColumnName="BankingDetailsAccountType" />
                 <ScalarProperty Name="BankingDetailsAccountNumber" ColumnName="BankingDetailsAccountNumber" />
@@ -3584,6 +3625,16 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PaymentOptions">
+            <EntityTypeMapping TypeName="FreeMarketModel.PaymentOption">
+              <MappingFragment StoreEntitySet="PaymentOption">
+                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PaymentOptionID" ColumnName="PaymentOptionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -288,7 +288,8 @@
     <Compile Include="Models\CharliesTransportCourierFeeReference.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Checkout\CheckOutViewModel.cs" />
+    <Compile Include="Models\Checkout\ConfirmInvoiceViewModel.cs" />
+    <Compile Include="Models\Checkout\PayInvoiceViewModel.cs" />
     <Compile Include="Models\Checkout\PaymentGatewayIntegration.cs" />
     <Compile Include="Models\CourierReview.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
@@ -476,6 +477,7 @@
     </Compile>
     <Compile Include="Models\Order\CartBody.cs" />
     <Compile Include="Models\Checkout\ConfirmOrderViewModel.cs" />
+    <Compile Include="Models\Order\PaymentOptionViewModel.cs" />
     <Compile Include="Models\Order\ViewProductViewModel.cs" />
     <Compile Include="Models\Order\CourierLocationMetaData.cs" />
     <Compile Include="Models\Order\CourierMetaData.cs" />
@@ -498,6 +500,9 @@
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PaymentGatewayTransactionStatu.cs">
+      <DependentUpon>FreeMarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaymentOption.cs">
       <DependentUpon>FreeMarketModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PostalFee.cs">
@@ -1283,6 +1288,12 @@
     <Content Include="Views\Product\_CourierContainer.cshtml" />
     <Content Include="Views\Admin\_ViewCustomerReport.cshtml" />
     <Content Include="Views\Admin\ViewCashOrdersByCustomer.cshtml" />
+    <Content Include="Views\ShoppingCart\ConfirmInvoice.cshtml" />
+    <Content Include="Views\ShoppingCart\ChoosePaymentOption.cshtml" />
+    <Content Include="Views\ShoppingCart\PayInvoice.cshtml" />
+    <Content Include="Views\ShoppingCart\_ConfirmInvoiceDeliveryPartial.cshtml" />
+    <Content Include="Views\Admin\_Invoices.cshtml" />
+    <Content Include="Views\Admin\_AllOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1319,6 +1330,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Report7.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Report8.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

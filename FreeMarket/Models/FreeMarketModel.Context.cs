@@ -67,6 +67,7 @@ namespace FreeMarket.Models
         public virtual DbSet<CashCustomer> CashCustomers { get; set; }
         public virtual DbSet<CashOrder> CashOrders { get; set; }
         public virtual DbSet<FreeMarketOwner> FreeMarketOwners { get; set; }
+        public virtual DbSet<PaymentOption> PaymentOptions { get; set; }
     
         public virtual ObjectResult<GetAllCouriersReviewList_Result> GetAllCouriersReviewList()
         {

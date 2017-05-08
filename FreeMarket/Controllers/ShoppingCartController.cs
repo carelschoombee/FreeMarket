@@ -440,7 +440,7 @@ namespace FreeMarket.Controllers
                 if (Request.IsAjaxRequest())
                     return JavaScript("window.location.reload();");
                 else
-                    return RedirectToAction("ConfirmShoppingCart", "ShoppingCart");
+                    return RedirectToAction("ChoosePaymentOption", "ShoppingCart");
             }
 
             model.SetAddressNameOptions(userId, model.SelectedAddress);
@@ -462,11 +462,53 @@ namespace FreeMarket.Controllers
         }
 
         [Authorize]
+        public ActionResult ChoosePaymentOption()
+        {
+            string userId = User.Identity.GetUserId();
+            ShoppingCart sessionCart = GetCartFromSession(userId);
+            PaymentOptionViewModel model = new PaymentOptionViewModel();
+
+            if (model.options.Count > 1)
+                return View(model);
+            else
+            {
+                // EFT
+                if (sessionCart.Order.PaymentOption == 1)
+                {
+                    return RedirectToAction("ConfirmInvoice", "ShoppingCart");
+                }
+                // PayGate
+                else if (sessionCart.Order.PaymentOption == 2)
+                {
+                    return RedirectToAction("ConfirmShoppingCart", "ShoppingCart");
+                }
+                else
+                {
+                    return RedirectToAction("ConfirmInvoice", "ShoppingCart");
+                }
+            }
+        }
+
+        [Authorize]
+        public ActionResult ConfirmInvoice()
+        {
+            string userId = User.Identity.GetUserId();
+            ShoppingCart sessionCart = GetCartFromSession(userId);
+            // EFT
+            sessionCart.Order.PaymentOption = 1;
+
+            ConfirmInvoiceViewModel model = new ConfirmInvoiceViewModel(sessionCart);
+
+            return View("ConfirmInvoice", model);
+        }
+
+        [Authorize]
         public ActionResult ConfirmShoppingCart()
         {
             string userId = User.Identity.GetUserId();
             ShoppingCart sessionCart = GetCartFromSession(userId);
 
+            sessionCart.Order.PaymentOption = 2;
             bool specialDelivery = false;
             int postalCode = 0;
 
@@ -491,6 +533,65 @@ namespace FreeMarket.Controllers
             model.SpecialDelivery = specialDelivery;
 
             return View("ConfirmShoppingCart", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<ActionResult> LockInvoice(ConfirmInvoiceViewModel confirmModel)
+        {
+            string userId = User.Identity.GetUserId();
+            ShoppingCart sessionCart = GetCartFromSession(userId);
+            int orderNumber = sessionCart.Order.OrderNumber;
+
+            if (ModelState.IsValid)
+            {
+                using (FreeMarketEntities db = new FreeMarketEntities())
+                {
+                    OrderHeader order = db.OrderHeaders.Find(orderNumber);
+                    if (order != null)
+                    {
+                        order.OrderStatus = "Invoiced";
+                        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        OrderHeader.SendInvoice(userId, order.OrderNumber);
+
+                        AuditUser.LogAudit(28, string.Format("Order Number: {0}", order.OrderNumber), User.Identity.GetUserId());
+
+                        sessionCart.Initialize(User.Identity.GetUserId());
+                    }
+                }
+                return RedirectToAction("PayInvoice", new { orderNumber = orderNumber });
+            }
+
+            ConfirmInvoiceViewModel model = new ConfirmInvoiceViewModel(sessionCart);
+            model.TermsAndConditions = confirmModel.TermsAndConditions;
+
+            return View("ConfirmInvoice", model);
+        }
+
+        [Authorize]
+        public ActionResult PayInvoice(int orderNumber)
+        {
+            using (FreeMarketEntities db = new FreeMarketEntities())
+            {
+                OrderHeader order = db.OrderHeaders.Find(orderNumber);
+                if (order == null)
+                    return RedirectToAction("Cart");
+                else
+                {
+                    if (User.Identity.GetUserId() == order.CustomerNumber)
+                    {
+                        ShoppingCart cart = new ShoppingCart(orderNumber);
+                        PayInvoiceViewModel model = new PayInvoiceViewModel(cart);
+
+                        return View("PayInvoice", model);
+                    }
+                }
+            }
+
+            return RedirectToAction("Cart");
         }
 
         [HttpPost]
