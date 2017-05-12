@@ -1,5 +1,11 @@
 ﻿/*@import url(//db.onlinewebfonts.com/c/ca6f91c0cad2fe33614026d17117601d?family=Edwardian+Script+ITC);*/
 
+.caret {
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid yellow;
+}
+
 .wrapper {
    position: relative;
 }
